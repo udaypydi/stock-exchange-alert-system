@@ -1,0 +1,1 @@
+export const fetchCurrencyExchangeData = () => fetch(`http://localhost:1000/get-exchange-rates`).then(res => res.json());
