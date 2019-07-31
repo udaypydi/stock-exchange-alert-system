@@ -10,22 +10,22 @@ export const CURRENCIES = ['eurusd', 'usdjpy', 'usdgyd', 'audnzd'];
 
 export const CURRENCY_GRAPH_DATA = [{
     domain: [1, 1.2],
-    colors: ['#15D0F8', '#12B1D3'],
+    colors: ['#045BA6', '#0CB674'],
     exchange: 'EUR/USD'
 },
 {
     domain: [107, 109],
-    colors: ['#15D0F8', '#12B1D3'],
+    colors: ['#432F6D', '#B4551E'],
     exchange: 'USD/JPY'
 },
 {
     domain: [206, 208],
-    colors: ['#A8EB12', '#051937'],
+    colors: ['#00AB12', '#4ED011'],
     exchange: 'USD/GYD'
 },
 {
     domain: [1, 1.1],
-    colors: ['#15D0F8', '#12B1D3'],
+    colors: ['#976D8B', '#007CD3'],
     exchange: 'AUD/NZD'
 }
 ];

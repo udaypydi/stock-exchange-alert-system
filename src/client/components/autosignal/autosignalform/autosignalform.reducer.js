@@ -8,6 +8,8 @@ import {
     AUTO_SIGNAL_TRADE_LOTS_CHANGE,
     AUTO_SIGNAL_ALERTS_SELECT,
     AUTO_SIGNAL_INTERVAL_CHANGE,
+    TOGGLE_LOADING_STATE,
+    NOTIFY_SUCCESS_ACTION,
 } from './autosignalform.constants';
 
 export default function AutoSignalFormReducer(state = AUTO_SIGNAL_FORM_INITIAL_STATE, action) {
@@ -76,7 +78,13 @@ export default function AutoSignalFormReducer(state = AUTO_SIGNAL_FORM_INITIAL_S
                     [action.payload.key]: action.payload.value,
                 },
             };
-            
+        
+        case TOGGLE_LOADING_STATE:
+            return { ...state, isLoading: !state.isLoading, isSuccess: null };
+
+        case NOTIFY_SUCCESS_ACTION:
+            return { ...state, isSuccess: action.flag };
+
         default: 
         return { ...state };
     }

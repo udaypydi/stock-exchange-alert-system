@@ -14,6 +14,7 @@ import {
 import { css, jsx } from '@emotion/core';
 import { CURRENCY_GRAPH_DATA } from './dashboardhome.constant';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
+import Header from 'commons/header/header.component';
 import { fetchCurrencyData, formatChartData } from './dashboardhome.action';
 import styles from './dashboardhome.styles';
 
@@ -23,7 +24,7 @@ function renderCurrencyGraph(currencyData) {
         <div css={styles.chartsContainer}>
             {
                 [eurusd, usdjpy, usdgyd, audnzd].map((data, index) => data.length && (
-                    <div css={styles.chartCard}>
+                    <Segment css={styles.chartCard} style={{ marginTop: 0 }}>
                         <div css={styles.chartData}>
                                 <div>
                                     <p
@@ -54,13 +55,13 @@ function renderCurrencyGraph(currencyData) {
                                 </p>
                                 </div>
                         <AreaChart
-                            width={300}
+                            width={250}
                             height={120}
                             data={data}
                             style={{ position: "absolute", bottom: 0 }}
                             >
                             <defs>
-                                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                                <linearGradient id={`colorUv-${index}`} x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="10%" stopColor={CURRENCY_GRAPH_DATA[index].colors[0]} stopOpacity={0.8} />
                                 <stop offset="90%" stopColor={CURRENCY_GRAPH_DATA[index].colors[1]} stopOpacity={1} />
                                 </linearGradient>
@@ -69,12 +70,12 @@ function renderCurrencyGraph(currencyData) {
                             <Area
                                 type="monotone"
                                 dataKey="uv"
-                                stroke="#8884d8"
-                                fill="url(#colorUv)"
+                                stroke={CURRENCY_GRAPH_DATA[index].colors[0]}
+                                fill={`url(#colorUv-${index})`}
                             />
                             <YAxis type="number" domain={CURRENCY_GRAPH_DATA[index].domain} hide />
                         </AreaChart>
-                    </div>
+                    </Segment>
                 ))
             }
             
@@ -92,7 +93,8 @@ function DashboardHome(props) {
     }, []);
 
     return (
-        <div>
+        <div css={styles.container}>
+            <Header />
             <CustomSidebar />
             {renderCurrencyGraph(dashboardCurrencyData)}
         </div>

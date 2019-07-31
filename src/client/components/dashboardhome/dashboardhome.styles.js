@@ -12,23 +12,28 @@ const styles = {
 
     chartCard: css`
         display: flex;
-        width: 300px;
-        height: 180px;
+        width: 250px;
+        height: 150px;
         position: relative;
         border-radius: 10px;
         justify-content: center;
         align-items: center;
-        border: 1px outset #999;
-        -webkit-box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
-        -moz-box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
+        border-radius: 5px;
+        margin-top: 0;
     `,
 
     chartsContainer: css`
         display: flex;
         flex: 1;
         justify-content: space-evenly;
-        margin-left: 180px;
-        margin-top: 150px;
+        padding-top: 160px;
+        height: ${window.availHeight}px;
+        padding-left: 280px;
+    `,
+    container: css`
+        height:  ${window.outerHeight}px;
+        width: 100%;
+        background: #f0f2f5;
     `
 };
 

@@ -8,9 +8,18 @@ import {
     AUTO_SIGNAL_TRADE_LOTS_CHANGE,
     AUTO_SIGNAL_ALERTS_SELECT,
     AUTO_SIGNAL_INTERVAL_CHANGE,
+    TOGGLE_LOADING_STATE,
+    NOTIFY_SUCCESS_ACTION,
  } from './autosignalform.constants';
 import { createAutoSignal } from './autosignalform.api';
+import history from '../../../history';
 
+export function toggleLoadingStatus() {
+    return {
+        type: TOGGLE_LOADING_STATE,
+    }
+
+}
 export function autoSignalNameChange(name) {
     return {
         type: AUTO_SIGNAL_NAME_CHANGE,
@@ -18,12 +27,24 @@ export function autoSignalNameChange(name) {
     };
 }
 
+export function notifySuccessAction(flag) {
+    return {
+        type : NOTIFY_SUCCESS_ACTION,
+        flag
+    };
+}
 
-export function submitAutoSignalData(data) {
+export const submitAutoSignalData = (data) => (dispatch) => {
+    dispatch(toggleLoadingStatus());
     createAutoSignal(data)
         .then((res) => {
-            console.log(res);
-        });
+            dispatch(toggleLoadingStatus());
+            dispatch(notifySuccessAction(true));
+            setTimeout(() => {
+                dispatch(notifySuccessAction(false));
+                dispatch(history.push('/auto-signals'));
+            }, 1000);
+    });
 }
 
 export function autoSignalIndicatorChange(value) {

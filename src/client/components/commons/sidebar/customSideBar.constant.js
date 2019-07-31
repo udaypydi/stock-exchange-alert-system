@@ -1,6 +1,6 @@
 export const SIDEBAR_MENU  = [
     {
-        name: 'Home',
+        name: 'Dashboard',
         iconName: 'dashboard',
         route: '/home',
     },
@@ -10,21 +10,15 @@ export const SIDEBAR_MENU  = [
         route: '/auto-signals'
     },
     {
-        name: 'Manual Signals',
+        name: 'Follow Experts',
         iconName: 'area graph',
-        route: '/home',
+        route: '/follow-experts',
     },
     {
         name: 'Alert History',
         iconName: 'chart line',
-        route: '/home',
+        route: '/alerts-history',
     },
-    {
-        name: 'Packages',
-        iconName: 'th large',
-        route: '/home',
-    },
-
 ];
 
 

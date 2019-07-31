@@ -65,6 +65,7 @@ module.exports = {
         commons: path.resolve(__dirname, 'src/client/components/commons'),
         components: path.resolve(__dirname, 'src/client/components'),
         reduxconfigs: path.resolve(__dirname, 'src/client/reduxconfigs'),
+        src: path.resolve(__dirname, 'src/client/')
       }
     },
     // plugins

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx webpack --config webpack.config.js --mode production",
-    "dev": "node index.js"
+    "dev": "node-sass-chokidar ./src/client/components/commons/preLoader/preLoader.scss ./src/client/components/commons/preLoader/preLoader.css; node index.js"
   },
   "keywords": [],
   "author": "",
@@ -25,13 +25,16 @@
     "body-parser": "^1.19.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
+    "history": "^4.9.0",
     "moment": "^2.24.0",
+    "node-sass-chokidar": "^1.3.5",
     "prop-types": "^15.7.2",
     "react": "^16.8.3",
     "react-datepicker": "^2.8.0",
     "react-dom": "^16.8.3",
     "react-hot-loader": "^4.7.1",
     "react-redux": "^7.1.0",
+    "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "react-timezone": "^2.4.0",
     "recharts": "^1.6.2",

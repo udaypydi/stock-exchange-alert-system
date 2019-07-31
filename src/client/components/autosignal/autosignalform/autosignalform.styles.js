@@ -8,6 +8,19 @@ const styles = {
         align-items: center;
     `,
 
+    container: css`
+        display: flex;
+        flex: 1;
+        align-items: center;
+        margin: 10px;
+        width: 80%;
+        margin-left: 65%;
+        margin-top: 7%;
+        transform: translate(-50%, 0);
+        height: 100%;
+    `,
+
+
     dropdownContainer: css`
         margin: 10px;
     `,

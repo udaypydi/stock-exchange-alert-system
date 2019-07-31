@@ -242,6 +242,8 @@ export const AUTO_SIGNAL_TIME_FRAME_CHANGE = 'AUTO_SIGNAL_TIME_FRAME_CHANGE';
 export const AUTO_SIGNAL_TRADE_LOTS_CHANGE = 'AUTO_SIGNAL_TRADE_LOTS_CHANGE';
 export const AUTO_SIGNAL_ALERTS_SELECT = 'AUTO_SIGNAL_ALERTS_SELECT';
 export const AUTO_SIGNAL_INTERVAL_CHANGE = 'AUTO_SIGNAL_INTERVAL_CHANGE';
+export const TOGGLE_LOADING_STATE = 'TOGGLE_LOADING_STATE';
+export const NOTIFY_SUCCESS_ACTION = 'NOTIFY_SUCCESS_ACTION';
 
 // Reducer form state 
 
@@ -268,5 +270,7 @@ export const AUTO_SIGNAL_FORM_INITIAL_STATE = {
     },
     signalName: '',
     addToProfile: false,
+    isLoading: false,
+    isSuccess: false,
 };
 
