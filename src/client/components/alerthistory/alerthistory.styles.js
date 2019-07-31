@@ -7,9 +7,10 @@ const styles = {
         align-items: center;
         margin: 10px;
         width: 80%;
-        margin-left: 55%;
+        margin-left: 65%;
         transform: translate(-50%, 0);
         height: 100%;
+        margin-top: 7%;
     `,
 
     headerContainer: css`

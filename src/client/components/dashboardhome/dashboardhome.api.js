@@ -1,1 +1,3 @@
-export const fetchCurrencyExchangeData = () => fetch(`http://localhost:1000/get-exchange-rates`).then(res => res.json());
+import { BASE_URL } from 'src/index.constants';
+
+export const fetchCurrencyExchangeData = () => fetch(`${BASE_URL}/get-exchange-rates`).then(res => res.json());

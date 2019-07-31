@@ -1,4 +1,6 @@
-export const createAutoSignal = (data) => fetch('http://localhost:1000/create-expert-signals', {
+import { BASE_URL } from 'src/index.constants';
+
+export const createAutoSignal = (data) => fetch(`${BASE_URL}/create-expert-signals`, {
     method: 'POST',
     headers: {
         'Accept': 'application/json',

@@ -1,1 +1,3 @@
-export const getAllAlerts = () => fetch('http://localhost:1000/get-alerts').then(res => res.json());
+import { BASE_URL } from 'src/index.constants';
+
+export const getAllAlerts = () => fetch(`${BASE_URL}/get-alerts`).then(res => res.json());

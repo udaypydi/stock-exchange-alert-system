@@ -7,14 +7,20 @@ const styles = {
         background: #f0f2f5;
         height: 100%;
         justify-content: center;
-        padding: 20px;
+        margin-top: 7%;
+        margin-left: 5%;
     `,
 
     header: css`
         display: flex;
-        width: 80%;
+        width: 100%;
         justify-content: space-around;
         align-items: center;
+    `,
+
+    title: css`
+        font-size: 20px;
+        margin-bottom: 0;
     `
 };
 

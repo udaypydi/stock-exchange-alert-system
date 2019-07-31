@@ -3,6 +3,7 @@ import { Segment, Divider } from 'semantic-ui-react';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
+import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import { fetchAlertsHistory } from './alerthistory.action';
 import styles from './alerthistory.styles';
@@ -19,6 +20,7 @@ function AlerstHistory(props) {
 
     return (
         <div>
+            <Header />
             <CustomSidebar />
             <div css={styles.container}>
                 <Segment fluid style={{ width: 1000 }}>

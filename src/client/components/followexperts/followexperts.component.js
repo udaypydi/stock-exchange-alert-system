@@ -3,6 +3,7 @@ import { Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
+import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import styles from './followexperts.styles';
 
@@ -15,10 +16,11 @@ function FollowExperts(props) {
 
     return (
         <div>
+             <Header />
              <CustomSidebar />
              <div css={styles.container}>
                 <div css={styles.header}>
-                    <p>Follow Experts</p>
+                    <p css={styles.title}>Follow Experts</p>
                     <Button 
                         basic 
                         color="blue" 

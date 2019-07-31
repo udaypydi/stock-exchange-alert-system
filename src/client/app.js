@@ -5,7 +5,7 @@ const Home = React.lazy(() => import('./components/home/home.component'));
 
 function App() {
   return (
-    <div>
+    <div style={{ backgroundColor: '#f0f2f5'}} >
        <Suspense fallback={<div>Loading...</div>}>
           <Home />
         </Suspense> 

@@ -10,6 +10,7 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import Loader from 'commons/preLoader/preloader.component';
+import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import "react-datepicker/dist/react-datepicker.css";
 /** @jsx jsx */
@@ -128,6 +129,7 @@ function renderExpertSignal(props) {
 
     return (
         <div>
+            <Header />
             <CustomSidebar />
             {
                 !isLoading && !isSuccess ? (

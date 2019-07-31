@@ -131,7 +131,7 @@ function renderAutoSignalForm(props) {
     }
 
     return (
-        <div>
+        <div style={{ backgroundColor: '#f0f2f5'}}>
             <Header />
             <CustomSidebar />
             {
@@ -373,7 +373,7 @@ function renderAutoSignalForm(props) {
 
 function AutoSignalFormComponent(props) {
     return (
-        <div>
+        <div style={{ backgroundColor: '#f0f2f5'}}>
             <p>Create AutoSignals</p>
             <Divider />
             <div>
