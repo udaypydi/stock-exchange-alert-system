@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx webpack --config webpack.config.js --mode production",
+    "webpack-dev": "npx webpack --config webpack.config.js --mode development",
     "dev": "node-sass-chokidar ./src/client/components/commons/preLoader/preLoader.scss ./src/client/components/commons/preLoader/preLoader.css; node index.js"
   },
   "keywords": [],
@@ -25,6 +26,7 @@
     "body-parser": "^1.19.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
+    "express-http-proxy": "^1.5.1",
     "history": "^4.9.0",
     "moment": "^2.24.0",
     "node-sass-chokidar": "^1.3.5",
@@ -43,7 +45,14 @@
     "redux-thunk": "^2.3.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.87.3",
-    "webpack": "^4.29.5"
+    "webpack": "^4.29.5",
+    "cors": "^2.8.5",
+    "mongodb": "^3.3.0-beta2",
+    "node-fetch": "^2.6.0",
+    "nodemailer": "^6.3.0",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "technicalindicators": "^2.0.9",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^1.0.1",

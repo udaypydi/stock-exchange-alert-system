@@ -1,6 +1,6 @@
 import { BASE_URL } from 'src/index.constants';
 
-export const createAutoSignal = (data) => fetch(`${BASE_URL}/create-auto-signal`, {
+export const createAutoSignal = (data) => fetch(`/create-auto-signal`, {
     method: 'POST',
     headers: {
         'Accept': 'application/json',
