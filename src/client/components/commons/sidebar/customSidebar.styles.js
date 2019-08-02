@@ -33,6 +33,12 @@ const styles = {
         &:hover {
             color: #2185d0;
         }
+    `,
+
+    profileImageContainer: css`
+        height: 175px;
+        width: 100%;
+        background: #ffffff;
     `
 };
 

@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
-import { Sidebar, Menu, Icon } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Image } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 /** @jsx jsx */
@@ -50,9 +50,20 @@ function CustomSideBar(props) {
             vertical
             visible={visible}
             width='thin'
-            style={{ color: '#fefefe', width: 250 }}
+            style={{ color: '#fefefe', width: 278 }}
         >
             <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
+            <div css={styles.profileImageContainer}>
+                <Image 
+                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw' 
+                    size='tiny' 
+                    circular
+                    style={{
+                        height: '50px',
+                        width: '50px'
+                    }}
+                />
+            </div>
             {
                 SIDEBAR_MENU.map((sidebarElement, index) => (
                     <Menu.Item 
