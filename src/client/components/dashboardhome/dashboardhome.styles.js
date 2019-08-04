@@ -13,12 +13,16 @@ const styles = {
     chartCard: css`
         display: flex;
         width: 250px;
-        height: 150px;
+        height: 140px;
         position: relative;
-        border-radius: 10px;
         justify-content: center;
         align-items: center;
-        border-radius: 5px;
+        -webkit-box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.03);
+        -moz-box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.03);
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
         margin-top: 0;
     `,
 
@@ -27,13 +31,11 @@ const styles = {
         flex: 1;
         justify-content: space-evenly;
         padding-top: 160px;
-        height: ${window.availHeight}px;
         padding-left: 280px;
     `,
     container: css`
-        height:  ${window.outerHeight}px;
         width: 100%;
-        background: #f0f2f5;
+        background: #f5f5f5;
     `
 };
 

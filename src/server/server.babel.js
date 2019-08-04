@@ -15,7 +15,7 @@ const compiler = webpack(webpackConfig);
 const app = express();
 
 // env config 
-const mode = env || 'production';
+const mode = env || 'development';
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static('../../public'));

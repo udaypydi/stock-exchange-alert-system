@@ -8,15 +8,19 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    Text
+    Text,
+    LineChart,
+    Line,
   } from "recharts";
   /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { CURRENCY_GRAPH_DATA } from './dashboardhome.constant';
+import { CURRENCY_GRAPH_DATA, ALERT_SIGNAL_HISTORY } from './dashboardhome.constant';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import Header from 'commons/header/header.component';
 import { fetchCurrencyData, formatChartData } from './dashboardhome.action';
 import styles from './dashboardhome.styles';
+
+// const currencies = [eurusd, usdjpy, usdgyd, audnzd];
 
 function renderCurrencyGraph(currencyData) {
     const { eurusd, usdjpy, usdgyd, audnzd } = currencyData;
@@ -24,7 +28,7 @@ function renderCurrencyGraph(currencyData) {
         <div css={styles.chartsContainer}>
             {
                 [eurusd, usdjpy, usdgyd, audnzd].map((data, index) => data.length && (
-                    <Segment css={styles.chartCard} style={{ marginTop: 0 }}>
+                    <Segment raised css={styles.chartCard} style={{ marginTop: 0, borderRadius: 10 }} key={index}>
                         <div css={styles.chartData}>
                                 <div>
                                     <p
@@ -54,32 +58,88 @@ function renderCurrencyGraph(currencyData) {
                                     23%
                                 </p>
                                 </div>
-                        <AreaChart
-                            width={250}
-                            height={120}
-                            data={data}
-                            style={{ position: "absolute", bottom: 0 }}
-                            >
-                            <defs>
-                                <linearGradient id={`colorUv-${index}`} x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="10%" stopColor={CURRENCY_GRAPH_DATA[index].colors[0]} stopOpacity={0.8} />
-                                <stop offset="90%" stopColor={CURRENCY_GRAPH_DATA[index].colors[1]} stopOpacity={1} />
-                                </linearGradient>
-                            </defs>
-                            <Tooltip />
-                            <Area
-                                type="monotone"
-                                dataKey="uv"
-                                stroke={CURRENCY_GRAPH_DATA[index].colors[0]}
-                                fill={`url(#colorUv-${index})`}
-                            />
-                            <YAxis type="number" domain={CURRENCY_GRAPH_DATA[index].domain} hide />
-                        </AreaChart>
+                                {
+                                    index !== 3 ? (
+                                        <AreaChart
+                                            width={250}
+                                            height={75}
+                                            data={data}
+                                            style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
+                                            margin={{top: 0, right: 0, left: 0, bottom: 0}}
+                                            >
+                                            <defs style={{ borderRadius: 10 }}>
+                                                <linearGradient id={`colorUv-${index}`} x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor={CURRENCY_GRAPH_DATA[index].colors[0]} stopOpacity={0.9} />
+                                                <stop offset="95%" stopColor={CURRENCY_GRAPH_DATA[index].colors[1]} stopOpacity={0.9} />
+                                                </linearGradient>
+                                            </defs>
+                                            <Tooltip />
+                                            <Area
+                                                strokeWidth={0}
+                                                stroke='#4D95F3'
+                                                type="monotone"
+                                                dataKey="uv"
+                                                stroke={CURRENCY_GRAPH_DATA[index].colors[0]}
+                                                fill={`url(#colorUv-${index})`}
+                                                fillOpacity={1}
+                                            />
+                                            <YAxis type="number" domain={CURRENCY_GRAPH_DATA[index].domain} hide />
+                                        </AreaChart>
+                                    ) : (
+                                        <LineChart
+                                            width={250}
+                                            height={75}
+                                            data={data}
+                                            style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
+                                            margin={{top: 5, right: 5, left: 5, bottom: 5}}
+                                        >
+                                            <Tooltip/>
+                                            <Line dataKey="uv" stroke="#038FDE" dot={{stroke: '#FEA931', strokeWidth: 2}}/>
+                                            <YAxis type="number" domain={CURRENCY_GRAPH_DATA[index].domain} hide />
+                                        </LineChart>
+                                    )
+                                }
+                        
                     </Segment>
                 ))
             }
-            
         </div>
+    );
+}
+
+function renderAlertsGraph(currencyData) {
+    const { eurusd, usdjpy, usdgyd, audnzd } = currencyData;
+    const graphWidth = (window.innerWidth / 100) * 55;
+    return (
+        <Segment raised css={styles.chartCard} style={{ marginTop: 20, borderRadius: 10, width: '55%', height: 250, float: 'right', marginRight: 30 }}>
+            <div css={css`${styles.chartData} left: -55px; top: 30px;`}>
+                <p>Alerts History</p>
+            </div>
+                <AreaChart
+                    width={graphWidth}
+                    height={180}
+                    data={ALERT_SIGNAL_HISTORY}
+                    style={{ position: "absolute", bottom: 0, borderRadius: 10, bottom: 0 }}
+                    margin={{top: 0, right: 0, left: 0, bottom: 0}}
+                    >
+                    <defs style={{ borderRadius: 10 }}>
+                        <linearGradient id={`colorUv-15`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={'#38AAE5'} stopOpacity={0.8} />
+                        <stop offset="95%" stopColor={'#F5FCFD'} stopOpacity={0.8} />
+                        </linearGradient>
+                    </defs>
+                    <Tooltip />
+                    <Area
+                        strokeWidth={2}
+                        stroke='#10316B'
+                        dataKey="uv"
+                        stroke={CURRENCY_GRAPH_DATA[0].colors[0]}
+                        fill={`url(#colorUv-15)`}
+                        fillOpacity={1}
+                    />
+                    <YAxis type="number" domain={[0, 500]} hide />
+                </AreaChart>
+        </Segment>
     );
 }
 
@@ -97,6 +157,7 @@ function DashboardHome(props) {
             <Header />
             <CustomSidebar />
             {renderCurrencyGraph(dashboardCurrencyData)}
+            {renderAlertsGraph(dashboardCurrencyData)}
         </div>
     )
 }

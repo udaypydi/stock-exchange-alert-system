@@ -9,25 +9,68 @@ export const DASHBOARD_HOME_INITIAL_STATE = {
 export const CURRENCIES = ['eurusd', 'usdjpy', 'usdgyd', 'audnzd'];
 
 export const CURRENCY_GRAPH_DATA = [{
-    domain: [1, 1.2],
-    colors: ['#045BA6', '#0CB674'],
-    exchange: 'EUR/USD'
+    domain: [1, 1.19],
+    colors: ['#163469', '#FE9E15'],
+	exchange: 'EUR/USD',
+	strokeColor: '#4D95F3',
 },
 {
     domain: [107, 109],
-    colors: ['#432F6D', '#B4551E'],
-    exchange: 'USD/JPY'
+    colors: ['#4ECDE4', '#06BB8A'],
+	exchange: 'USD/JPY',
+	strokeColor: '#4D95F3',
 },
 {
     domain: [206, 208],
-    colors: ['#00AB12', '#4ED011'],
-    exchange: 'USD/GYD'
+    colors: ['#e81a24', '#FEEADA'],
+	exchange: 'USD/GYD',
+	strokeColor: '#FEEADA',
 },
 {
     domain: [1, 1.1],
-    colors: ['#976D8B', '#007CD3'],
+    colors: ['#038FDE', '#007CD3'],
     exchange: 'AUD/NZD'
 }
+];
+
+
+export const ALERT_SIGNAL_HISTORY = [
+	{
+		date: '2019-07-26',
+		uv: 12,
+	},
+	{
+		date: '2019-07-27',
+		uv: 100,
+	},
+	{
+		date: '2019-07-28',
+		uv: 200,
+	},
+	{
+		date: '2019-07-29',
+		uv: 30,
+	},
+	{
+		date: '2019-07-30',
+		uv: 300,
+	},
+	{
+		date: '2019-08-01',
+		uv: 120,
+	},
+	{
+		date: '2019-08-02',
+		uv: 90,
+	},
+	{
+		date: '2019-08-03',
+		uv: 400,
+	},
+	{
+		date: '2019-08-04',
+		uv: 180,
+	},
 ];
 
 export const DEMO_DATA_JSON = {
