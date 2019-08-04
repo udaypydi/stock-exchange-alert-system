@@ -1,5 +1,5 @@
-import { MongoClient } from 'mongodb';
-import bcrypt from 'bcrypt-nodejs';
+const { MongoClient } = require('mongodb');
+const bcrypt = require('bcrypt-nodejs');
 const { mongoconnection } = require('../config/mongoconnection');
 const { config } = require('../config');
 

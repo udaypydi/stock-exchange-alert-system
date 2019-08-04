@@ -1,5 +1,5 @@
-import passport from 'passport';
-import { authentication } from '../models';
+const passport = require('passport');
+const { authentication } =  require('../models');
 
 module.exports = {
     get: [

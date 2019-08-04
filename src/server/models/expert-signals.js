@@ -3,6 +3,13 @@ const uuidv4 = require('uuid/v4');
 const { ObjectId } = require('mongodb');
 const { mongoconnection } = require('../config/mongoconnection');
 
+let database;
+
+mongoconnection.dbInstance((db) => {
+    database = db.db('signalant');
+});
+
+
 let rsiInterval = [];
 let pipService = [];
 
@@ -71,7 +78,7 @@ function startPipCountService(pipData) {
 function createRSISignal(signalData) {
     const { currencyPair, indicatorParameters, ohlc, indicator, alerts, alert_id, stopLoss, targetProfit } = signalData;
     const { level, period } = indicatorParameters;
-    
+
     console.log('alert_id for expert signals', alert_id);
 
     rsiInterval[alert_id] = setInterval(() => {
@@ -143,17 +150,21 @@ function createRSISignal(signalData) {
 module.exports = {
     createExpertSignal: (req, res) => {
         const { indicator } = req.body;
-
-        mongoconnection.dbInstance((db) => {
-            const database = db.db('signalant');
-            database.collection('signals').insert(req.body, (err, result) => {
-                if (err) throw err;
-                const alert_id = result.insertedIds['0'];
-                if (indicator === 'rsi') {
-                    createRSISignal({ ...req.body, alert_id: alert_id });
-                }
-                res.json({ status: 200 });
-            })
+        database.collection('expertsignals').insert({ ...req.body, email: req.session.user.email } , (err, result) => {
+            if (err) throw err;
+            database.collection('users').update({ email: req.session.user.email }, {$set: { isExpert: true }});
+            const alert_id = result.insertedIds['0'];
+            if (indicator === 'rsi') {
+                createRSISignal({ ...req.body, alert_id: alert_id });
+            }
+            res.json({ status: 200 });
         });
     },
+
+    fetchExperts: (req, res) => {
+        database.collection('users').find({ isExpert: true }).toArray((err, result) => {
+            if (err) throw err;
+            res.json({ experts: result });
+        })
+    }
 }

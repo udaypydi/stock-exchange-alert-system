@@ -38,7 +38,7 @@ let alertSignalInterval = [];
 // }
 
 function createRSISignal(signalData) {
-    const { currencyPair, timeFrame, indicatorParameters, ohlc, signalTimeFrame, indicator, alert_id } = signalData;
+    const { currencyPair, timeFrame, indicatorParameters, ohlc, signalTimeFrame, indicator, alert_id, email } = signalData;
     const { level, period } = indicatorParameters;
     const { timeOut } = signalTimeFrame;
 
@@ -72,7 +72,7 @@ function createRSISignal(signalData) {
                 }
                 mongoconnection.dbInstance((db) => {
                     const database = db.db('signalant');
-                    database.collection('alerts').insert(alert, (err, result) => {
+                    database.collection('alerts').insert({ ...alert, email }, (err, result) => {
                         if (err) console.log(err);
                         console.log('alert created');
                     })
@@ -84,7 +84,7 @@ function createRSISignal(signalData) {
 
 
 function createBollingerBands(signalData) {
-    const { currencyPair, timeFrame, indicatorParameters, ohlc, signalTimeFrame, alert_id } = signalData;
+    const { currencyPair, timeFrame, indicatorParameters, ohlc, signalTimeFrame, alert_id, email } = signalData;
     const { deviation, period } = indicatorParameters;
     const { timeOut } = signalTimeFrame;
     console.log('bollinger bands indicator alert created with id', alert_id);
@@ -121,7 +121,7 @@ module.exports = {
     getAutoSignals: (req, res) => {
         mongoconnection.dbInstance((db) => {
             const database = db.db('signalant');
-            database.collection('signals').find({}).toArray((err, result) => {
+            database.collection('signals').find({ email: req.session.user.email }).toArray((err, result) => {
                 if (err) throw err;
                 console.log(result);
                 res.json({ status: 200, 'alerts_signals': result });
@@ -133,11 +133,11 @@ module.exports = {
         const { indicator } = req.body;
         mongoconnection.dbInstance((db) => {
             const database = db.db('signalant');
-            database.collection('signals').insert(req.body, (err, result) => {
+            database.collection('signals').insert({ ...req.body, email: req.session.user.email }, (err, result) => {
                 if (err) throw err;
                 const alert_id = result.insertedIds['0'];
                 if (indicator === 'rsi') {
-                    createRSISignal({ ...req.body, alert_id: alert_id });
+                    createRSISignal({ ...req.body, alert_id: alert_id, email: req.session.user.email },);
                 } else if (indicator === 'bollinger_bands') {
                     createBollingerBands({ ...req.body, alert_id: alert_id });
                 }

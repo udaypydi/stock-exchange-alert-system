@@ -1,5 +1,5 @@
 
-import authentication from './authentication';
+const authentication = require('./authentication');
 
 module.exports = {
   authentication,
