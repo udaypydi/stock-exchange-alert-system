@@ -36,10 +36,20 @@ const styles = {
     `,
 
     profileImageContainer: css`
-        height: 175px;
+        height: 120px;
         width: 100%;
         background: #ffffff;
-    `
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    `,
+
+    profileType: css`
+        padding: 10px;
+        color: #000000;
+        font-weight: 400;
+    `,
 };
 
 

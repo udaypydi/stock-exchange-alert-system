@@ -1,6 +1,9 @@
 const fetch = require('node-fetch');
 const { ObjectId } = require('mongodb');
 const { mongoconnection } = require('../config/mongoconnection');
+
+let alertSignalInterval = [];
+
 // function createAutoSignals() {
 //     const SMA_ARRAY = ['https://www.alphavantage.co/query?function=SMA&symbol=USDEUR&interval=5min&time_period=10&series_type=open&apikey=IFRN6HIL90MFHQP4',
 //     'https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=EUR&apikey=IFRN6HIL90MFHQP4'
@@ -35,18 +38,19 @@ const { mongoconnection } = require('../config/mongoconnection');
 // }
 
 function createRSISignal(signalData) {
-    const { currencyPair, timeFrame, indicatorParameters, ohlc, signalTimeFrame, indicator } = signalData;
+    const { currencyPair, timeFrame, indicatorParameters, ohlc, signalTimeFrame, indicator, alert_id } = signalData;
     const { level, period } = indicatorParameters;
     const { timeOut } = signalTimeFrame;
-    
-    setInterval(() => {
+
+    console.log('rsi indicator alert created with id', alert_id);
+
+    alertSignalInterval[alert_id] = setInterval(() => {
         fetch(`https://www.alphavantage.co/query?function=RSI&symbol=${currencyPair}&interval=${timeFrame}&time_period=${parseInt(period)}&series_type=${ohlc}&apikey=JJJLU0RT9LACJCYK`)
             .then(res => res.json())
             .then(json => {
                 const rsi_analysis_keys = Object.keys(json["Technical Analysis: RSI"]);
                 const rsi_analysis = json["Technical Analysis: RSI"];
                 const rsi = parseFloat(rsi_analysis[rsi_analysis_keys[0]]["RSI"]);
-                console.log(rsi_analysis);
                 let alert = {
                     currencyPair,
                     indicator: indicator.toUpperCase(),
@@ -80,10 +84,11 @@ function createRSISignal(signalData) {
 
 
 function createBollingerBands(signalData) {
-    const { currencyPair, timeFrame, indicatorParameters, ohlc, signalTimeFrame } = signalData;
+    const { currencyPair, timeFrame, indicatorParameters, ohlc, signalTimeFrame, alert_id } = signalData;
     const { deviation, period } = indicatorParameters;
     const { timeOut } = signalTimeFrame;
-    setInterval(() => {
+    console.log('bollinger bands indicator alert created with id', alert_id);
+    alertSignalInterval[alert_id] = setInterval(() => {
         fetch(`https://www.alphavantage.co/query?function=BBANDS&symbol=${currencyPair}&interval=${timeFrame}&time_period=${parseInt(period)}&series_type=${ohlc}&nbdevup=${parseInt(deviation)}&nbdevdn=${parseInt(deviation)}&apikey=JJJLU0RT9LACJCYK`)
             .then(res => res.json())
             .then(json => {
@@ -126,15 +131,17 @@ module.exports = {
 
     createAutoSignal: (req, res) => {
         const { indicator } = req.body;
-        if (indicator === 'rsi') {
-            createRSISignal(req.body);
-        } else if (indicator === 'bollinger_bands') {
-            createBollingerBands(req.body);
-        }
         mongoconnection.dbInstance((db) => {
             const database = db.db('signalant');
             database.collection('signals').insert(req.body, (err, result) => {
-                if (err) console.log(err);
+                if (err) throw err;
+                const alert_id = result.insertedIds['0'];
+                if (indicator === 'rsi') {
+                    createRSISignal({ ...req.body, alert_id: alert_id });
+                } else if (indicator === 'bollinger_bands') {
+                    createBollingerBands({ ...req.body, alert_id: alert_id });
+                }
+
                 res.json({ status: 200 });
             })
         });
@@ -147,7 +154,9 @@ module.exports = {
             database.collection('signals').remove({ _id: ObjectId(id) }, true);
             database.collection('signals').find({}).toArray((err, result) => {
                 if (err) throw err;
-                console.log(result);
+                console.log('alert signal delted');
+                clearInterval(alertSignalInterval[id]);
+                console.log('indicator timer stopped with this id', id);
                 res.json({ status: 200, 'alerts_signals': result });
             });
         })

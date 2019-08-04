@@ -1,16 +1,18 @@
 import React, { Component, useState, useEffect } from 'react';
 import { Sidebar, Menu, Icon, Image } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
+import { sideBarToggleStatus } from './customSideBar.constant';
 import { SIDEBAR_MENU, SIDEBAR_HEADER, DASHBOARD_ROUTE } from './customSideBar.constant';
 import styles from './customSidebar.styles';
 
 function CustomSideBar(props) {
 
     const [activeIndex, setActiveIndex] = useState(0);
-    const { visible } = props;
+    const { visible , sideBar} = props;
 
     useEffect(() => {
         let index = DASHBOARD_ROUTE.indexOf(window.location.hash);
@@ -43,44 +45,87 @@ function CustomSideBar(props) {
     }
 
     return (
-        <Sidebar
-            as={Menu}
-            animation='overlay'
-            icon='labeled'
-            vertical
-            visible={visible}
-            width='thin'
-            style={{ color: '#fefefe', width: 278 }}
-        >
-            <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
-            <div css={styles.profileImageContainer}>
-                <Image 
-                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw' 
-                    size='tiny' 
-                    circular
-                    style={{
-                        height: '50px',
-                        width: '50px'
-                    }}
-                />
-            </div>
-            {
-                SIDEBAR_MENU.map((sidebarElement, index) => (
-                    <Menu.Item 
-                        style={{ 
-                            backgroundColor: activeIndex === index ? '#e6faff' : '#ffffff'
-                        }} 
-                        onClick={() => handleRouteClick(sidebarElement.route, index)}
-                    >
-                        <div css={activeIndex === index ? styles.activeMenuItem : styles.menuItem}>
-                            <Icon name={sidebarElement.iconName} style={{ marginLeft: 40 }} />
-                            <p style={{ marginLeft: 20 }}>{sidebarElement.name}</p>
-                        </div>
-                    </Menu.Item>
-                ))
-            }
-           
-        </Sidebar>
+        <React.Fragment>
+            <Sidebar
+                as={Menu}
+                icon='labeled'
+                vertical
+                visible={sideBar.sidebarOpen}
+                width='thin'
+                animation="push"
+                style={{ color: '#fefefe', width: 278 }}
+            >
+                <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
+                <div css={styles.profileImageContainer}>
+                    <Image 
+                        src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw' 
+                        size='tiny' 
+                        circular
+                        style={{
+                            height: '50px',
+                            width: '50px'
+                        }}
+                    />
+                    <p css={styles.profileType}>Trader</p>
+                </div>
+                {
+                    SIDEBAR_MENU.map((sidebarElement, index) => (
+                        <Menu.Item 
+                            style={{ 
+                                backgroundColor: activeIndex === index ? '#e6faff' : '#ffffff',
+                                borderRight: activeIndex === index ? '4px solid #038fde' : '0px',
+                                borderBottom: 0,
+                            }} 
+                            onClick={() => handleRouteClick(sidebarElement.route, index)}
+                        >
+                            <div css={activeIndex === index ? styles.activeMenuItem : styles.menuItem}>
+                                <Icon name={sidebarElement.iconName} style={{ marginLeft: 40, fontSize: 18 }} />
+                                <p style={{ marginLeft: 20 }}>{sidebarElement.name}</p>
+                            </div>
+                        </Menu.Item>
+                    ))
+                }
+            </Sidebar>
+            <Sidebar
+                as={Menu}
+                icon='labeled'
+                vertical
+                visible={!sideBar.sidebarOpen}
+                width='thin'
+                animation="push"
+                style={{ color: '#fefefe', width: 80, overflow: 'hidden' }}
+            >
+                <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
+                <div css={styles.profileImageContainer}>
+                    <Image 
+                        src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw' 
+                        size='tiny' 
+                        circular
+                        style={{
+                            height: '50px',
+                            width: '50px'
+                        }}
+                    />
+                </div>
+                {
+                    SIDEBAR_MENU.map((sidebarElement, index) => (
+                        <Menu.Item 
+                            style={{ 
+                                backgroundColor: activeIndex === index ? '#e6faff' : '#ffffff',
+                                borderRight: activeIndex === index ? '4px solid #038fde' : '0px',
+                                borderBottom: 0,
+                                width: 40,
+                            }} 
+                            onClick={() => handleRouteClick(sidebarElement.route, index)}
+                        >
+                            <div css={activeIndex === index ? styles.activeMenuItem : styles.menuItem}>
+                                <Icon name={sidebarElement.iconName} style={{ marginLeft: 10, fontSize: 18 }} />
+                            </div>
+                        </Menu.Item>
+                    ))
+                }
+            </Sidebar>
+        </React.Fragment>
     );
 }
 
@@ -93,4 +138,8 @@ CustomSideBar.defaultProps = {
     visible: true,
 };
 
-export default withRouter(CustomSideBar);
+const mapStateToProps = (state) => ({
+    sideBar: state.sidebar
+});
+
+export default withRouter(connect(mapStateToProps)(CustomSideBar));

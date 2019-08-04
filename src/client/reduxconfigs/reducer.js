@@ -4,6 +4,8 @@ import autoSignalsList from 'components/autosignal/autoSignalsList/autoSignalsLi
 import dashboardHomeReducer from 'components/dashboardhome/dashboardhome.reducer';
 import expertSignal from 'components/expertsignalform/expertsignalform.reducer.js';
 import alerts from 'components/alerthistory/alerthistory.reducer';
+import sideBar from 'commons/header/header.reducer';
+import user from 'components/auth/auth.reducer';
 
 export default combineReducers({
     autoSignal,
@@ -11,4 +13,6 @@ export default combineReducers({
     alerts,
     dashboard: dashboardHomeReducer,
     expertSignal,
+    sidebar: sideBar,
+    user,
 });

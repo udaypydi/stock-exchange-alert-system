@@ -33,6 +33,46 @@ export const CURRENCY_GRAPH_DATA = [{
 }
 ];
 
+
+export const ALERT_SIGNAL_HISTORY = [
+	{
+		date: '2019-07-26',
+		uv: 12,
+	},
+	{
+		date: '2019-07-27',
+		uv: 100,
+	},
+	{
+		date: '2019-07-28',
+		uv: 200,
+	},
+	{
+		date: '2019-07-29',
+		uv: 30,
+	},
+	{
+		date: '2019-07-30',
+		uv: 300,
+	},
+	{
+		date: '2019-08-01',
+		uv: 120,
+	},
+	{
+		date: '2019-08-02',
+		uv: 90,
+	},
+	{
+		date: '2019-08-03',
+		uv: 400,
+	},
+	{
+		date: '2019-08-04',
+		uv: 180,
+	},
+];
+
 export const DEMO_DATA_JSON = {
 	"status": 200,
 	"currencyExchange": [

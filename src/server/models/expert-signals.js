@@ -7,7 +7,7 @@ let rsiInterval = [];
 let pipService = [];
 
 function startPipCountService(pipData) {
-    const pip_index = uuidv4();
+    const pip_index = pipData.alert_id;
     pipService[pip_index] = setInterval(() => {
         let profitArray = 0;
         let lossArray = 0;
@@ -69,9 +69,12 @@ function startPipCountService(pipData) {
 }
 
 function createRSISignal(signalData) {
-    const { currencyPair, indicatorParameters, ohlc, indicator, alerts, alert_index, stopLoss, targetProfit } = signalData;
+    const { currencyPair, indicatorParameters, ohlc, indicator, alerts, alert_id, stopLoss, targetProfit } = signalData;
     const { level, period } = indicatorParameters;
-    rsiInterval[alert_index] = setInterval(() => {
+    
+    console.log('alert_id for expert signals', alert_id);
+
+    rsiInterval[alert_id] = setInterval(() => {
         fetch(`https://www.alphavantage.co/query?function=RSI&symbol=${currencyPair}&interval=5min&time_period=${parseInt(period)}&series_type=${ohlc}&apikey=QZ5AG7BLQD7TLXTZ`)
             .then(res => res.json())
             .then(json => {
@@ -88,13 +91,14 @@ function createRSISignal(signalData) {
 
                 if (rsi > parseFloat(level)) {
                     if (alerts === 'sell') {
-                        clearInterval(rsiInterval[alert_index]);
+                        clearInterval(rsiInterval[alert_id]);
                         const pipData = {
                             ohlc,
                             alerts,
                             currencyPair,
                             stop_loss: stopLoss,
                             target_profit: targetProfit,
+                            alert_id,
                         };
 
                         console.log('sell alert created');
@@ -107,11 +111,12 @@ function createRSISignal(signalData) {
                     }
                 } else if (rsi <= 60) {
                     if (alerts === 'buy') {
-                        clearInterval(rsiInterval[alert_index]);
+                        clearInterval(rsiInterval[alert_id]);
                         const pipData = {
                             ohlc,
                             alerts,
                             currencyPair,
+                            alert_id,
                         };
 
 
@@ -139,10 +144,16 @@ module.exports = {
     createExpertSignal: (req, res) => {
         const { indicator } = req.body;
 
-        if (indicator === 'rsi') {
-            createRSISignal({ ...req.body, alert_index: uuidv4() });
-        }
-
-        res.json({ status: 200 });
+        mongoconnection.dbInstance((db) => {
+            const database = db.db('signalant');
+            database.collection('signals').insert(req.body, (err, result) => {
+                if (err) throw err;
+                const alert_id = result.insertedIds['0'];
+                if (indicator === 'rsi') {
+                    createRSISignal({ ...req.body, alert_id: alert_id });
+                }
+                res.json({ status: 200 });
+            })
+        });
     },
 }

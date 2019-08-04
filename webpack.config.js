@@ -9,7 +9,10 @@ module.exports = {
     devtool: 'eval-source-map',
     mode: 'development',
     entry: {
-      app: "./src/client/index.js"
+      index: [
+          "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
+          "./src/client/index.js"
+      ]
     },
     output: {
         path: path.resolve(__dirname, './public'),
@@ -30,7 +33,6 @@ module.exports = {
           },
           {
             test:/\.css$/,
-            exclude: /node_modules/,
             use:['style-loader','css-loader']
           },
           {

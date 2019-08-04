@@ -30,7 +30,7 @@ const styles = {
         display: flex;
         flex: 1;
         justify-content: space-evenly;
-        padding-top: 100px;
+        padding-top: 160px;
         padding-left: 280px;
     `,
     container: css`

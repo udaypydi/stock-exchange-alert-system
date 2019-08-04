@@ -333,9 +333,6 @@ function renderAutoSignalForm(props) {
                                         }}
                                     />
                                 </div>
-                                <div css={styles.formContainer}>
-                                    <Checkbox label="Add this to my profile signals" css={styles.checkboxContainer} />
-                                </div>
                                 <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
                                     <Button 
                                         color="blue" 
