@@ -1,7 +1,7 @@
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
-import { MongoClient } from 'mongodb';
-import { authentication } from '../models';
+const passport  = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const { MongoClient } = require('mongodb');
+const { authentication } = require('../models');
 
 let database;
 

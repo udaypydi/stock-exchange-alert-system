@@ -9,4 +9,13 @@ module.exports = {
             }
         },
     ],
+
+    get: [
+        {
+            url: '/fetch-experts',
+            callback: (req, res) => {
+                experts.fetchExperts(req, res);
+            }
+        }
+    ]
 };
