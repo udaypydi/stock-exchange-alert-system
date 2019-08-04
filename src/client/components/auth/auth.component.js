@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Segment, Input, Checkbox, Button } from 'semantic-ui-react';
   /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
@@ -8,11 +8,19 @@ import styles from './auth.styles';
 
 function Auth(props) {
 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
     function logInUser() {
         const { dispatch } = props;
-        dispatch(signInUser());
+        const userData = {
+            email,
+            password,
+        };
+
+        dispatch(signInUser(userData));
     }
-    
+
     return (
         <div css={styles.container}>
             <Segment style={{ width: '60%', height: 300, borderRadius: 10, backgroundColor: '#ffffff' }} raised>
@@ -51,16 +59,20 @@ function Auth(props) {
                         <Grid.Column computer={8} mobile={16}>
                             <div css={styles.authFormContainer}>
                                 <div css={styles.formElement}>
-                                    <Input placeholder="Email" style={{ width: '80%' }} />
+                                    <Input 
+                                        placeholder="Email" 
+                                        style={{ width: '80%' }}
+                                        onChange={(event) => { setEmail(event.target.value) }}
+                                    />
                                 </div>
                                 <div css={styles.formElement}>
-                                    <Input placeholder="Password" style={{ width: '80%' }} />
-                                </div>
-                                <div css={styles.formElement}>
-                                    <Checkbox label="by signing up, I accept"/>
-                                    <label>Term & Condition</label>
-                                </div>
-                                
+                                    <Input 
+                                        type="password" 
+                                        placeholder="Password" 
+                                        style={{ width: '80%' }} 
+                                        onChange={(event) => { setPassword(event.target.value) }}
+                                    />
+                                </div> 
                                 <div css={styles.formElement}>
                                     <Button onClick={logInUser}primary>Sign In</Button>
                                     <label>or</label>

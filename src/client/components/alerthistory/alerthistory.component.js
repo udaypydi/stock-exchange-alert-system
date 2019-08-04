@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Segment, Divider } from 'semantic-ui-react';
+import { Segment, Divider, Tab } from 'semantic-ui-react';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
@@ -7,6 +7,15 @@ import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import { fetchAlertsHistory } from './alerthistory.action';
 import styles from './alerthistory.styles';
+
+
+
+const panes = [
+    { menuItem: 'Indicator Alerts', render: () => <Tab.Pane attached={false}>Tab 1 Content</Tab.Pane>},
+    { menuItem: 'Expert Alerts', render: () => <Tab.Pane attached={false}>Tab 2 Content</Tab.Pane>},
+    { menuItem: 'Price Alerts', render: () => <Tab.Pane attached={false}>Tab 3 Content</Tab.Pane>},
+];
+
 
 function AlerstHistory(props) {
 
@@ -31,6 +40,7 @@ function AlerstHistory(props) {
                             </div>
                         </div>
                         <Divider />
+                        <Tab menu={{ pointing: true }} panes={panes} />
                         <div style={{ marginTop: 30 }}>
                             <Segment 
                                 css={styles.signalsHeaderContainer} 

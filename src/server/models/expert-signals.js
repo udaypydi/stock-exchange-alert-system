@@ -155,6 +155,7 @@ module.exports = {
             database.collection('users').update({ email: req.session.user.email }, {$set: { isExpert: true }});
             const alert_id = result.insertedIds['0'];
             if (indicator === 'rsi') {
+                console.log('indicator', alert_id);
                 createRSISignal({ ...req.body, alert_id: alert_id });
             }
             res.json({ status: 200 });
