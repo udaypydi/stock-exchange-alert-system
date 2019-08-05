@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
 const app = express();
+const config = require('../config')
 
 const MongoStore =  require ('connect-mongo')(session);
 
@@ -21,7 +22,7 @@ module.exports.middleware = (app,express) => {
 		resave: false, 
 		saveUninitialized: false,
 		store: new MongoStore({
-				url: 'mongodb://localhost:27017/signalant',
+				url: config.development.mongourl,
 				collection: 'session',
 		 }),
 		autoRemove: 'native'
