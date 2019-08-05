@@ -5,7 +5,7 @@ const { config } = require('../config');
 
 let database  ;
 
-MongoClient.connect('mongodb://localhost:27017/signalant', (err, db) => {
+MongoClient.connect(config.development.mongourl, (err, db) => {
   if (err)
     throw err
   else {
