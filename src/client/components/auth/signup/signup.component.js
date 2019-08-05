@@ -30,7 +30,7 @@ function SignUp(props) {
             .then(json => {
                 if (json.status === 200) {
                     updateUserState(json);
-                    history.push('/');
+                    history.push('/home');
                 }
             });
     }

@@ -5,42 +5,27 @@ import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
 import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
-import { fetchAlertsHistory } from './alerthistory.action';
+import { getExpertAlerts } from './alerthistory.api';
 import styles from './alerthistory.styles';
 
 
-
-const panes = [
-    { menuItem: 'Indicator Alerts', render: () => <Tab.Pane attached={false}>Tab 1 Content</Tab.Pane>},
-    { menuItem: 'Expert Alerts', render: () => <Tab.Pane attached={false}>Tab 2 Content</Tab.Pane>},
-    { menuItem: 'Price Alerts', render: () => <Tab.Pane attached={false}>Tab 3 Content</Tab.Pane>},
-];
-
-
-function AlerstHistory(props) {
+function ExpertAlerts(props) {
 
     const [pageCount, setPageCount] = useState(0);
-    const { alerts } = props;
+    const [expertAlerts, setExpertAlerts] = useState([]);
 
     useEffect(() => {
-        const { dispatch } = props;
-        dispatch(fetchAlertsHistory());
+        getExpertAlerts()
+            .then(json => {
+                setExpertAlerts(json.alerts);
+            })
     }, []);
 
     return (
         <div>
-            <Header />
-            <CustomSidebar />
             <div css={styles.container}>
                 <Segment fluid style={{ width: 1000 }}>
                     <div>
-                        <div css={styles.headerContainer}>
-                            <div>
-                                <p>Alerts History</p>
-                            </div>
-                        </div>
-                        <Divider />
-                        <Tab menu={{ pointing: true }} panes={panes} />
                         <div style={{ marginTop: 30 }}>
                             <Segment 
                                 css={styles.signalsHeaderContainer} 
@@ -51,20 +36,20 @@ function AlerstHistory(props) {
                                 <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Buy/Sell price with time</p>
                                 <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Created Time</p>
                                 <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Profit/Loss</p>
-                                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Auto Signals</p>
+                                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Created By</p>
                             </Segment>
                             {
-                                alerts && [...alerts].splice(10 * pageCount, 10).map((alert, index) => (
+                                expertAlerts && [...expertAlerts].splice(10 * pageCount, 10).map((alert, index) => (
                                     <Segment 
                                         css={styles.signalsHeaderContainer} 
                                         style={{ borderBottom: index !== alert.length - 1 ? '1px solid #ccc' : '', padding: 0 }}
                                         basic
                                     > 
-                                        <p css={styles.autoSignalCell}>{alert.currencyPair}</p>
-                                        <p css={styles.autoSignalCell}>1.111</p>
-                                        <p css={styles.autoSignalCell}>{alert.created_at}</p>
-                                        <p css={styles.autoSignalCell}>0</p>
-                                        <p css={styles.autoSignalCell}>{alert.indicator}</p>
+                                        <p css={styles.autoSignalCell}>{alert.currency_pair}</p>
+                                        <p css={styles.autoSignalCell}>{alert.buy_sell_price}</p>
+                                        <p css={styles.autoSignalCell}>{alert.created_time}</p>
+                                        <p css={styles.autoSignalCell}>{alert.total_loss_profit}</p>
+                                        <p css={styles.autoSignalCell}>{alert.email}</p>
                                     </Segment>
                                 ))
                             }
@@ -83,7 +68,7 @@ function AlerstHistory(props) {
                                         }}
                                     >{pageCount + 1}</p>
                                     {
-                                        ((pageCount + 1) * 10 <= alerts.length) && (
+                                        ((pageCount + 1) * 10 <= expertAlerts.length) && (
                                             <p 
                                                 css={styles.signalPaginationButtons}
                                                 onClick={() => setPageCount(pageCount + 1)}
@@ -105,4 +90,4 @@ const mapStateToProps = (state) => ({
     alerts: state.alerts,
 });
 
-export default connect(mapStateToProps)(AlerstHistory);
+export default connect(mapStateToProps)(ExpertAlerts);

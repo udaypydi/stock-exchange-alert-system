@@ -1,8 +1,11 @@
 const fetch = require('node-fetch');
+const mailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
+const nodemailer = require('nodemailer');
 const uuidv4 = require('uuid/v4');
 const { ObjectId } = require('mongodb');
 const { mongoconnection } = require('../config/mongoconnection');
-
+const { generateSignalantTemplate } = require('../common/mailTemplate');
 let database;
 
 mongoconnection.dbInstance((db) => {
@@ -10,20 +13,32 @@ mongoconnection.dbInstance((db) => {
 });
 
 
+const transporter = nodemailer.createTransport(smtpTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    auth: {
+      user: 'udaypydi333@gmail.com',
+      pass: 'dupkhotwvolgdgla'
+    }
+}));
+
 let rsiInterval = [];
 let pipService = [];
+let pipArray = {};
 
 function startPipCountService(pipData) {
     const pip_index = pipData.alert_id;
+    pipArray[pip_index] = { loss: 0, profit: 0 };
+    
     pipService[pip_index] = setInterval(() => {
-        let profitArray = 0;
-        let lossArray = 0;
         const {
             ohlc,
             alerts,
             currencyPair,
             stop_loss,
             target_profit,
+            tradeLots,
+            email,
         } = pipData;
 
         let uhlc_key = '';
@@ -40,9 +55,12 @@ function startPipCountService(pipData) {
             uhlc_key = '1. open';
         }
 
-        fetch(`https://www.alphavantage.co/query?function=FX_INTRADAY&from_symbol=${currencyPair.split('').splice(0, 2)}&to_symbol=${currencyPair.split('').splice(3, 3)}&interval=1min&apikey=QZ5AG7BLQD7TLXTZ`)
+        const URL = `https://www.alphavantage.co/query?function=FX_INTRADAY&from_symbol=${currencyPair.split('').splice(0, 3).join('')}&to_symbol=${currencyPair.split('').splice(3, 6).join('')}&interval=1min&apikey=IFRN6HIL90MFHQP4`;
+
+        fetch(URL)
             .then(res => res.json())
             .then(json => {
+                console.log(pipArray);
                 const pip_data_key = Object.keys(json['Time Series FX (1min)']);
                 const pip_data = json["Time Series FX (1min)"];
                 const current_exchange_value = parseFloat(pip_data[pip_data_key[0]][uhlc_key]);
@@ -50,23 +68,101 @@ function startPipCountService(pipData) {
 
                 if (current_exchange_value > prev_exchange_value) {
                     if (alerts === 'sell') {
-                        profitArray ++;
+                        pipArray[pip_index].profit ++;
                     } else {
-                        lossArray ++;
+                        pipArray[pip_index].loss ++;
                     }  
                 } else {
                     if (alerts === 'sell') {
-                        lossArray ++;
+                        pipArray[pip_index].loss ++;
                     } else {
-                        profitArray ++;
+                        pipArray[pip_index].profit ++;
                     } 
                 }
 
-                if (lossArray === stop_loss) {
-                    console.log('loss signal generated');
+                if (pipArray[pip_index].loss === parseInt(stop_loss)) {
+                    const loss = parseInt(tradeLots) * 0.0001 * parseInt(stop_loss);
+
+                    const data = {
+                        total_loss_profit: loss.toFixed(4),
+                        currency_pair: currencyPair,
+                        transaction_type: 'loss',
+                        buy_sell_price: current_exchange_value,
+                        created_time: new Date(),
+                        email, 
+                    };
+
+                    const mailData = {  
+                        currencyPair,
+                        alertType: alerts,
+                        price: current_exchange_value,
+                        indicator: 'RSI',  
+                        profitLoss: loss.toFixed(4),
+                    };
+
+                    const mail_template = generateSignalantTemplate(mailData)
+
+                    const mailConfig = {
+                        from: 'udaypydi333@gmail.com',
+                        to: ['udaypydi333@gmail.com', 'mail@adithyan.in'],
+                        subject: 'Signalant Alerts',
+                        html: mail_template,
+                    };
+
+                    transporter.sendMail(mailConfig, function(error, info){
+                        if (error) {
+                          console.log(error);
+                        } else {
+                          console.log('Email sent: ' + info.response);
+                        }
+                      });
+                    
+
+                    database.collection('expert_alerts').insert(data, (err, result) => {
+                        if (err) throw err;
+                        console.log('saved loss signal');
+                    });
                     clearInterval(pipService[pip_index]);
-                } else if (profitArray === target_profit) {
-                    console.log('profit signal generated');
+                } else if (pipArray[pip_index].profit === parseInt(target_profit)) {
+                    const profit = parseInt(tradeLots) * 0.0001 * parseInt(target_profit)
+                    const data = {
+                        total_loss_profit: profit.toFixed(4),
+                        currency_pair: currencyPair,
+                        transaction_type: 'profit',
+                        buy_sell_price: current_exchange_value,
+                        created_time: new Date(),
+                        email, 
+                    };
+
+                    const mailData = {  
+                        currencyPair,
+                        alertType: alerts,
+                        price: current_exchange_value,
+                        indicator: 'RSI',  
+                        profitLoss: profit.toFixed(4),
+                    };
+
+                    const mail_template = generateSignalantTemplate(mailData)
+
+                    const mailConfig = {
+                        from: 'udaypydi333@gmail.com',
+                        to: ['udaypydi333@gmail.com', 'mail@adithyan.in'],
+                        subject: 'Signalant Alerts',
+                        html: mail_template,
+                    };
+
+                    transporter.sendMail(mailConfig, function(error, info){
+                        if (error) {
+                          console.log(error);
+                        } else {
+                          console.log('Email sent: ' + info.response);
+                        }
+                      });
+
+                    database.collection('expert_alerts').insert(data, (err, result) => {
+                        if (err) throw err;
+                        console.log('saved loss signal');
+                    })
                     clearInterval(pipService[pip_index]);
                 }
             })
@@ -76,7 +172,18 @@ function startPipCountService(pipData) {
 }
 
 function createRSISignal(signalData) {
-    const { currencyPair, indicatorParameters, ohlc, indicator, alerts, alert_id, stopLoss, targetProfit } = signalData;
+    const { 
+        currencyPair, 
+        indicatorParameters, 
+        ohlc, 
+        indicator, 
+        alerts, 
+        alert_id, 
+        stopLoss, 
+        targetProfit, 
+        tradeLots,
+        email,
+    } = signalData;
     const { level, period } = indicatorParameters;
 
     console.log('alert_id for expert signals', alert_id);
@@ -94,7 +201,7 @@ function createRSISignal(signalData) {
                     created_at: new Date()
                 };
 
-                console.log(`alert signal created at ${new Date()}`);
+                console.log(`alert signal created at ${new Date()}`, parseFloat(rsi));
 
                 if (rsi > parseFloat(level)) {
                     if (alerts === 'sell') {
@@ -106,6 +213,8 @@ function createRSISignal(signalData) {
                             stop_loss: stopLoss,
                             target_profit: targetProfit,
                             alert_id,
+                            tradeLots,
+                            email,
                         };
 
                         console.log('sell alert created');
@@ -124,6 +233,8 @@ function createRSISignal(signalData) {
                             alerts,
                             currencyPair,
                             alert_id,
+                            tradeLots,
+                            email,
                         };
 
 
@@ -144,7 +255,7 @@ function createRSISignal(signalData) {
                 //     })
                 // });
             })
-    }, 5 * 60 * 1000);
+    }, 3000);
 }
 
 module.exports = {
@@ -155,7 +266,8 @@ module.exports = {
             database.collection('users').update({ email: req.session.user.email }, {$set: { isExpert: true }});
             const alert_id = result.insertedIds['0'];
             if (indicator === 'rsi') {
-                createRSISignal({ ...req.body, alert_id: alert_id });
+                console.log('indicator', alert_id);
+                createRSISignal({ ...req.body, alert_id: alert_id, email: req.session.user.email });
             }
             res.json({ status: 200 });
         });

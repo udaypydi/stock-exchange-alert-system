@@ -8,5 +8,11 @@ module.exports = {
                 alerts.getAllAlerts(req, res);
             }
         },
+        {
+            url: '/get-expert-alerts',
+            callback: (req, res) => {
+                alerts.getExpertAlerts(req, res);
+            }
+        },
     ],
 };
