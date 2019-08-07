@@ -12,7 +12,7 @@ import styles from './customSidebar.styles';
 function CustomSideBar(props) {
 
     const [activeIndex, setActiveIndex] = useState(0);
-    const { visible , sideBar} = props;
+    const { visible , sideBar, user} = props;
 
     useEffect(() => {
         let index = DASHBOARD_ROUTE.indexOf(window.location.hash);
@@ -66,7 +66,7 @@ function CustomSideBar(props) {
                             width: '50px'
                         }}
                     />
-                    <p css={styles.profileType}>Trader</p>
+                    <p css={styles.profileType}>{user.name}</p>
                 </div>
                 {
                     SIDEBAR_MENU.map((sidebarElement, index) => (
@@ -139,7 +139,8 @@ CustomSideBar.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-    sideBar: state.sidebar
+    sideBar: state.sidebar,
+    user: state.user,
 });
 
 export default withRouter(connect(mapStateToProps)(CustomSideBar));

@@ -8,6 +8,12 @@ module.exports = {
                 experts.createExpertSignal(req, res);
             }
         },
+        {
+            url: '/follow-unfollow-expert',
+            callback: (req, res) => {
+                experts.followUnfollowExperts(req, res);
+            }
+        }
     ],
 
     get: [

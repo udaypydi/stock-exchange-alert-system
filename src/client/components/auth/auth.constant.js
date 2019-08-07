@@ -4,4 +4,8 @@ export const SIGN_UP_USER = 'SIGN_UP_USER';
 export const USER_INIT_STATE = {
     isLoggedIn: false,
     email: '',
-}
+    following: [],
+    followers: [],
+    name: '',
+};
+

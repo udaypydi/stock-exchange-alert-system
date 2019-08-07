@@ -278,5 +278,34 @@ module.exports = {
             if (err) throw err;
             res.json({ experts: result });
         })
+    },
+
+    followUnfollowExperts: (req, res) => {
+        const { email } = req.body;
+        const { user } = req.session;
+        let following = user.following;
+        const followingExpertIndex = following.indexOf(email);
+        if (followingExpertIndex === -1) {
+            following.push(email);
+        } else {
+            following.splice(followingExpertIndex, 1);
+        }
+
+        database.collection('users').updateOne({ email: user.email }, { $set: { "following": following }}, );
+        database.collection('users').find({ email: email }).toArray((err, result) => {
+            if (err) throw err;
+            let followers = result[0].followers;
+            const followerExpertIndex = followers.indexOf(user.email);
+            if (followerExpertIndex === -1) {
+                followers.push(user.email);
+            } else {
+                followers.splice(followerExpertIndex, 1);
+            }
+            database.collection('users').updateOne({ email: email }, { $set: { "followers": followers }}, );
+
+            res.json({ following, status: 200 });
+        });
+        // database.collection('users').update({ email }, { $set: { followers:  }});
+        
     }
 }

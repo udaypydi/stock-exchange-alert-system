@@ -43,7 +43,14 @@ module.exports = {
                 res.json({isRegistered: false, message: info.message});
               }
             })(req, res, next)
-          },
+        },
+
+        {
+            url: '/update-user-profile',
+            callback: (req, res) => {
+                authentication.uploadProfilePic(req, res);
+            }
+        },
       
     ]
 }

@@ -39,8 +39,9 @@ const styles = {
     followProfileContainer: css`
         width: 300px;
         display: flex;
-        justify-content: space-evenly;
+        justify-content: flex-end;
         height: 35px;
+        margin-right: 20px;
     `,
 
     dataContainer: css`

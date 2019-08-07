@@ -165,6 +165,7 @@ function renderAutoSignalForm(props) {
                                         css={styles.dropdownContainer}
                                         text={currencyPair}
                                         onChange={handleCurrencyPairChange}
+                                        style={{ width: '30%' }}
                                     />
                                     <Dropdown
                                         placeholder='Select timeframe ex:1 hour'
@@ -174,21 +175,13 @@ function renderAutoSignalForm(props) {
                                         css={styles.dropdownContainer}
                                         text={timeFrame}
                                         onChange={handleTimeFrameChange}
+                                        style={{ width: '30%' }}
                                     />
-                                </div>
-                                <div css={styles.formContainer}>
                                     <div style={{ width: '50%', justifyContent: 'space-evenly', display: 'flex', margin: 10 }}>
                                         <Checkbox label="Buy Alerts" onChange={() => handleAlertsSelect('buy')} checked={alerts.indexOf('buy') !== -1} />
                                         <Checkbox label="Sell Alerts" onChange={() => handleAlertsSelect('sell')} checked={alerts.indexOf('sell') !== -1} />
                                         <Checkbox label="Both" onChange={() => handleAlertsSelect('both')} checked={alerts.length === 2} />
                                     </div>
-                                    <Input 
-                                        fluid 
-                                        style={{ width: '50%', margin: 10 }} 
-                                        placeholder='Trade Lots' 
-                                        value={tradeLots}
-                                        onChange={handleTradeLotsChange}
-                                    />
                                 </div>
                                 <div css={styles.formContainer}>
                                     <Dropdown
