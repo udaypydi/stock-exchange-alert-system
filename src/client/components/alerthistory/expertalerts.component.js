@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Segment, Divider, Tab } from 'semantic-ui-react';
+import Moment from 'moment';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
@@ -23,65 +24,63 @@ function ExpertAlerts(props) {
 
     return (
         <div>
-            <div css={styles.container}>
-                <Segment fluid style={{ width: 1000 }}>
-                    <div>
-                        <div style={{ marginTop: 30 }}>
-                            <Segment 
-                                css={styles.signalsHeaderContainer} 
-                                style={{ backgroundColor: '#f8f8f8', padding: 10 }}
-                                basic
-                            >
-                                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Currency Pair</p>
-                                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Buy/Sell price with time</p>
-                                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Created Time</p>
-                                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Profit/Loss</p>
-                                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Created By</p>
-                            </Segment>
-                            {
-                                expertAlerts && [...expertAlerts].splice(10 * pageCount, 10).map((alert, index) => (
-                                    <Segment 
-                                        css={styles.signalsHeaderContainer} 
-                                        style={{ borderBottom: index !== alert.length - 1 ? '1px solid #ccc' : '', padding: 0 }}
-                                        basic
-                                    > 
-                                        <p css={styles.autoSignalCell}>{alert.currency_pair}</p>
-                                        <p css={styles.autoSignalCell}>{alert.buy_sell_price}</p>
-                                        <p css={styles.autoSignalCell}>{alert.created_time}</p>
-                                        <p css={styles.autoSignalCell}>{alert.total_loss_profit}</p>
-                                        <p css={styles.autoSignalCell}>{alert.email}</p>
-                                    </Segment>
-                                ))
-                            }
-                            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                <div style={{ display: 'flex' }}>
-                                    {
-                                        pageCount !== 0 && (
-                                            <p css={styles.signalPaginationButtons} onClick={() => setPageCount(pageCount - 1)}>&lt;</p>
-                                        )
-                                    }
-                                    <p 
-                                        css={styles.signalPaginationButtons} 
-                                        style={{ 
-                                            color: 'rgb(3, 143, 222)', 
-                                            border: '1px solid rgb(3, 143, 222)'
-                                        }}
-                                    >{pageCount + 1}</p>
-                                    {
-                                        ((pageCount + 1) * 10 <= expertAlerts.length) && (
-                                            <p 
-                                                css={styles.signalPaginationButtons}
-                                                onClick={() => setPageCount(pageCount + 1)}
-                                            >&gt;</p>
-                                        )
-                                    }
-                                   
-                                </div>
+            <Segment basic fluid style={{ border: 0 }}>
+                <div>
+                    <div style={{ marginTop: 30 }}>
+                        <Segment 
+                            css={styles.signalsHeaderContainer} 
+                            style={{ backgroundColor: '#f8f8f8', padding: 10 }}
+                            basic
+                        >
+                            <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Currency Pair</p>
+                            <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Buy/Sell price with time</p>
+                            <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Created Time</p>
+                            <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Profit/Loss</p>
+                            <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Created By</p>
+                        </Segment>
+                        {
+                            expertAlerts && [...expertAlerts].splice(10 * pageCount, 10).map((alert, index) => (
+                                <Segment 
+                                    css={styles.signalsHeaderContainer} 
+                                    style={{ borderBottom: index !== alert.length - 1 ? '1px solid #ccc' : '', padding: 0 }}
+                                    basic
+                                > 
+                                    <p css={styles.autoSignalCell}>{alert.currency_pair}</p>
+                                    <p css={styles.autoSignalCell}>{alert.buy_sell_price}</p>
+                                    <p css={styles.autoSignalCell}>{Moment(alert.created_at).format('MMMM Do YYYY, h:mm:ss a')}</p>
+                                    <p css={styles.autoSignalCell}>{parseFloat(alert.total_loss_profit).toFixed(4)}</p>
+                                    <p css={styles.autoSignalCell}>{alert.email}</p>
+                                </Segment>
+                            ))
+                        }
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <div style={{ display: 'flex' }}>
+                                {
+                                    pageCount !== 0 && (
+                                        <p css={styles.signalPaginationButtons} onClick={() => setPageCount(pageCount - 1)}>&lt;</p>
+                                    )
+                                }
+                                <p 
+                                    css={styles.signalPaginationButtons} 
+                                    style={{ 
+                                        color: 'rgb(3, 143, 222)', 
+                                        border: '1px solid rgb(3, 143, 222)'
+                                    }}
+                                >{pageCount + 1}</p>
+                                {
+                                    ((pageCount + 1) * 10 <= expertAlerts.length) && (
+                                        <p 
+                                            css={styles.signalPaginationButtons}
+                                            onClick={() => setPageCount(pageCount + 1)}
+                                        >&gt;</p>
+                                    )
+                                }
+                                
                             </div>
                         </div>
                     </div>
-                </Segment>
-            </div>
+                </div>
+            </Segment>
         </div>
     )
 }

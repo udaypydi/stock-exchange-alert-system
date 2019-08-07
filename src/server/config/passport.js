@@ -2,7 +2,7 @@ const passport  = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const { MongoClient } = require('mongodb');
 const { authentication } = require('../models');
-const { config } = require('../config');
+const config  = require('../config/config');
 let database;
 
 MongoClient.connect(config.development.mongourl, (err, db) => {
@@ -43,6 +43,7 @@ passport.use('local.signup', new LocalStrategy({
         return done(null ,false, { message: 'Email already in use' });
       }
       var newUser = {};
+      newUser.name = req.body.userName;
       newUser.email = req.body.email;
       newUser.password = authentication.encryptPassword(req.body.password);
       newUser.created_at = new Date();

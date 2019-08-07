@@ -34,6 +34,11 @@ const styles = {
         margin-left: 4px;
         border-radius: 2px;
         height: 31px;
+    `,
+
+    autoSignalCell: css`
+        width: 120px;
+        text-align: center;
     `
 }
 

@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
 const app = express();
-const config = require('../config')
+const config = require('../config/config')
 
 const MongoStore =  require ('connect-mongo')(session);
 
