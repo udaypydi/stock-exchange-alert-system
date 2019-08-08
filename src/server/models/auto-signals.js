@@ -38,14 +38,29 @@ let alertSignalInterval = [];
 // }
 
 function createRSISignal(signalData) {
-    const { currencyPair, timeFrame, indicatorParameters, ohlc, signalTimeFrame, indicator, alert_id, email } = signalData;
+    const { 
+        currencyPair, 
+        timeFrame, 
+        indicatorParameters, 
+        ohlc, 
+        signalTimeFrame, 
+        indicator, 
+        alert_id, 
+        email,
+        created_at,
+    } = signalData;
     const { level, period } = indicatorParameters;
-    const { timeOut } = signalTimeFrame;
+    const { timeOut, timeOutHours } = signalTimeFrame;
 
     console.log('rsi indicator alert created with id', alert_id);
 
     alertSignalInterval[alert_id] = setInterval(() => {
-        fetch(`https://www.alphavantage.co/query?function=RSI&symbol=${currencyPair}&interval=${timeFrame}&time_period=${parseInt(period)}&series_type=${ohlc}&apikey=JJJLU0RT9LACJCYK`)
+        const current_time = (new Date()).getTime();
+        if (current_time - created_at >= timeOut * 60 * 60 * 1000) {
+            clearInterval(alertSignalInterval[alert_id]);
+        } else {
+            console.log(`time difference is ${current_time - created_at} milli seconds`)
+            fetch(`https://www.alphavantage.co/query?function=RSI&symbol=${currencyPair}&interval=${timeFrame}&time_period=${parseInt(period)}&series_type=${ohlc}&apikey=JJJLU0RT9LACJCYK`)
             .then(res => res.json())
             .then(json => {
                 const rsi_analysis_keys = Object.keys(json["Technical Analysis: RSI"]);
@@ -54,7 +69,8 @@ function createRSISignal(signalData) {
                 let alert = {
                     currencyPair,
                     indicator: indicator.toUpperCase(),
-                    created_at: new Date()
+                    created_at: new Date(),
+                    indicator_value: rsi,
                 };
 
                 if (rsi > parseFloat(level)) {
@@ -78,6 +94,8 @@ function createRSISignal(signalData) {
                     })
                 });
             })
+        }
+       
     }, parseInt(timeOut) * 1000);
     // if RSI crosses signal threshold generate sell signal or if it is less than 30 generate buy signal
 }
@@ -137,9 +155,9 @@ module.exports = {
                 if (err) throw err;
                 const alert_id = result.insertedIds['0'];
                 if (indicator === 'rsi') {
-                    createRSISignal({ ...req.body, alert_id: alert_id, email: req.session.user.email },);
+                    createRSISignal({ ...req.body, alert_id: alert_id, email: req.session.user.email, created_at: (new Date()).getTime() },);
                 } else if (indicator === 'bollinger_bands') {
-                    createBollingerBands({ ...req.body, alert_id: alert_id });
+                    createBollingerBands({ ...req.body, alert_id: alert_id, email: req.session.user.email, created_at: (new Date()).getTime() });
                 }
 
                 res.json({ status: 200 });

@@ -58,7 +58,7 @@ function CustomSideBar(props) {
                 <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
                 <div css={styles.profileImageContainer}>
                     <Image 
-                        src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw' 
+                        src={user.profilePic || 'https://solarman.in/wp-content/themes/micron/images/placeholders/placeholder_large.jpg'} 
                         size='tiny' 
                         circular
                         style={{

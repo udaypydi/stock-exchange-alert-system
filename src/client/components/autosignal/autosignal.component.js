@@ -30,12 +30,12 @@ function AutoSignal(props) {
                     <div>
                         <div css={styles.headerContainer}>
                             <div>
-                                <p>Auto Signals</p>
+                                <p>Indicator Signals</p>
                             </div>
                             <Button 
                                 basic 
                                 color="blue" 
-                                content='Create Auto Signals' 
+                                content='Create Indicator Signals' 
                                 icon={'add'}
                                 labelPosition='left' 
                                 onClick={showAutoSignalConfigurationForm}

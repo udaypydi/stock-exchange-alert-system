@@ -5,7 +5,7 @@ export const SIDEBAR_MENU  = [
         route: '/home',
     },
     {
-        name: 'Auto Signals',
+        name: 'Indicator Signals',
         iconName: 'line graph',
         route: '/auto-signals'
     },

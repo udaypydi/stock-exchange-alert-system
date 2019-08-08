@@ -13,7 +13,7 @@ export const fetchCurrencyData = () => (dispatch) => {
     DEMO_DATA_JSON['currencyExchange'].forEach((json, index) => {
         currencyExchange[CURRENCIES[index]] = json.map(data => ({
             date: data.date,
-            uv: parseFloat(data.currencyValue['1. open'])
+            price: parseFloat(data.currencyValue['1. open'])
         }));
     });
 
@@ -23,7 +23,7 @@ export const fetchCurrencyData = () => (dispatch) => {
 export function formatChartData(currency) {
     return currency.map(data => ({
         name: data.date,
-        uv: parseFloat(data.currencyValue['1. open']),
+        price: parseFloat(data.currencyValue['1. open']),
     }))
 }
 

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Segment, Image } from 'semantic-ui-react';
+import { Segment, Image, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import Header from 'commons/header/header.component';
+import { updateUserProfilePic } from 'components/auth/auth.action';
 import { profilePicUpload } from './myprofile.api';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import styles from './myprofile.styles';
@@ -11,21 +12,25 @@ import styles from './myprofile.styles';
 class MyProfile extends Component {
     
     state = {
-        profile_pic: 'https://solarman.in/wp-content/themes/micron/images/placeholders/placeholder_large.jpg',
+        imageUploadType: '',
     };
 
-    handleProfilePicUpload = () => {
-        document.getElementById('profile-pic-uploader').click();
+    handleProfilePicUpload = (key) => {
+        this.setState({ imageUploadType: key}, () => {
+            document.getElementById('profile-pic-uploader').click();
+        });
     }
 
     handleImageUpload = (event) => {
+        const { imageUploadType } = this.state;
+        const { dispatch } = this.props;
         // const { targetElement, selectedImage } = this.state;
         const file = event.target.files[0];
         const reader = new FileReader();
         reader.onloadend = () => {
-            profilePicUpload({ data: reader.result})
+            profilePicUpload({ data: reader.result, imageUploadType })
                 .then(json => {
-                    this.setState({ profile_pic: json.profile_pic });
+                    dispatch(updateUserProfilePic(json.profile_pic, imageUploadType));
                 });
         }
         if (file) {
@@ -36,7 +41,6 @@ class MyProfile extends Component {
 
     render() {
         const { user } = this.props;
-        const { profile_pic } = this.state;
 
         return (
             <div style={{ height: window.innerHeight }}>
@@ -45,15 +49,36 @@ class MyProfile extends Component {
                 <Segment basic style={{ padding: 0, marginTop: 60, paddingTop: 10 }}>
                     <div css={styles.container}>
                         <div css={styles.imageContainer}>
+                            {
+                                user.bannerURL && (
+                                    <div style={{ position: 'absolute', top: 0, right: 0, left: 0, bottom: 0 }}>
+                                         <Image 
+                                            src={user.bannerURL} 
+                                            style={{
+                                                height: 260,
+                                                width: '100%',
+                                            }}
+                                        />
+                                    </div>
+                                )
+                            }
+                            <div style={{ position: 'absolute', top: 30, right: 10 }}>
+                                <Icon 
+                                    name='edit' 
+                                    color='#fff' 
+                                    style={{ fontSize: 20 }}
+                                    onClick={() => this.handleProfilePicUpload('banner')}
+                                />
+                            </div>
                             <Image 
-                                src={profile_pic} 
+                                src={user.profilePic || 'https://solarman.in/wp-content/themes/micron/images/placeholders/placeholder_large.jpg'} 
                                 size='tiny' 
                                 circular
                                 style={{
                                     height: '100px',
                                     width: '100px',
                                 }}
-                                onClick={this.handleProfilePicUpload}
+                                onClick={() => this.handleProfilePicUpload('profile')}
                             />
                             <input type="file" id="profile-pic-uploader" onChange={this.handleImageUpload} style={ { display: 'none' } } />
                             <p css={styles.traderName}>{user.name}</p>
@@ -90,7 +115,7 @@ class MyProfile extends Component {
                                 </div>    
                                 <div style={{ padding: 10 }}>
                                     {
-                                        user.followers.map((follower) => (
+                                        user.followers && user.followers.map((follower) => (
                                             <p>{follower}</p>
                                         ))
                                     }
@@ -103,7 +128,7 @@ class MyProfile extends Component {
                                 
                                 <div style={{ padding: 10 }}>
                                     {
-                                        user.following.map((following) => (
+                                        user.following && user.following.map((following) => (
                                             <p>{following}</p>
                                         ))
                                     }

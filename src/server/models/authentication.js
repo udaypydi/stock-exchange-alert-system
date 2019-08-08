@@ -25,12 +25,22 @@ module.exports = {
     getUser: (req, res) => {
         database.collection('session').findOne({ _id: req.sessionID }, (err, user) => {
             if (user) {
-                res.json({ 
-                  email: JSON.parse(user.session).user.email, 
-                  isLoggedIn: true, 
-                  following: JSON.parse(user.session).user.following,
-                  name: JSON.parse(user.session).user.name
-                });
+                console.log(user);
+                database.collection('alerts').find({ email: JSON.parse(user.session).user.email }).toArray((err, result) => {
+                  database.collection('users').find({ email: req.session.user.email}).toArray((error, userData) => {
+                    res.json({ 
+                      email: JSON.parse(user.session).user.email, 
+                      isLoggedIn: true, 
+                      followers: JSON.parse(user.session).user.followers,
+                      following: JSON.parse(user.session).user.following,
+                      name: JSON.parse(user.session).user.name,
+                      alerts: result,
+                      profile_pic: userData[0].profile_pic,
+                      banner_url: userData[0].banner_url,
+                    });
+                  });
+                })
+                
             } else {
                res.json({ email: '', isLoggedIn: false });
             }
@@ -45,7 +55,15 @@ module.exports = {
       });
       
       cloudinary.uploader.upload(req.body.data, function(error, result) { 
-        database.collection('users').update({ email: req.session.user.email }, { $set: { profile_pic: result.secure_url }}, { upsert: true });
+        console.log('image uplaoded. secure url =', result.secure_url);
+        let updatedData = {};
+        if (req.body.imageUploadType === 'profile') {
+          updatedData = { profile_pic: result.secure_url };
+        } else {
+          updatedData = { banner_url: result.secure_url };
+        }
+
+        database.collection('users').updateOne({ email: req.session.user.email }, { $set: updatedData});
         res.json({ profile_pic: result.secure_url });
        });
     },
