@@ -37,6 +37,7 @@ class AppRouter extends Component {
 
         return (
             <Router history={history}>
+                <Route path="/" component={Auth} exact />
                 <Route path="/alerts-history" component={AlertsHistory} exact /> 
                 <Route path="/auto-signals" component={AutoSignal} />
                 <Route path="/auto-signals-create" component={AutoSignalForm} />

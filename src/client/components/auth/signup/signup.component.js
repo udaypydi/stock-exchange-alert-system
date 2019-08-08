@@ -108,9 +108,7 @@ function SignUp(props) {
                                 </div>
                                 
                                 <div css={styles.formElement}>
-                                    <Button onClick={signupUser}primary>Sign In</Button>
-                                    <label>or</label>
-                                    <label>Sign Up</label>
+                                    <Button onClick={signupUser}primary>Sign Up</Button>
                                 </div>
                             </div>  
                         </Grid.Column>

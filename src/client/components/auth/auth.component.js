@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Grid, Segment, Input, Checkbox, Button } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
   /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
@@ -75,8 +76,8 @@ function Auth(props) {
                                 </div> 
                                 <div css={styles.formElement}>
                                     <Button onClick={logInUser}primary>Sign In</Button>
-                                    <label>or</label>
-                                    <label>Sign Up</label>
+                                    <label style={{ marginLeft: 10 }}>or</label>
+                                    <label css={styles.signUpText} onClick={() => props.history.push('/sign-up')}>Sign Up</label>
                                 </div>
                             </div>  
                         </Grid.Column>
@@ -88,4 +89,4 @@ function Auth(props) {
     )
 } 
 
-export default connect()(Auth);
+export default withRouter(connect()(Auth));
