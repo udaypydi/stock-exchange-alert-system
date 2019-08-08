@@ -52,6 +52,7 @@ passport.use('local.signup', new LocalStrategy({
       newUser.following = [];
       newUser.success_ratio = 0;
       newUser.user_role = 'trader';
+      newUser.profile_pic = '';
       database.collection('users').insert(newUser, (err, result) => {
         if (err) {
           return done(err);

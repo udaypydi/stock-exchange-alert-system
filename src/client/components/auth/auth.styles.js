@@ -20,5 +20,11 @@ export default {
     formElement: css`
         margin: 10px;
         width: 100%;
+    `,
+
+    signUpText: css`
+        color: rgba(3, 143, 222, 0.7);
+        cursor: pointer;
+        margin: 10px;
     `
 }

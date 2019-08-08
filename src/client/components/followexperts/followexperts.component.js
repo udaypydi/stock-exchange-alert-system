@@ -45,12 +45,12 @@ function FollowExperts(props) {
                     marginLeft: 10,
                 }}>
                 <img 
-                    src="http://2.bp.blogspot.com/-EVBRY_NGNT0/VgKSHqkhXaI/AAAAAAAAAHo/E3Qnfco9pUg/s1600/banner2.jpg" 
+                    src={expert.banner_url} 
                     css={styles.cardImage}
                 />
                 <div>
                     <Image 
-                        src="http://sfwallpaper.com/images/profile-pictures-7.jpg" 
+                        src={expert.profile_pic} 
                         style={{
                             borderRadius: 10,
                             height: 60,

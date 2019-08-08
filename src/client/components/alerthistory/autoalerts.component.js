@@ -42,7 +42,7 @@ function AutoAlerts(props) {
                                     basic
                                 > 
                                     <p css={styles.autoSignalCell}>{alert.currencyPair}</p>
-                                    <p css={styles.autoSignalCell}>{alert.sellPrice}</p>
+                                    <p css={styles.autoSignalCell}>{alert.indicator_value}</p>
                                     <p css={styles.autoSignalCell}>{Moment(alert.created_at).format('MMMM Do YYYY, h:mm:ss a')}</p>
                                     <p css={styles.autoSignalCell}>{alert.indicator}</p>
                                 </Segment>

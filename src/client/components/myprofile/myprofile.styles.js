@@ -2,7 +2,7 @@ import { css } from '@emotion/core';
 
 const styles = {
     container: css`
-        background-color: rgb(3, 143, 222);
+        background-image: linear-gradient(to right top, #072c64, #114484, #175ea6, #187ac8, #1297eb);
         color: #ffffff;
         width: 100%;
         height: 250px;

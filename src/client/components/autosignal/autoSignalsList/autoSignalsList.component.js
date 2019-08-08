@@ -28,8 +28,8 @@ function AutoSignalsList(props) {
                 basic
             >
                 <p css={styles.autoSignalCell}>Signal Name</p>
-                <p css={styles.autoSignalCell}>Success Ratio</p>
-                <p css={styles.autoSignalCell}>Trade timeframe</p>
+                <p css={styles.autoSignalCell}>Trade Timeframe</p>
+                <p css={styles.autoSignalCell}>Signal Timeout</p>
                 <p css={styles.autoSignalCell}>Status</p>
                 <p css={styles.autoSignalCell}>Action</p>
             </Segment>
@@ -41,8 +41,8 @@ function AutoSignalsList(props) {
                         basic
                     > 
                         <p css={styles.autoSignalCell}>{signal.signalName}</p>
-                        <p css={styles.autoSignalCell}>97%</p>
-                        <p css={styles.autoSignalCell}>{signal.signalTimeFrame.startTime}</p>
+                        <p css={styles.autoSignalCell}>{signal.timeFrame}</p>
+                        <p css={styles.autoSignalCell}>{signal.signalTimeFrame.timeOutHours} Hours</p>
                         <div css={styles.autoSignalCell}><p css={styles.statusButton}>Pending</p></div>
                         <div css={styles.autoSignalCell}>
                             <Icon name="pencil" style={{ marginRight: 20 }} />

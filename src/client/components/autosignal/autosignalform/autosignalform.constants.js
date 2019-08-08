@@ -244,7 +244,7 @@ export const AUTO_SIGNAL_ALERTS_SELECT = 'AUTO_SIGNAL_ALERTS_SELECT';
 export const AUTO_SIGNAL_INTERVAL_CHANGE = 'AUTO_SIGNAL_INTERVAL_CHANGE';
 export const TOGGLE_LOADING_STATE = 'TOGGLE_LOADING_STATE';
 export const NOTIFY_SUCCESS_ACTION = 'NOTIFY_SUCCESS_ACTION';
-
+export const UPDATE_INDICATOR_ALERTS_TIMEOUT_HOURS = 'UPDATE_INDICATOR_ALERTS_TIMEOUT_HOURS';
 // Reducer form state 
 
 export const AUTO_SIGNAL_FORM_INITIAL_STATE = {
@@ -263,8 +263,7 @@ export const AUTO_SIGNAL_FORM_INITIAL_STATE = {
         deviation: '', 
     },
     signalTimeFrame: {
-        startTime: new Date(),
-        endTime: new Date(),
+        timeOutHours: 3,
         timeZone: '',
         timeOut: 120,
     },
