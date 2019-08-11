@@ -12,6 +12,7 @@ import FollowExperts from 'components/followexperts/followexperts.component';
 import CreateExpertSignal from 'components/expertsignalform/expertsignalform.component';
 import Auth from 'components/auth/auth.component';
 import SignUp from 'components/auth/signup/signup.component';
+import PriceAlertsForm from 'components/pricealerts/pricealertsform/pricealertsform.component';
 import MyProfile from 'components/myprofile/myprofile.component';
 import { getUser } from 'components/home/home.api';
 import { getUserState } from 'components/home/home.action';
@@ -44,6 +45,7 @@ class AppRouter extends Component {
                 <Route path="/home" component={DashboardHome} exact/>
                 <Route path="/follow-experts" component={FollowExperts} exact />
                 <Route path="/create-expert-signal" component={CreateExpertSignal} exact />
+                <Route path="/create-price-alerts" component={PriceAlertsForm} exact />
                 <Route path="/sign-in" component={Auth} exact />
                 <Route path="/sign-up" component={SignUp} exact />
                 <Route path="/my-profile" component={MyProfile} exact />

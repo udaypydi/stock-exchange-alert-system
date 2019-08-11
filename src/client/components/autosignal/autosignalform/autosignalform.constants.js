@@ -73,6 +73,16 @@ export const CURRENCY_OPTIONS = [
     },
 ];
 
+export const FORM_TOOLIPS = {
+    SIGNAL_NAME: 'Name your signal',
+    CURRENCY_PAIR: 'The currency pair',
+    SIGNAL_TYPE: 'Select the type of signal',
+    TRADE_LOTS: 'Trade lots are the number of trades you want to buy or sell',
+    INDICATOR: 'The technical indicator to apply to the alert. Some indicators have additional parameters and condition options.',
+    TIME_OUT: 'Time interval between every alert.',
+    TIME_FRAME: 'Time frame is an option to fetch the indicator values in a specific time interval.',
+}
+
 export const TIMEFRAME_OPTIONS = [
     {
         key: '1 min',

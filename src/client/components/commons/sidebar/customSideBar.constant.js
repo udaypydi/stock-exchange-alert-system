@@ -24,6 +24,11 @@ export const SIDEBAR_MENU  = [
         iconName: 'user circle',
         route: '/my-profile',
     },
+    {
+        name: 'Price Alerts',
+        iconName: 'dollar sign',
+        route: '/create-price-alerts',
+    }
 ];
 
 export const DASHBOARD_ROUTE = ['#/home', '#/auto-signals', '#/follow-experts', '#/alerts-history', '#/my-profile'];

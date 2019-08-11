@@ -7,6 +7,7 @@ import {
     Button, 
     Segment,
     Message,
+    Icon,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import DatePicker from 'react-datepicker';
@@ -25,6 +26,7 @@ import {
     INDICATOR_KEY_VALUE_MAP,
     OHLC,
     MACD_PARAMETERS,
+    FORM_TOOLIPS,
 } from './autosignalform.constants';
 import { 
     autoSignalNameChange, 
@@ -41,9 +43,10 @@ import {
 } from './autosignalform.action';
 // import AutoSignalFormReducer from './autosignalform.reducer';
 import styles from './autosignalform.styles';
+import './autosignalform.css';
 
 function renderAutoSignalForm(props) {
-
+    const [activeElement, setActiveElement] = useState('');
     const [ currentDate, setCurrentDate ] = useState(new Date());
 
     const {    
@@ -158,7 +161,17 @@ function renderAutoSignalForm(props) {
                                         placeholder='Signal name (ex: My golden crossover)' 
                                         value={signalName}
                                         onChange={handleSignalNameChange}
+                                        onFocus={() => setActiveElement('SIGNAL_NAME')}
+                                        onBlur={() => setActiveElement('')}
                                     />
+                                    {
+                                        activeElement === 'SIGNAL_NAME' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_NAME']}</span>
+                                            </div>
+                                        )
+                                    } 
                                 </div>
                                 <div css={styles.formContainer}>
                                     <Dropdown
@@ -171,7 +184,17 @@ function renderAutoSignalForm(props) {
                                         text={currencyPair}
                                         onChange={handleCurrencyPairChange}
                                         style={{ width: '30%' }}
+                                        onFocus={() => setActiveElement('CURRENCY_PAIR')}
+                                        onBlur={() => setActiveElement('')}
                                     />
+                                    {
+                                        activeElement === 'CURRENCY_PAIR' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['CURRENCY_PAIR']}</span>
+                                            </div>
+                                        )
+                                    } 
                                     <Dropdown
                                         placeholder='Select timeframe ex:1 hour'
                                         fluid
@@ -181,12 +204,34 @@ function renderAutoSignalForm(props) {
                                         text={timeFrame}
                                         onChange={handleTimeFrameChange}
                                         style={{ width: '30%' }}
+                                        onFocus={() => setActiveElement('TIME_FRAME')}
+                                        onBlur={() => setActiveElement('')}
                                     />
-                                    <div style={{ width: '50%', justifyContent: 'space-evenly', display: 'flex', margin: 10 }}>
+                                    {
+                                        activeElement === 'TIME_FRAME' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['TIME_FRAME']}</span>
+                                            </div>
+                                        )
+                                    } 
+                                    <div 
+                                        onFocus={() => setActiveElement('SIGNAL_TYPE')}
+                                        onBlur={() => setActiveElement('')}
+                                        style={{ width: '50%', justifyContent: 'space-evenly', display: 'flex', margin: 10 }}
+                                    >
                                         <Checkbox label="Buy Alerts" onChange={() => handleAlertsSelect('buy')} checked={alerts.indexOf('buy') !== -1} />
                                         <Checkbox label="Sell Alerts" onChange={() => handleAlertsSelect('sell')} checked={alerts.indexOf('sell') !== -1} />
                                         <Checkbox label="Both" onChange={() => handleAlertsSelect('both')} checked={alerts.length === 2} />
                                     </div>
+                                    {
+                                        activeElement === 'SIGNAL_TYPE' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_TYPE']}</span>
+                                            </div>
+                                        )
+                                    } 
                                 </div>
                                 <div css={styles.formContainer}>
                                     <Dropdown
@@ -198,7 +243,17 @@ function renderAutoSignalForm(props) {
                                         css={styles.dropdownContainer}
                                         text={INDICATOR_KEY_VALUE_MAP[indicator]}
                                         onChange={handleIndicatorChange}
+                                        onFocus={() => setActiveElement('INDICATOR')}
+                                        onBlur={() => setActiveElement('')}
                                     />
+                                     {
+                                        activeElement === 'INDICATOR' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['INDICATOR']}</span>
+                                            </div>
+                                        )
+                                    } 
                                     <React.Fragment>
                                         {
                                             indicator !== 'macd' && (
@@ -293,7 +348,17 @@ function renderAutoSignalForm(props) {
                                         placeholder='Timeout in (seconds)' 
                                         text={timeOut}
                                         onChange={(event) => handleSignalTimeFrameChange(parseIntevent.target.value, 'timeOut')}
+                                        onFocus={() => setActiveElement('TIME_OUT')}
+                                        onBlur={() => setActiveElement('')}
                                     />
+                                     {
+                                        activeElement === 'TIME_OUT' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['TIME_OUT']}</span>
+                                            </div>
+                                        )
+                                    }
                                     <Button.Group onClick={(event) => handleAlertExpiryTimeSelect(event, 'timeOutHours')}>
                                         <Button inverted={timeOutHours !== 3} value={3} color='blue'>
                                             3 Hours

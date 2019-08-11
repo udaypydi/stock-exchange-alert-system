@@ -56,9 +56,7 @@ export default function ExpertSignalFormReducer(state = EXPERT_SIGNAL_FORM_INITI
                 newState.targetProfit = action.payload.value;
             }
             return { ...newState };
-        }
-            
-
+        };
         
         case TOGGLE_LOADING_STATE:
             return { ...state, isLoading: !state.isLoading, isSuccess: null };

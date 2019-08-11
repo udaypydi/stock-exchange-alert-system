@@ -5,6 +5,7 @@ import dashboardHomeReducer from 'components/dashboardhome/dashboardhome.reducer
 import expertSignal from 'components/expertsignalform/expertsignalform.reducer.js';
 import alerts from 'components/alerthistory/alerthistory.reducer';
 import sideBar from 'commons/header/header.reducer';
+import priceAlert from 'components/pricealerts/pricealertsform/pricealertsform.reducer';
 import user from 'components/auth/auth.reducer';
 
 export default combineReducers({
@@ -15,4 +16,5 @@ export default combineReducers({
     expertSignal,
     sidebar: sideBar,
     user,
+    priceAlert,
 });

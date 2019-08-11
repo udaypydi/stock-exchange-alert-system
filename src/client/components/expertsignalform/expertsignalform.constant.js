@@ -73,6 +73,15 @@ export const CURRENCY_OPTIONS = [
     },
 ];
 
+export const FORM_TOOLIPS = {
+    SIGNAL_NAME: 'Name your signal',
+    CURRENCY_PAIR: 'The currency pair',
+    SIGNAL_TYPE: 'Select the type of signal',
+    TRADE_LOTS: 'Trade lots are the number of trades you want to buy or sell',
+    INDICATOR: 'The technical indicator to apply to the alert. Some indicators have additional parameters and condition options.',
+    STOP_LOSS: 'You will be notified with a loss alert and the alerts will stop once a loss is occured',
+    TARGET_PROFIT: 'You will be notified with a profit alert and the alerts will stop once a profit is occured',
+}
 export const TIMEFRAME_OPTIONS = [
     {
         key: '1 min',

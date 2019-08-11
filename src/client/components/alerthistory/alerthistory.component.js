@@ -7,6 +7,7 @@ import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import { fetchAlertsHistory } from './alerthistory.action';
 import ExpertAlerts from './expertalerts.component';
+import PriceAlerts from './pricealertshistory.component';
 import AutoAlerts from './autoalerts.component';
 import styles from './alerthistory.styles';
 
@@ -15,7 +16,7 @@ import styles from './alerthistory.styles';
 const panes = [
     { menuItem: 'Indicator Alerts', render: () => <Tab.Pane attached={false}><AutoAlerts /> </Tab.Pane>},
     { menuItem: 'Expert Alerts', render: () => <Tab.Pane attached={false} onClick={() => { console.log('tab clicked')}}><ExpertAlerts /></Tab.Pane>},
-    { menuItem: 'Price Alerts', render: () => <Tab.Pane attached={false}>Tab 3 Content</Tab.Pane>},
+    { menuItem: 'Price Alerts', render: () => <Tab.Pane attached={false}><PriceAlerts /></Tab.Pane>},
 ];
 
 
