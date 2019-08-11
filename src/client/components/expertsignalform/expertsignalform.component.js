@@ -7,6 +7,7 @@ import {
     Button, 
     Segment,
     Message,
+    Icon,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import Loader from 'commons/preLoader/preloader.component';
@@ -21,6 +22,7 @@ import {
     INDICATOR_KEY_VALUE_MAP,
     OHLC,
     MACD_PARAMETERS,
+    FORM_TOOLIPS,
 } from './expertsignalform.constant';
 import { 
     expertSignalNameChange, 
@@ -37,8 +39,10 @@ import {
     profitLossTargetChange,
 } from './expertsignalform.action';
 import styles from './expertsignalform.styles';
+import './expertsignalform.css';
 
 function renderExpertSignal(props) {
+    const [activeElement, setActiveElement] = useState('');
     const {    
         currencyPair,
         alerts,
@@ -150,7 +154,17 @@ function renderExpertSignal(props) {
                                         placeholder='Signal name (ex: My golden crossover)' 
                                         value={signalName}
                                         onChange={handleSignalNameChange}
-                                    />
+                                        onFocus={() => setActiveElement('SIGNAL_NAME')}
+                                        onBlur={() => setActiveElement('')}
+                                    /> 
+                                    {
+                                        activeElement === 'SIGNAL_NAME' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_NAME']}</span>
+                                            </div>
+                                        )
+                                    }       
                                 </div>
                                 <div css={styles.formContainer}>
                                     <Dropdown
@@ -163,11 +177,34 @@ function renderExpertSignal(props) {
                                         text={currencyPair}
                                         style={{ width: '50%' }}
                                         onChange={handleCurrencyPairChange}
+                                        onFocus={() => setActiveElement('CURRENCY_PAIR')}
+                                        onBlur={() => setActiveElement('')}
                                     />
-                                    <div style={{ width: '50%', justifyContent: 'space-evenly', display: 'flex', margin: 10 }}>
+                                    {
+                                        activeElement === 'CURRENCY_PAIR' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['CURRENCY_PAIR']}</span>
+                                            </div>
+                                        )
+                                    }    
+
+                                    <div 
+                                        style={{ width: '50%', justifyContent: 'space-evenly', display: 'flex', margin: 10 }}
+                                        onFocus={() => setActiveElement('SIGNAL_TYPE')}
+                                        onBlur={() => setActiveElement('')}
+                                    >
                                         <Radio name='radioGroup' label="Buy Alerts" onChange={() => handleAlertsSelect('buy')} checked={alerts === 'buy'} />
                                         <Radio name='radioGroup' label="Sell Alerts" onChange={() => handleAlertsSelect('sell')} checked={alerts === 'sell'} />
                                     </div>
+                                    {
+                                        activeElement === 'SIGNAL_TYPE' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_TYPE']}</span>
+                                            </div>
+                                        )
+                                    } 
                                 </div>
                                 <div css={styles.formContainer}>
                                     <Input 
@@ -176,7 +213,17 @@ function renderExpertSignal(props) {
                                         placeholder='Trade Lots' 
                                         value={tradeLots}
                                         onChange={handleTradeLotsChange}
+                                        onFocus={() => setActiveElement('TRADE_LOTS')}
+                                        onBlur={() => setActiveElement('')}
                                     />
+                                    {
+                                        activeElement === 'TRADE_LOTS' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['TRADE_LOTS']}</span>
+                                            </div>
+                                        )
+                                    } 
                                     <Dropdown
                                         placeholder='Add indicator'
                                         fluid
@@ -187,7 +234,17 @@ function renderExpertSignal(props) {
                                         text={INDICATOR_KEY_VALUE_MAP[indicator]}
                                         style={{ width: '50%' }}
                                         onChange={handleIndicatorChange}
+                                        onFocus={() => setActiveElement('INDICATOR')}
+                                        onBlur={() => setActiveElement('')}
                                     />
+                                    {
+                                        activeElement === 'INDICATOR' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['INDICATOR']}</span>
+                                            </div>
+                                        )
+                                    }  
                                 </div>
                                 <div css={styles.formContainer}>
                                     <React.Fragment>
@@ -284,7 +341,17 @@ function renderExpertSignal(props) {
                                         text={level}
                                         value={stopLoss}
                                         onChange={(event) => handleProfitLossChange('loss', event.target.value)}
+                                        onFocus={() => setActiveElement('STOP_LOSS')}
+                                        onBlur={() => setActiveElement('')}
                                     />
+                                       {
+                                        activeElement === 'STOP_LOSS' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['STOP_LOSS']}</span>
+                                            </div>
+                                        )
+                                        }  
                                     <Input 
                                         fluid 
                                         style={{ width: '50%', margin: 10 }} 
@@ -292,7 +359,17 @@ function renderExpertSignal(props) {
                                         text={level}
                                         targetProfit
                                         onChange={(event) => handleProfitLossChange('profit', event.target.value)}
+                                        onFocus={() => setActiveElement('TARGET_PROFIT')}
+                                        onBlur={() => setActiveElement('')}
                                     />
+                                     {
+                                        activeElement === 'TARGET_PROFIT' && (
+                                            <div class="tooltip">
+                                                <Icon name='info circle' />
+                                                <span class="tooltiptext">{FORM_TOOLIPS['TARGET_PROFIT']}</span>
+                                            </div>
+                                        )
+                                    }  
                                 </div>
                                 <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
                                     <Button 

@@ -10,7 +10,6 @@ import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import styles from './myprofile.styles';
 
 class MyProfile extends Component {
-    
     state = {
         imageUploadType: '',
     };

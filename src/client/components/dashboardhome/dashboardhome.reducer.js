@@ -1,6 +1,7 @@
 import { 
     FETCH_CURRENCY_DATA, 
     DASHBOARD_HOME_INITIAL_STATE ,
+    IS_LOADING,
 } from './dashboardhome.constant';
 
 export default function DashboardHomeReducer(state = DASHBOARD_HOME_INITIAL_STATE, action) {
@@ -13,6 +14,13 @@ export default function DashboardHomeReducer(state = DASHBOARD_HOME_INITIAL_STAT
                 usdgyd: action.value['usdgyd'],
                 audnzd: action.value['audnzd']
             };
+
+        case IS_LOADING:
+            return {
+                ...state,
+                isLoading: !state.isLoading,
+            };
+            
         default:
             return { ...state };
     }

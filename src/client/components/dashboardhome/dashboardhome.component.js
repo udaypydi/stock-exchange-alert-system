@@ -23,73 +23,79 @@ import styles from './dashboardhome.styles';
 // const currencies = [eurusd, usdjpy, usdgyd, audnzd];
 
 function renderCurrencyGraph(currencyData) {
-    const { eurusd, usdjpy, usdgyd, audnzd } = currencyData;
+    const { eurusd, usdjpy, usdgyd, audnzd, isLoading } = currencyData;
     return (
         <div css={styles.chartsContainer}>
             {
-                [eurusd, usdjpy, usdgyd, audnzd].map((data, index) => data.length && (
-                    <Segment raised css={styles.chartCard} style={{ marginTop: 0, borderRadius: 10 }} key={index}>
-                        <div css={styles.chartData}>
-                                <div>
-                                    <p
-                                    style={{
-                                        fontWeight: "bold",
-                                        fontSize: 30,
-                                        margin: 0,
-                                        marginTop: 20
-                                    }}
-                                    >
-                                    {data[0].price}
-                                    </p>
-                                    <p
-                                    style={{ margin: 0, fontSize: 12, color: "rgba(0, 0, 0, 0.5) " }}
-                                    >
-                                    {CURRENCY_GRAPH_DATA[index].exchange}
-                                    </p>
-                                </div>
-                                </div>
-                                {
-                                    index !== 3 ? (
-                                        <AreaChart
-                                            width={250}
-                                            height={75}
-                                            data={data}
-                                            style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
-                                            margin={{top: 0, right: 0, left: 0, bottom: 0}}
-                                            >
-                                            <defs style={{ borderRadius: 10 }}>
-                                                <linearGradient id={`colorUv-${index}`} x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor={CURRENCY_GRAPH_DATA[index].colors[0]} stopOpacity={0.9} />
-                                                <stop offset="95%" stopColor={CURRENCY_GRAPH_DATA[index].colors[1]} stopOpacity={0.9} />
-                                                </linearGradient>
-                                            </defs>
-                                            <Tooltip />
-                                            <Area
-                                                strokeWidth={0}
-                                                stroke='#4D95F3'
-                                                type="monotone"
-                                                dataKey="price"
-                                                stroke={CURRENCY_GRAPH_DATA[index].colors[0]}
-                                                fill={`url(#colorUv-${index})`}
-                                                fillOpacity={1}
-                                            />
-                                            <YAxis type="number" domain={CURRENCY_GRAPH_DATA[index].domain} hide />
-                                        </AreaChart>
-                                    ) : (
-                                        <LineChart
-                                            width={250}
-                                            height={75}
-                                            data={data}
-                                            style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
-                                            margin={{top: 5, right: 5, left: 5, bottom: 5}}
+                [eurusd, usdjpy, usdgyd, audnzd].map((data, index) => (
+                    <Segment raised css={styles.chartCard} style={{ marginTop: 0, borderRadius: 10 }} key={index} loading={isLoading}>
+                        {
+                            data.length > 0 && (
+                                <React.Fragment>
+                                    <div css={styles.chartData}>
+                                    <div>
+                                        <p
+                                        style={{
+                                            fontWeight: "bold",
+                                            fontSize: 30,
+                                            margin: 0,
+                                            marginTop: 20
+                                        }}
                                         >
-                                            <Tooltip/>
-                                            <Line dataKey="price" stroke="#038FDE" dot={{stroke: '#FEA931', strokeWidth: 2}}/>
-                                            <YAxis type="number" domain={CURRENCY_GRAPH_DATA[index].domain} hide />
-                                        </LineChart>
-                                    )
-                                }
-                        
+                                        {data[0].price}
+                                        </p>
+                                        <p
+                                        style={{ margin: 0, fontSize: 12, color: "rgba(0, 0, 0, 0.5) " }}
+                                        >
+                                        {CURRENCY_GRAPH_DATA[index].exchange}
+                                        </p>
+                                    </div>
+                                    </div>
+                                    {
+                                        index !== 3 ? (
+                                            <AreaChart
+                                                width={250}
+                                                height={75}
+                                                data={data}
+                                                style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
+                                                margin={{top: 0, right: 0, left: 0, bottom: 0}}
+                                                >
+                                                <defs style={{ borderRadius: 10 }}>
+                                                    <linearGradient id={`colorUv-${index}`} x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="5%" stopColor={CURRENCY_GRAPH_DATA[index].colors[0]} stopOpacity={0.9} />
+                                                    <stop offset="95%" stopColor={CURRENCY_GRAPH_DATA[index].colors[1]} stopOpacity={0.9} />
+                                                    </linearGradient>
+                                                </defs>
+                                                <Tooltip />
+                                                <Area
+                                                    strokeWidth={0}
+                                                    stroke='#4D95F3'
+                                                    type="monotone"
+                                                    dataKey="price"
+                                                    stroke={CURRENCY_GRAPH_DATA[index].colors[0]}
+                                                    fill={`url(#colorUv-${index})`}
+                                                    fillOpacity={1}
+                                                />
+                                                <YAxis type="number" domain={CURRENCY_GRAPH_DATA[index].domain} hide />
+                                            </AreaChart>
+                                        ) : (
+                                            <LineChart
+                                                width={250}
+                                                height={75}
+                                                data={data}
+                                                style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
+                                                margin={{top: 5, right: 5, left: 5, bottom: 5}}
+                                            >
+                                                <Tooltip/>
+                                                <Line dataKey="price" stroke="#038FDE" dot={{stroke: '#FEA931', strokeWidth: 2}}/>
+                                                <YAxis type="number" domain={CURRENCY_GRAPH_DATA[index].domain} hide />
+                                            </LineChart>
+                                        )
+                                    }
+                                </React.Fragment>
+                            )
+                        }
+                     
                     </Segment>
                 ))
             }

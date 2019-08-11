@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 module.exports = {
     getCurrencyExchange: (req, res) => {
         const CURRENCY_EXCHANGE_RATE = [
-            'https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD&apikey=demo',
+            'https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD&apikey=QZ5AG7BLQD7TLXTZ',
             'https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=USD&to_symbol=JPY&apikey=JJJLU0RT9LACJCYK',
             'https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=USD&to_symbol=GYD&apikey=OUMK5GXJ8U10GOC0',
             'https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=AUD&to_symbol=NZD&apikey=QZ5AG7BLQD7TLXTZ',
