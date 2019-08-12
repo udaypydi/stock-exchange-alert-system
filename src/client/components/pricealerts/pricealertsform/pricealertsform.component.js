@@ -131,41 +131,28 @@ function PriceAlertsForm(props) {
                         )
                     }
                 </div>
-                <div css={styles.formContainer}>
+                <div css={styles.formContainer} style={{ justifyContent: 'flex-start', marginBottom: 20 }}>
                     <div 
-                        style={{ width: '50%', justifyContent: 'space-evenly', display: 'flex', margin: 10 }}
+                        style={{ 
+                            width: '50%', 
+                            justifyContent: 'space-between', 
+                            display: 'flex', 
+                            margin: 10,
+                            alignItems: 'center',
+                        }}
                         onFocus={() => setActiveElement('SIGNAL_TYPE')}
                         onBlur={() => setActiveElement('')}
                     >
-                        <Checkbox label="Price Lower Alert" onChange={() => handleAlertsSelect('high')} checked={alerts.indexOf('high') !== -1} />
-                        <Checkbox label="Price Higher Alert" onChange={() => handleAlertsSelect('low')} checked={alerts.indexOf('low') !== -1} />
-                        <Checkbox label="Both" onChange={() => handleAlertsSelect('both')} checked={alerts.length === 2} />
+                        <p style={{ margin: 0 }}>Direction:</p>
+                        <Checkbox label="Cross Above" onChange={() => handleAlertsSelect('high')} checked={alerts.indexOf('high') !== -1} />
+                        <Checkbox label="Cross Below" onChange={() => handleAlertsSelect('low')} checked={alerts.indexOf('low') !== -1} />
+                        <Checkbox label="Any" onChange={() => handleAlertsSelect('both')} checked={alerts.length === 2} />
                     </div>
                     {
                         activeElement === 'SIGNAL_TYPE' && (
                             <div class="tooltip">
                                 <Icon name='info circle' />
                                 <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_TYPE']}</span>
-                            </div>
-                        )
-                    } 
-                    <Dropdown
-                        placeholder='Select timeframe ex:1 hour'
-                        fluid
-                        selection
-                        options={TIMEFRAME_OPTIONS} 
-                        css={styles.dropdownContainer}
-                        style={{ width: '50%' }}
-                        value={timeFrame}
-                        onChange={handleTimeFrameChange}
-                        onFocus={() => setActiveElement('TIME_FRAME')}
-                        onBlur={() => setActiveElement('')}
-                    />
-                     {
-                        activeElement === 'TIME_FRAME' && (
-                            <div class="tooltip">
-                                <Icon name='info circle' />
-                                <span class="tooltiptext">{FORM_TOOLIPS['TIME_FRAME']}</span>
                             </div>
                         )
                     } 

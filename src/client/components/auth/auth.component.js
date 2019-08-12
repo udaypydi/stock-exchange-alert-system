@@ -52,7 +52,7 @@ function Auth(props) {
                                <p style={{ fontSize: 16 }}>By Signing Up, you can avail full features of our services.</p>
                                <p style={{ fontSize: 16, marginTop: 20 }}>Get an account!!!</p> 
                                <img 
-                                    src="https://res.cloudinary.com/dgvup74b7/image/upload/v1564828194/White_sndtyk.png" 
+                                    src="https://res.cloudinary.com/dgvup74b7/image/upload/v1565302530/h6auuysxte0jayf1ro9t.png" 
                                     style={{ height: 40, marginTop: 40 }} 
                                 />
                             </div>

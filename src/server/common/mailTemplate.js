@@ -26,12 +26,12 @@ const generateSignalantTemplate = (data) => `<!DOCTYPE html>
           	<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
           		<tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
           			<td width="40%"  style="text-align: left;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-			            <h1 style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: 'Nunito Sans', sans-serif;color: #000000;margin-top: 0;margin: 0;"><a href="https://signalant.domaincer.com/" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: #000;font-size: 20px;font-weight: 700;text-transform: uppercase;font-family: 'Nunito Sans', sans-serif;">Signalant</a></h1>
+			            <h1 style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: 'Nunito Sans', sans-serif;color: #000000;margin-top: 0;margin: 0;"><a href="https://app.signalant.com/" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: #000;font-size: 20px;font-weight: 700;text-transform: uppercase;font-family: 'Nunito Sans', sans-serif;">Signalant</a></h1>
 			          </td>
 			          <td width="60%"  style="text-align: right;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
 			            <ul style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 0;">
 			            	
-			            	<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;display: inline-block;margin-left: 5px;font-size: 12px;font-weight: 700;text-transform: uppercase;"><a href="https://signalant.domaincer.com/" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: rgba(0,0,0,.6);">Manage Alerts</a></li>
+			            	<li style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;list-style: none;display: inline-block;margin-left: 5px;font-size: 12px;font-weight: 700;text-transform: uppercase;"><a href="https://app.signalant.com/" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: rgba(0,0,0,.6);">Manage Alerts</a></li>
 			            	
 			            </ul>
 			          </td>
@@ -44,7 +44,7 @@ const generateSignalantTemplate = (data) => `<!DOCTYPE html>
 	        <td  style="text-align: center;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background: rgba(0,0,0,.8);padding: 2.5em;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
 	        	<div  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: rgba(255,255,255,.8);">
 	          	<h2 style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: line-height: 1;color: #ffffff;margin-top: 0;font-size: 24px;line-height: 1.4;font-weight: 700;padding-bottom: 0;">Forex Trade Alerts</h2>
-	          	<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">You have got a notification alert from your Auto Signal. You can manage all your alerts <a href="https://signalant.domaincer.com/" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: #f5564e;">here</a>. </p>
+	          	<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">You have got a notification alert from your Auto Signal. You can manage all your alerts <a href="https://app.signalant.com/" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: #f5564e;">here</a>. </p>
 					<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><b style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">CURRENCY PAIR:</b> ${data.currencyPair} </p>
 					<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><b style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">ALERT:</b> ${data.alertType}</p>
 					<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><b style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">PRICE:</b> ${data.price}</p>
@@ -73,7 +73,7 @@ const generateSignalantTemplate = (data) => `<!DOCTYPE html>
                             <td  style="text-align: left;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 10px 10px 0;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
                             	<h3 style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: 'Nunito Sans', sans-serif;color: #000000;margin-top: 0;font-size: 16px;font-weight: 600;">Auto Signals</h3>
                              	<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">You can create customised signals using indicators and timeframe.</p>
-                             	<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><a href="https://signalant.domaincer.com/"  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: #ffffff;padding: 5px 15px;display: inline-block;border-radius: 5px;background: #f5564e;">Create Auto Signal</a></p>
+                             	<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><a href="https://app.signalant.com/"  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: #ffffff;padding: 5px 15px;display: inline-block;border-radius: 5px;background: #f5564e;">Create Auto Signal</a></p>
                             </td>
                           </tr>
                         </table>
@@ -85,7 +85,7 @@ const generateSignalantTemplate = (data) => `<!DOCTYPE html>
                             <td style="text-align: left;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 10px 10px 0;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
                             	<h3 style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: 'Nunito Sans', sans-serif;color: #000000;margin-top: 0;font-size: 16px;font-weight: 600;">Manual Signals</h3>
                               <p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">You can start following market experts and copy their signals.</p>
-                              <p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><a href="https://signalant.domaincer.com/"  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: #ffffff;padding: 5px 15px;display: inline-block;border-radius: 5px;background: #f5564e;">Follow Manual Signals</a></p>
+                              <p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><a href="https://app.signalant.com/"  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: #ffffff;padding: 5px 15px;display: inline-block;border-radius: 5px;background: #f5564e;">Follow Manual Signals</a></p>
                             </td>
                           </tr>
                         </table>
@@ -164,7 +164,7 @@ const generateSignalantTemplate = (data) => `<!DOCTYPE html>
                   <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
                     <tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
                       <td style="text-align: right;padding-left: 5px;padding-right: 5px;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-                      	<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><a href="https://signalant.domaincer.com/" style="color: rgba(255,255,255,.4);-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;">Unsubcribe</a></p>
+                      	<p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><a href="https://app.signalant.com/" style="color: rgba(255,255,255,.4);-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;">Unsubcribe</a></p>
                       </td>
                     </tr>
                   </table>

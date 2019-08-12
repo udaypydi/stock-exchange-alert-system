@@ -79,8 +79,9 @@ export const FORM_TOOLIPS = {
     SIGNAL_TYPE: 'Select the type of signal',
     TRADE_LOTS: 'Trade lots are the number of trades you want to buy or sell',
     INDICATOR: 'The technical indicator to apply to the alert. Some indicators have additional parameters and condition options.',
-    TIME_OUT: 'Time interval between every alert.',
-    TIME_FRAME: 'Time frame is an option to fetch the indicator values in a specific time interval.',
+    TIME_OUT: 'After execution, the alert will be inactive for this many seconds. This is useful to prevent too frequent executions.',
+    TIME_FRAME: 'The time interval based on which the indicator is calculated.',
+    PARAMETERS:  'The parameters based on which to calculate the technical indicator',
 }
 
 export const TIMEFRAME_OPTIONS = [

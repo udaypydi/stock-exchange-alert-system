@@ -20,9 +20,9 @@ export const PRICE_ALERT_SIGNAL_INIT_STATE = {
 export const FORM_TOOLIPS = {
     SIGNAL_NAME: 'Name your signal',
     CURRENCY_PAIR: 'The currency pair',
-    SIGNAL_TYPE: 'Select the type of signal. High is when the price crosses the mentioned price and Low is when price goes below the mentioned price.',
+    SIGNAL_TYPE: 'The direction.',
     PRICE: 'The price at which the alert has to be sent. ',
-    TIME_OUT: 'Time interval between every alert.',
+    TIME_OUT: 'After execution, the alert will be inactive for this many seconds. This is useful to prevent too frequent executions.',
     TIME_FRAME: 'Fetch the currency between this specific time frame',
 }
 

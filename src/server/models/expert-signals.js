@@ -39,6 +39,7 @@ function startPipCountService(pipData) {
             target_profit,
             tradeLots,
             email,
+            followers,
         } = pipData;
 
         let uhlc_key = '';
@@ -104,7 +105,7 @@ function startPipCountService(pipData) {
 
                     const mailConfig = {
                         from: 'udaypydi333@gmail.com',
-                        to: ['udaypydi333@gmail.com', 'mail@adithyan.in'],
+                        to: ['udaypydi333@gmail.com', 'mail@adithyan.in', ...followers],
                         subject: 'Signalant Alerts',
                         html: mail_template,
                     };
@@ -146,7 +147,7 @@ function startPipCountService(pipData) {
 
                     const mailConfig = {
                         from: 'udaypydi333@gmail.com',
-                        to: ['udaypydi333@gmail.com', 'mail@adithyan.in'],
+                        to: ['udaypydi333@gmail.com', 'mail@adithyan.in', ...followers],
                         subject: 'Signalant Alerts',
                         html: mail_template,
                     };
@@ -221,7 +222,7 @@ function createRSISignal(signalData) {
                         console.log('starting pip service');
                         console.log('stopping indicator alert service');
 
-                        startPipCountService(pipData);
+                        startPipCountService({ ...pipData, followers: JSON.parse(req.session).user.followers });
                         // start pip count service
                         // stop indicator service
                     }
@@ -242,7 +243,7 @@ function createRSISignal(signalData) {
                         console.log('starting pip service');
                         console.log('stopping indicator alert service');
 
-                        startPipCountService(pipData);
+                        startPipCountService({ ...pipData, followers: JSON.parse(req.session).user.followers });
                         // start pip count service
                         // stop indicator service
                     }
