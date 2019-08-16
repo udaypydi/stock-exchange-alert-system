@@ -18,20 +18,18 @@ import { CURRENCY_GRAPH_DATA, ALERT_SIGNAL_HISTORY } from './dashboardhome.const
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import Header from 'commons/header/header.component';
 import { fetchCurrencyData, formatChartData } from './dashboardhome.action';
-import DashboardHomeMobile from './dashboardhome.mobile.component';
 import styles from './dashboardhome.styles';
 
-// const currencies = [eurusd, usdjpy, usdgyd, audnzd];
-
-function renderCurrencyGraph(currencyData, props) {
+function renderCurrencyGraph(currencyData) {
     const { eurusd, usdjpy, usdgyd, audnzd, isLoading } = currencyData;
-    const { sidebar } = props;
+
+    const areaChartWidth = (window.screen.availWidth) * 90 / 100;
 
     return (
-        <div css={styles.chartsContainer} style={{ paddingLeft: sidebar.sidebarOpen ? 280 : 140, marginRight: sidebar.sidebarOpen ? 0 : '-35px' }}>
+        <div css={styles.mobileChartContainer}>
             {
                 [eurusd, usdjpy, usdgyd, audnzd].map((data, index) => (
-                    <Segment raised css={styles.chartCard} style={{ marginTop: 0, borderRadius: 10 }} key={index} loading={isLoading}>
+                    <Segment raised css={styles.chartCard} style={{ marginTop: 0, borderRadius: 10, width: '90%', height: 170 }} key={index} loading={isLoading}>
                         {
                             data.length > 0 && (
                                 <React.Fragment>
@@ -57,8 +55,8 @@ function renderCurrencyGraph(currencyData, props) {
                                     {
                                         index !== 3 ? (
                                             <AreaChart
-                                                width={250}
-                                                height={75}
+                                                width={areaChartWidth}
+                                                height={100}
                                                 data={data}
                                                 style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
                                                 margin={{top: 0, right: 0, left: 0, bottom: 0}}
@@ -83,8 +81,8 @@ function renderCurrencyGraph(currencyData, props) {
                                             </AreaChart>
                                         ) : (
                                             <LineChart
-                                                width={250}
-                                                height={75}
+                                                width={areaChartWidth}
+                                                height={100}
                                                 data={data}
                                                 style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
                                                 margin={{top: 5, right: 5, left: 5, bottom: 5}}
@@ -108,9 +106,9 @@ function renderCurrencyGraph(currencyData, props) {
 
 function renderAlertsGraph(currencyData) {
     const { eurusd, usdjpy, usdgyd, audnzd } = currencyData;
-    const graphWidth = (window.innerWidth / 100) * 56;
+    const graphWidth = (window.innerWidth / 100) * 90;
     return (
-        <Segment raised css={styles.chartCard} style={{ marginTop: 20, borderRadius: 10, width: '72%', height: 250, float: 'right', marginRight: 30 }}>
+        <Segment raised css={styles.chartCard} style={{ borderRadius: 10, width: '90%', height: 250, float: 'right' }}>
             <div css={css`${styles.chartData} left: -55px; top: 30px;`}>
                 <p>Alerts History</p>
             </div>
@@ -142,7 +140,7 @@ function renderAlertsGraph(currencyData) {
     );
 }
 
-function DashboardHome(props) {
+function DashboardHomeMobile(props) {
 
     const { dashboardCurrencyData, user, sidebar } = props;
 
@@ -152,16 +150,19 @@ function DashboardHome(props) {
     }, []);
 
     return (
-        <div css={styles.container} style={{ marginRight: sidebar.sidebarOpen ? 0 : 30 }}>
+        <div css={styles.container}>
             <Header />
-            <Responsive minWidth={701}>
-                <CustomSidebar />    
-                {renderCurrencyGraph(dashboardCurrencyData, props)}
-                <div style={{ display: 'flex', flex: 1, justifyContent: 'space-between', marginLeft: sidebar.sidebarOpen ? 310 : 200 }}>
+            {
+                sidebar.mobileSidebarOpen && (
+                    <CustomSidebar />
+                )
+            }
+                {renderCurrencyGraph(dashboardCurrencyData)}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {   
                     user.alerts && (
                         
-                        <Segment style={{ width: '22%', height: 250, marginTop: 20 }} raised>
+                        <Segment style={{ width: '90%', height: 250, marginTop: 20 }} raised>
                             <h2 style={{ textAlign: 'center' }}>Profile Summary</h2>
                             <div>
                                 <div
@@ -206,10 +207,6 @@ function DashboardHome(props) {
                 }
                 {renderAlertsGraph(dashboardCurrencyData)}
                 </div>
-            </Responsive>
-            <Responsive maxWidth={700}>
-                <DashboardHomeMobile />
-            </Responsive>
         </div>
     )
 }
@@ -220,4 +217,4 @@ const mapStateToProps = (state) => ({
     sidebar: state.sidebar,
 });
 
-export default connect(mapStateToProps)(DashboardHome);
+export default connect(mapStateToProps)(DashboardHomeMobile);

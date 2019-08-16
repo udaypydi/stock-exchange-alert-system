@@ -38,8 +38,9 @@ export const SIDEBAR_HEADER = 'Signalant';
 // reducer constants
 
 export const SIDEBAR_TOGGLE_STATUS = 'SIDEBAR_TOGGLE_STATUS';
-
+export const MOBILE_SIDEBAR_TOGGLE_STATUS = 'MOBILE_SIDEBAR_TOGGLE_STATUS';
 
 export const SIDEBAR_INIT_STATE = {
     sidebarOpen: true,
+    mobileSidebarOpen: false,
 };
