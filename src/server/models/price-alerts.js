@@ -20,6 +20,12 @@ const transporter = nodemailer.createTransport(smtpTransport({
     }
 }));
 
+const pricealertsmapping = {
+    '5min': 5 * 60,
+    '30min': 30 * 60,
+    '1hour': 60 * 60,
+    '1week': 7 * 24 * 60,
+};
 
 let priceAlerts = [];
 
@@ -91,6 +97,7 @@ module.exports = {
                                 }
                               });
 
+                              clearInterval(priceAlerts[alert_id]);
                         } else {
                             const mailData = {  
                                 currencyPair,
@@ -128,12 +135,12 @@ module.exports = {
                                   console.log('Email sent: ' + info.response);
                                 }
                               });
+                              clearInterval(priceAlerts[alert_id]);
                         }
                     });
                 }
                 
-            }, parseInt(timeBetweenAlerts) * 1000);
-           
+            }, pricealertsmapping[timeFrame] * 1000);
         });
     },
 

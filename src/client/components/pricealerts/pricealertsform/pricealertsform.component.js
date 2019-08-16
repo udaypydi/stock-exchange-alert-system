@@ -22,7 +22,7 @@ import './pricealertsform.css';
 
 function PriceAlertsForm(props) {
     const [activeElement, setActiveElement] = useState('');
-    const { priceAlert, dispatch } = props;
+    const { priceAlert, dispatch, sidebar } = props;
 
     const {
         name,
@@ -67,7 +67,7 @@ function PriceAlertsForm(props) {
         <div>
             <Header />
             <CustomSidebar />
-            <Segment style={{ width: 1000, marginLeft: 350, marginTop: '10%' }} raised>
+            <Segment style={{ width: sidebar.sidebarOpen ? 1000 : 1200, marginLeft: sidebar.sidebarOpen ? 350 : 150, marginTop: '10%' }} raised>
                 <div>
                     <p>Calculation Properties</p>
                 </div>
@@ -156,8 +156,28 @@ function PriceAlertsForm(props) {
                             </div>
                         )
                     } 
+                    <Dropdown
+                        placeholder='Select timeframe ex:1 hour'
+                        fluid
+                        selection
+                        options={TIMEFRAME_OPTIONS} 
+                        css={styles.dropdownContainer}
+                        text={timeFrame}
+                        onChange={handleTimeFrameChange}
+                        style={{ width: '50%' }}
+                        onFocus={() => setActiveElement('TIME_FRAME')}
+                        onBlur={() => setActiveElement('')}
+                    />
+                    {
+                        activeElement === 'TIME_FRAME' && (
+                            <div class="tooltip">
+                                <Icon name='info circle' />
+                                <span class="tooltiptext">{FORM_TOOLIPS['TIME_FRAME']}</span>
+                            </div>
+                        )
+                    } 
                 </div>
-                <div>
+                {/* <div>
                     <p>Timing</p>
                 </div>
                 <Divider />
@@ -197,7 +217,7 @@ function PriceAlertsForm(props) {
                             24 Hours
                         </Button>
                     </Button.Group>
-                </div>
+                </div> */}
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20, marginBottom: 20 }}>
                     <Button 
                          color="blue" 
@@ -213,6 +233,7 @@ function PriceAlertsForm(props) {
 
 const mapStateToProps = (state) => ({
     priceAlert: state.priceAlert,
+    sidebar: state.sidebar,
 });
 
 export default connect(mapStateToProps)(PriceAlertsForm);
