@@ -22,6 +22,13 @@ module.exports = {
         hotUpdateMainFilename: '.hot/[hash].hot-update.json'
     },
 
+    devServer: {
+      port: 3000,
+      open: true,
+      proxy: {
+        '/': 'http://localhost:8080'
+      }
+    },
     // loaders for loading different file extension
 
     module: {
@@ -36,14 +43,14 @@ module.exports = {
             use:['style-loader','css-loader']
           },
           {
-            test: /\.(gif|png|jpe?g|svg|ttf|woff2|woff|eot)$/i,
+            test: /\.(gif|png|jpe?g|svg|ttf|woff|woff2|eot)$/i,
             use: [
               'file-loader',
               'image-webpack-loader'
             ],
           },
           {
-            test: /\.(html)$/,
+            test: /\.html$/,
             exclude: [/node_modules/],
             use: {
                 loader: 'file-loader',
@@ -68,17 +75,15 @@ module.exports = {
         src: path.resolve(__dirname, 'src/client/')
       }
     },
+
     // plugins
     plugins: [
       new CleanWebpackPlugin(['public']),
       new HtmlWebpackPlugin({
-        filename: 'index.html',
-        inject: true,
-        title: 'Demo App',
+        template: './template.ejs',
+        title: 'Signalant',
       }),
-      new HtmlWebpackRootPlugin({
-        tagId: 'root',
-      }),
+      new HtmlWebpackRootPlugin(),
       new webpack.HotModuleReplacementPlugin(),
       new UglifyJsPlugin()
     ],

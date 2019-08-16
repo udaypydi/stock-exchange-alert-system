@@ -1,18 +1,79 @@
 import React, { Component } from 'react';
-import { Segment, Image, Icon } from 'semantic-ui-react';
+import { Segment, Image, Icon, Divider, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
+import { sideBarToggleStatus } from 'commons/sidebar/customSidebar.action';
 import Header from 'commons/header/header.component';
 import { updateUserProfilePic } from 'components/auth/auth.action';
 import { profilePicUpload } from './myprofile.api';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import styles from './myprofile.styles';
 
+const traderData = [
+    {
+      name: "Trader 1",
+      icon:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
+    },
+    {
+      name: "Trader 1",
+      icon:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
+    },
+    {
+      name: "Trader 1",
+      icon:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
+    },
+    {
+      name: "Trader 1",
+      icon:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
+    },
+    {
+      name: "Trader 1",
+      icon:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
+    },
+    {
+      name: "Trader 1",
+      icon:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
+    },
+    {
+      name: "Trader 1",
+      icon:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
+    },
+    {
+      name: "Trader 1",
+      icon:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
+    },
+    {
+      name: "Trader 1",
+      icon:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
+    },
+    {
+      name: "Trader 1",
+      icon:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
+    }
+  ];
+  
+
 class MyProfile extends Component {
     state = {
         imageUploadType: '',
     };
+
+
+    componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch(sideBarToggleStatus());
+    }
 
     handleProfilePicUpload = (key) => {
         this.setState({ imageUploadType: key}, () => {
@@ -39,103 +100,297 @@ class MyProfile extends Component {
     }
 
     render() {
-        const { user } = this.props;
+        const { user, sidebar } = this.props;
 
         return (
-            <div style={{ height: window.innerHeight }}>
+            <div>
                 <Header />
                 <CustomSidebar />
-                <Segment basic style={{ padding: 0, marginTop: 60, paddingTop: 10 }}>
-                    <div css={styles.container}>
-                        <div css={styles.imageContainer}>
-                            {
-                                user.bannerURL && (
-                                    <div style={{ position: 'absolute', top: 0, right: 0, left: 0, bottom: 0 }}>
-                                         <Image 
-                                            src={user.bannerURL} 
-                                            style={{
-                                                height: 260,
-                                                width: '100%',
-                                            }}
-                                        />
-                                    </div>
-                                )
-                            }
-                            <div style={{ position: 'absolute', top: 30, right: 10 }}>
-                                <Icon 
-                                    name='edit' 
-                                    color='#fff' 
-                                    style={{ fontSize: 20 }}
-                                    onClick={() => this.handleProfilePicUpload('banner')}
-                                />
-                            </div>
-                            <Image 
-                                src={user.profilePic || 'https://solarman.in/wp-content/themes/micron/images/placeholders/placeholder_large.jpg'} 
-                                size='tiny' 
-                                circular
-                                style={{
-                                    height: '100px',
-                                    width: '100px',
-                                }}
-                                onClick={() => this.handleProfilePicUpload('profile')}
-                            />
-                            <input type="file" id="profile-pic-uploader" onChange={this.handleImageUpload} style={ { display: 'none' } } />
-                            <p css={styles.traderName}>{user.name}</p>
-                        </div>
-                    </div>
-                    <div 
-                        style={{ 
-                            display: 'flex', 
-                            justifyContent: 'space-evenly', 
-                            marginLeft: 250,
-                            marginTop: 0,
+                <div>
+                <img
+                    height={300}
+                    width={1600}
+                    src={user.bannerURL}
+                />
+                <img
+                    height={150}
+                    width={150}
+                    style={{
+                        position: "absolute",
+                        left: 50,
+                        top: 250,
+                        borderRadius: "50%",
+                        zIndex: 9999,
+                        marginLeft: sidebar.sidebarOpen ? 240 : 120,
+                    }}
+                    src={user.profilePic}
+                />
+                <Segment
+                    style={{
+                    marginTop: "-10px",
+                    height: 80,
+                    display: "flex",
+                    justifyContent: "center"
+                    }}
+                    raised
+                >
+                    <div
+                    style={{
+                        marginLeft: 30,
+                        paddingRight: 20,
+                        borderRight: "1px solid #ccc"
+                    }}
+                    >
+                    <p
+                        style={{
+                        fontSize: 18,
+                        margin: 0,
+                        fontWeight: 700,
+                        color: "#2566e8"
                         }}
                     >
-                        <Segment style={{ width: 300, height: 150, marginTop: '-75px', marginBottom: 80 }} raised>
-                            <div>
-                                <p style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 0 }}>Email</p>
-                                <p style={{ marginLeft: 20, marginTop: 5 }}>{user.email}</p>
-                            </div>
-                            <div>
-                                <p style={{ fontWeight: 'bold', fontSize: 18, marginTop: 10 }}>Phone Number</p>
-                                <p style={{ marginLeft: 20, marginBottom: 0  }}>-</p>
-                            </div>
-                        </Segment>
-                        
+                        Followers
+                    </p>
+                    <p style={{ fontWeight: 700 }}>{user.followers.length}</p>
                     </div>
-                    <div style={{ 
-                            display: 'flex', 
-                            justifyContent: 'space-evenly', 
-                            marginLeft: 250,
-                        }}>
-                        <Segment raised style={{ width: 300, padding: 0, height: 300, overflow: 'auto' }}>
-                                <div style={{ backgroundColor: 'rgb(3, 143, 222)', color: '#ffffff', padding: 10 }}>
-                                    <h1 style={{ textAlign: 'center' }}>Followers</h1>
-                                </div>    
-                                <div style={{ padding: 10 }}>
-                                    {
-                                        user.followers && user.followers.map((follower) => (
-                                            <p>{follower}</p>
-                                        ))
-                                    }
-                                </div>
-                        </Segment>
-                        <Segment style={{ marginTop: 0, width: 300, padding: 0, height: 300, overflow: 'auto'  }} raised>
-                                <div style={{ backgroundColor: 'rgb(3, 143, 222)', color: '#ffffff', padding: 10 }}>
-                                    <h1 style={{ textAlign: 'center' }}>Following</h1>
-                                </div>
-                                
-                                <div style={{ padding: 10 }}>
-                                    {
-                                        user.following && user.following.map((following) => (
-                                            <p>{following}</p>
-                                        ))
-                                    }
-                                </div>
-                        </Segment>
+                    <div
+                    style={{
+                        marginLeft: 30,
+                        paddingRight: 20,
+                        borderRight: "1px solid #ccc"
+                    }}
+                    >
+                    <p
+                        style={{
+                        fontSize: 18,
+                        margin: 0,
+                        fontWeight: 700,
+                        color: "#2566e8"
+                        }}
+                    >
+                        Following
+                    </p>
+                    <p style={{ fontWeight: 700 }}>{user.following.length}</p>
+                    </div>
+                    <div style={{ marginLeft: 30 }}>
+                    <p
+                        style={{
+                        fontSize: 18,
+                        margin: 0,
+                        fontWeight: 700,
+                        color: "#2566e8"
+                        }}
+                    >
+                        Alerts
+                    </p>
+                    <p style={{ fontWeight: 700 }}>250</p>
                     </div>
                 </Segment>
-            </div>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        marginLeft: sidebar.sidebarOpen ? 240 : 120,
+                    }}
+                >
+                    <div
+                    style={{
+                        marginTop: 50,
+                        marginLeft: 30,
+                        width: 200,
+                        borderRight: "1px solid #cccccc",
+                        textAlign: "center"
+                    }}
+                    >
+                    <p style={{ fontSize: 20, fontWeight: "bold" }}>John Doe</p>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            fontSize: 17,
+                            margin: 10,
+                            marginLeft: 20
+                        }}
+                    >
+                        <Icon name="mail" />
+                        <p>trader@gmail.com</p>
+                    </div>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            fontSize: 17,
+                            margin: 10,
+                            marginLeft: 20
+                        }}
+                    >
+                        <Icon name="point" />
+                        <p>India</p>
+                    </div>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            fontSize: 17,
+                            margin: 10,
+                            marginLeft: 20
+                        }}
+                    >
+                        <Icon name="call" />
+                        <p>9787752856</p>
+                    </div>
+                    </div>
+                    <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flex: 1,
+                        marginTop: 40
+                    }}
+                    >
+                    <Segment
+                        style={{
+                        width: 300,
+                        height: 300,
+                        marginRight: 20,
+                        padding: 0,
+                        borderRadius: 5
+                        }}
+                        raised
+                    >
+                        <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            background: "#2566e8",
+                            height: 50,
+                            width: "100%",
+                            borderTopLeftRadius: 5,
+                            borderTopRightRadius: 5
+                        }}
+                        >
+                        <p
+                            style={{ color: "#ffffff", fontWeight: "bold", fontSize: 20 }}
+                        >
+                            Followers
+                        </p>
+                        </div>
+                        <div style={{ height: 250, overflow: "auto", padding: 5 }}>
+                        {traderData.map(trader => (
+                            <React.Fragment>
+                            <div
+                                style={{
+                                display: "flex",
+                                justifyContent: "flex-start",
+                                alignItems: "center",
+                                marginBottom: 10
+                                }}
+                            >
+                                <img
+                                src={trader.icon}
+                                style={{
+                                    height: 50,
+                                    width: 50,
+                                    borderRadius: "50%",
+                                    marginLeft: 20
+                                }}
+                                />
+                                <p style={{ marginLeft: 50 }}>{trader.name}</p>
+                            </div>
+                            <Divider />
+                            </React.Fragment>
+                        ))}
+                        </div>
+                    </Segment>
+                    <Segment
+                        style={{
+                        width: 300,
+                        height: 300,
+                        marginRight: 20,
+                        padding: 0,
+                        borderRadius: 5,
+                        marginTop: 0
+                        }}
+                        raised
+                    >
+                        <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            background: "#2566e8",
+                            height: 50,
+                            width: "100%",
+                            borderTopLeftRadius: 5,
+                            borderTopRightRadius: 5
+                        }}
+                        >
+                        <p
+                            style={{ color: "#ffffff", fontWeight: "bold", fontSize: 20 }}
+                        >
+                            Following
+                        </p>
+                        </div>
+                        <div style={{ height: 250, overflow: "auto", padding: 5 }}>
+                        {traderData.map(trader => (
+                            <React.Fragment>
+                            <div
+                                style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                marginBottom: 10
+                                }}
+                            >
+                                <img
+                                src={trader.icon}
+                                style={{ height: 50, width: 50, borderRadius: "50%" }}
+                                />
+                                <p>{trader.name}</p>
+                                <Button primary inverted>
+                                Unfollow
+                                </Button>
+                            </div>
+                            <Divider />
+                            </React.Fragment>
+                        ))}
+                        </div>
+                    </Segment>
+                    <Segment
+                        style={{
+                        width: 300,
+                        height: 300,
+                        marginRight: 20,
+                        padding: 0,
+                        borderRadius: 5,
+                        marginTop: 0
+                        }}
+                        raised
+                    >
+                        <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            background: "#2566e8",
+                            height: 50,
+                            width: "100%",
+                            borderTopLeftRadius: 5,
+                            borderTopRightRadius: 5
+                        }}
+                        >
+                        <p
+                            style={{ color: "#ffffff", fontWeight: "bold", fontSize: 20 }}
+                        >
+                            Alerts
+                        </p>
+                        </div>
+                    </Segment>
+                    </div>
+                </div>
+                </div>
+          </div>
         );
     }
 }
@@ -143,6 +398,7 @@ class MyProfile extends Component {
 
 const mapStateToProps = (state) => ({
     user: state.user,
+    sidebar: state.sidebar,
 });
 
 export default connect(mapStateToProps)(MyProfile);

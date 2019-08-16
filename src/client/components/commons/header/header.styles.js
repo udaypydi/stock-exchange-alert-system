@@ -10,7 +10,7 @@ const styles = {
         right: 0;
         top: 0;
         background: #ffffff;
-        z-index: 999;
+        z-index: 999999;
         align-items: center;
         -webkit-box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
         -moz-box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);

@@ -104,11 +104,6 @@ export const CURRENCY_OPTIONS = [
 
 export const TIMEFRAME_OPTIONS = [
     {
-        key: '1 min',
-        value: '1min',
-        text: '1 min',
-    },
-    {
         key: '5 min',
         value: '5min',
         text: '5 min',

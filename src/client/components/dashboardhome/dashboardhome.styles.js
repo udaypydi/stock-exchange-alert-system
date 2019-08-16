@@ -33,6 +33,13 @@ const styles = {
         padding-top: 160px;
         padding-left: 280px;
     `,
+    mobileChartContainer: css`
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 100px;
+    `,
     container: css`
         width: 100%;
         background: #f5f5f5;

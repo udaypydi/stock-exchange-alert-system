@@ -4,6 +4,7 @@ const styles = {
 
     sidebarContainer: css`
         background: #000000;
+        z-index: 99999;
     `,
 
     sidebarHeader: css`

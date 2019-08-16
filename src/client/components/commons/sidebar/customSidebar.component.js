@@ -53,7 +53,7 @@ function CustomSideBar(props) {
                 visible={sideBar.sidebarOpen}
                 width='thin'
                 animation="push"
-                style={{ color: '#fefefe', width: 278 }}
+                style={{ color: '#fefefe', width: 278, zIndex: 99999 }}
             >
                 <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
                 <div css={styles.profileImageContainer}>
@@ -93,12 +93,12 @@ function CustomSideBar(props) {
                 visible={!sideBar.sidebarOpen}
                 width='thin'
                 animation="push"
-                style={{ color: '#fefefe', width: 80, overflow: 'hidden' }}
+                style={{ color: '#fefefe', width: 80, overflow: 'hidden', zIndex: 99999 }}
             >
                 <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
                 <div css={styles.profileImageContainer}>
                     <Image 
-                        src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw' 
+                        src={user.profilePic || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw'}
                         size='tiny' 
                         circular
                         style={{
