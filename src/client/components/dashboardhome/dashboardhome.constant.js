@@ -35,7 +35,10 @@ export const CURRENCY_GRAPH_DATA = [{
 ];
 
 
-export const ALERT_SIGNAL_HISTORY = [
+export const ALERT_SIGNAL_HISTORY = [];
+
+
+export const ALERT_SIGNAL_HISTORY_DEMO = [
 	{
 		date: '2019-07-26',
 		alerts: 12,

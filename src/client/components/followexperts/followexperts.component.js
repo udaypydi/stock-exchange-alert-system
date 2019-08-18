@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Segment, Image } from 'semantic-ui-react';
+import { Button, Segment, Image, Icon } from 'semantic-ui-react';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 /** @jsx jsx */
@@ -13,6 +13,7 @@ import styles from './followexperts.styles';
 
 function FollowExperts(props) {
     const [experts, setExperts] = useState([]);
+    const { sidebar } = props;
 
     useEffect(() => {
         fetchExperts()
@@ -95,7 +96,7 @@ function FollowExperts(props) {
         <div>
              <Header />
              <CustomSidebar />
-             <div css={styles.container}>
+             <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '5%' : 0 }}>
                 <div css={styles.header}>
                     <p css={styles.title}>Follow Experts</p>
                     <Button 
@@ -109,7 +110,7 @@ function FollowExperts(props) {
                 </div>
                 {
                     experts.length > 0 && (
-                        <div style={{ marginLeft: 220, marginTop: 30, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
+                        <div style={{ marginLeft: sidebar.sidebarOpen ? 220 : 100, marginTop: 30, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
                             {renderExpertsCards()}
                         </div>
                     )
@@ -122,6 +123,7 @@ function FollowExperts(props) {
 
 const mapStateToProps = (state) => ({
     user: state.user,
+    sidebar: state.sidebar,
 });
 
 export default withRouter(connect(mapStateToProps)(FollowExperts));

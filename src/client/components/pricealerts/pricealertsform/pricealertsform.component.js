@@ -6,6 +6,8 @@ import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
 import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
+import MailConfigurationForm from 'commons/mailconfiguration/mailconfiguration.component';
+import AlertTiming from 'commons/alerttiming/alerttiming.component';
 import { CURRENCY_OPTIONS, TIMEFRAME_OPTIONS, FORM_TOOLIPS } from './pricealertsform.constant';
 import { 
     priceAlertNameChange, 
@@ -22,7 +24,7 @@ import './pricealertsform.css';
 
 function PriceAlertsForm(props) {
     const [activeElement, setActiveElement] = useState('');
-    const { priceAlert, dispatch, sidebar } = props;
+    const { priceAlert, dispatch, sidebar, signalMail, signalTiming } = props;
 
     const {
         name,
@@ -32,7 +34,10 @@ function PriceAlertsForm(props) {
         timeFrame,
         timeBetweenAlerts,
         timeOutHours,
+        executionLimit,
     } = priceAlert;
+
+    const { total, daily } = executionLimit;
 
     const handlePriceAlertNameChange = (event) => {
         dispatch(priceAlertNameChange(event.target.value));
@@ -177,52 +182,19 @@ function PriceAlertsForm(props) {
                         )
                     } 
                 </div>
-                {/* <div>
-                    <p>Timing</p>
+                
+                <div>
+                    <AlertTiming />
                 </div>
-                <Divider />
-                <div css={styles.formContainer}>
-                    <Input 
-                        fluid 
-                        style={{ width: '50%', margin: 10 }}
-                        placeholder='Time Between Alerts(in seconds)' 
-                        type="number"
-                        value={timeBetweenAlerts}
-                        onChange={handleTimeIntervalChange}
-                        onFocus={() => setActiveElement('TIME_OUT')}
-                        onBlur={() => setActiveElement('')}
-                    />
-                    {
-                        activeElement === 'TIME_OUT' && (
-                            <div class="tooltip">
-                                <Icon name='info circle' />
-                                <span class="tooltiptext">{FORM_TOOLIPS['TIME_OUT']}</span>
-                            </div>
-                        )
-                    }
-                     <Button.Group onClick={handleTimeOutHoursChange} style={{ width: '50%', margin: 10 }}>
-                        <Button inverted={timeOutHours !== 3} value={3} color='blue'>
-                            3 Hours
-                        </Button>
-                        <Button.Or />
-                        <Button inverted={timeOutHours !== 6} value={6} color='blue'>
-                            6 Hours
-                        </Button>
-                        <Button.Or />
-                        <Button inverted={timeOutHours !== 12} value={12} color='blue'>
-                            12 Hours
-                        </Button>
-                        <Button.Or />
-                        <Button inverted={timeOutHours !== 24} value={24} color='blue'>
-                            24 Hours
-                        </Button>
-                    </Button.Group>
-                </div> */}
+
+                <div>
+                    <MailConfigurationForm />
+                </div>
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20, marginBottom: 20 }}>
                     <Button 
                          color="blue" 
                          content='Create Alert'
-                         onClick={() => createTraderPriceAlerts(priceAlert)}
+                         onClick={() => createTraderPriceAlerts({ ...priceAlert, ...signalMail, ...signalTiming })}
                     />
                 </div>
             </Segment>
@@ -234,6 +206,8 @@ function PriceAlertsForm(props) {
 const mapStateToProps = (state) => ({
     priceAlert: state.priceAlert,
     sidebar: state.sidebar,
+    signalMail: state.signalMail,
+    signalTiming: state.signalTiming,
 });
 
 export default connect(mapStateToProps)(PriceAlertsForm);

@@ -13,6 +13,8 @@ import { connect } from 'react-redux';
 import Loader from 'commons/preLoader/preloader.component';
 import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
+import MailConfigurationForm from 'commons/mailconfiguration/mailconfiguration.component';
+import AlertTiming from 'commons/alerttiming/alerttiming.component';
 import "react-datepicker/dist/react-datepicker.css";
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
@@ -56,6 +58,7 @@ function renderExpertSignal(props) {
         stopLoss,
         targetProfit,
     } = props.expertSignal;
+    const { signalMail, signalTiming } = props;
 
     const {
         period,
@@ -82,8 +85,8 @@ function renderExpertSignal(props) {
     }
 
     function handleSubmitFormData() {
-        const { dispatch } = props;
-        dispatch(submitExpertSignalData(props.expertSignal));
+        const { dispatch, signalTiming, signalMail } = props;
+        dispatch(submitExpertSignalData({ ...props.expertSignal, ...signalTiming, ...signalMail }));
     }
 
     function handleCurrencyPairChange(event, data) {
@@ -371,6 +374,13 @@ function renderExpertSignal(props) {
                                         )
                                     }  
                                 </div>
+                                <div style={{ marginTop: 20, marginLeft: '-50px' }}>
+                                    <AlertTiming />
+                                </div>
+                                <div style={{ marginLeft: '-50px' }}>
+                                    <MailConfigurationForm />
+                                </div>
+                                
                                 <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
                                     <Button 
                                         color="blue" 
@@ -420,6 +430,8 @@ function ExpertSignalFormComponent(props) {
 
 const mapStateToProps = (state) => ({
     expertSignal: state.expertSignal,
+    signalMail: state.signalMail,
+    signalTiming: state.signalTiming,
 });
 
 export default connect(mapStateToProps)(ExpertSignalFormComponent);

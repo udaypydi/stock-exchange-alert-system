@@ -84,6 +84,20 @@ export const FORM_TOOLIPS = {
     PARAMETERS:  'The parameters based on which to calculate the technical indicator',
 }
 
+export const periodValueDropdownGenerator = () => {
+    const periodValueDropdown = [];
+
+    for (let i = 2; i <= 200; i ++) {
+        periodValueDropdown.push({
+            key: i,
+            value: i,
+            text: i,
+        });
+    }
+
+    return periodValueDropdown;
+}
+
 export const TIMEFRAME_OPTIONS = [
     {
         key: '5 min',

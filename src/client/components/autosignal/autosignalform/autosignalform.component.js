@@ -12,6 +12,8 @@ import {
 import { connect } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import TimezonePicker from 'react-timezone';
+import MailConfigurationForm from 'commons/mailconfiguration/mailconfiguration.component';
+import AlertTiming from 'commons/alerttiming/alerttiming.component';
 import Header from 'commons/header/header.component';
 import Loader from 'commons/preLoader/preloader.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
@@ -27,6 +29,7 @@ import {
     OHLC,
     MACD_PARAMETERS,
     FORM_TOOLIPS,
+    periodValueDropdownGenerator,
 } from './autosignalform.constants';
 import { 
     autoSignalNameChange, 
@@ -49,6 +52,7 @@ function renderAutoSignalForm(props) {
     const [activeElement, setActiveElement] = useState('');
     const [ currentDate, setCurrentDate ] = useState(new Date());
 
+    const { sidebar } = props;
     const {    
         currencyPair,
         timeFrame,
@@ -89,8 +93,8 @@ function renderAutoSignalForm(props) {
     }
 
     function handleSubmitFormData() {
-        const { dispatch } = props;
-        dispatch(submitAutoSignalData(props.autoSignal));
+        const { dispatch, signalTiming, signalMail } = props;
+        dispatch(submitAutoSignalData({ ...props.autoSignal, ...signalTiming, ...signalMail }));
     }
 
     function handleCurrencyPairChange(event, data) {
@@ -144,8 +148,8 @@ function renderAutoSignalForm(props) {
             <CustomSidebar />
             {
                 !isLoading && !isSuccess ? (
-                <div css={styles.container}>
-                    <Segment fluid style={{ width: 1000 }}>
+                <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '65%' : '52%' }}>
+                    <Segment fluid style={{ width: sidebar.sidebarOpen ? 1000 : 1200 }}>
                         <div>
                             <div css={styles.headerContainer}>
                                 <div>
@@ -183,7 +187,7 @@ function renderAutoSignalForm(props) {
                                         css={styles.dropdownContainer}
                                         text={currencyPair}
                                         onChange={handleCurrencyPairChange}
-                                        style={{ width: '30%' }}
+                                        style={{ width: '50%' }}
                                         onFocus={() => setActiveElement('CURRENCY_PAIR')}
                                         onBlur={() => setActiveElement('')}
                                     />
@@ -203,7 +207,7 @@ function renderAutoSignalForm(props) {
                                         css={styles.dropdownContainer}
                                         text={timeFrame}
                                         onChange={handleTimeFrameChange}
-                                        style={{ width: '30%' }}
+                                        style={{ width: '50%' }}
                                         onFocus={() => setActiveElement('TIME_FRAME')}
                                         onBlur={() => setActiveElement('')}
                                     />
@@ -215,7 +219,7 @@ function renderAutoSignalForm(props) {
                                             </div>
                                         )
                                     } 
-                                    <div 
+                                    {/* <div 
                                         onFocus={() => setActiveElement('SIGNAL_TYPE')}
                                         onBlur={() => setActiveElement('')}
                                         style={{ width: '50%', justifyContent: 'space-evenly', display: 'flex', margin: 10 }}
@@ -223,7 +227,7 @@ function renderAutoSignalForm(props) {
                                         <Checkbox label="Buy Alerts" onChange={() => handleAlertsSelect('buy')} checked={alerts.indexOf('buy') !== -1} />
                                         <Checkbox label="Sell Alerts" onChange={() => handleAlertsSelect('sell')} checked={alerts.indexOf('sell') !== -1} />
                                         <Checkbox label="Both" onChange={() => handleAlertsSelect('both')} checked={alerts.length === 2} />
-                                    </div>
+                                    </div> */}
                                     {
                                         activeElement === 'SIGNAL_TYPE' && (
                                             <div class="tooltip">
@@ -257,12 +261,16 @@ function renderAutoSignalForm(props) {
                                     <React.Fragment>
                                         {
                                             indicator !== 'macd' && (
-                                                <Input 
-                                                    fluid 
+                                                <Dropdown
+                                                    placeholder='Period'
+                                                    fluid
+                                                    search
+                                                    selection
+                                                    options={periodValueDropdownGenerator()}
                                                     style={{ width: '50%', margin: 10 }} 
-                                                    placeholder='Period' 
-                                                    value={period}
-                                                    onChange={(event) => handleIndicatorParamsChange(event, undefined, 'period')}
+                                                    css={styles.dropdownContainer}
+                                                    text={period}
+                                                    onChange={(event, data) => handleIndicatorParamsChange(event, data, 'period')}
                                                 />
                                             )
                                         }
@@ -340,7 +348,13 @@ function renderAutoSignalForm(props) {
                                         />
                                     </div>
                                 )}
-                                <div css={styles.dateContainer}>
+                                <div style={{ marginTop: 20, marginLeft: '-50px' }}>
+                                    <AlertTiming />
+                                </div> 
+                                <div style={{ marginLeft: '-50px' }}>
+                                    <MailConfigurationForm />
+                                </div>   
+                                {/* <div css={sstyles.dateContainer}>
                                     <p>Signal Timeframe:</p>
                                     <Input 
                                         fluid 
@@ -376,7 +390,7 @@ function renderAutoSignalForm(props) {
                                             24 Hours
                                         </Button>
                                     </Button.Group>
-                                </div>
+                                </div> */}
                                 <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
                                     <Button 
                                         color="blue" 
@@ -426,6 +440,9 @@ function AutoSignalFormComponent(props) {
 
 const mapStateToProps = (state) => ({
     autoSignal: state.autoSignal,
+    signalMail: state.signalMail,
+    signalTiming: state.signalTiming,
+    sidebar: state.sidebar,
 });
 
 export default connect(mapStateToProps)(AutoSignalFormComponent);

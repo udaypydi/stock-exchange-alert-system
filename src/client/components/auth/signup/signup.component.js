@@ -6,7 +6,7 @@ import 'react-flags-select/css/react-flags-select.css';
   /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
-import { updateUserState } from 'components/home/home.action';
+import { updateUserState, getUserState } from 'components/home/home.action';
 import { userSignUp } from '../auth.api';
 import styles from './signup.styles';
 
@@ -30,6 +30,7 @@ function SignUp(props) {
             .then(json => {
                 if (json.status === 200) {
                     updateUserState(json);
+                    dispatch(getUserState());
                     history.push('/home');
                 }
             });

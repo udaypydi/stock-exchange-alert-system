@@ -13,7 +13,7 @@ import styles from './autosignal.styles';
 
 function AutoSignal(props) {
     const [isAutoSignalFormVisible, setisAutoSignalFormVisible] = useState(false);
-    const { autoSignal } = props;
+    const { autoSignal, sidebar } = props;
 
 
     function showAutoSignalConfigurationForm() {
@@ -25,8 +25,11 @@ function AutoSignal(props) {
         <div style={{ backgroundColor: '#f0f2f5'}}>
             <Header />
             <CustomSidebar />
-            <div css={styles.container}>
-                <Segment fluid style={{ width: 1000 }}>
+            <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '65%' : '52%' }}>
+                <Segment 
+                    fluid 
+                    style={{ width: sidebar.sidebarOpen ? 1000 : 1200 }}
+                >
                     <div>
                         <div css={styles.headerContainer}>
                             <div>
@@ -52,6 +55,7 @@ function AutoSignal(props) {
 
 const mapStateToProps = (state) => ({
     autoSignal: state.autoSignal,
+    sidebar: state.sidebar,
 });
 
 export default withRouter(connect(mapStateToProps)(AutoSignal));

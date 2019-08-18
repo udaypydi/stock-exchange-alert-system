@@ -108,7 +108,14 @@ function renderAlertsGraph(currencyData) {
     const { eurusd, usdjpy, usdgyd, audnzd } = currencyData;
     const graphWidth = (window.innerWidth / 100) * 90;
     return (
-        <Segment raised css={styles.chartCard} style={{ borderRadius: 10, width: '90%', height: 250, float: 'right' }}>
+        <Segment raised css={styles.alertGraphCard} 
+            style={{ 
+                borderRadius: 10, 
+                width: '90%', 
+                height: 250, 
+                float: 'right',
+            }}
+        >
             <div css={css`${styles.chartData} left: -55px; top: 30px;`}>
                 <p>Alerts History</p>
             </div>

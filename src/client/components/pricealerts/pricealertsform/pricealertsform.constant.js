@@ -15,6 +15,10 @@ export const PRICE_ALERT_SIGNAL_INIT_STATE = {
     timeFrame: '',
     timeBetweenAlerts: '',
     timeOutHours: 3,
+    executionLimit: {
+        total: '',
+        daily: '',
+    },
 };
 
 export const FORM_TOOLIPS = {

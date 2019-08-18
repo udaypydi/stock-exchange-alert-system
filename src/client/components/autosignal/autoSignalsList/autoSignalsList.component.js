@@ -56,6 +56,21 @@ function AutoSignalsList(props) {
                     </Segment>
                 ))
             }
+            {
+                autoSignalsList.length > 0 && (
+                    <React.Fragment>
+                        <Icon 
+                            name='database'
+                            color='blue'
+                            style={{ 
+                                fontSize: 40,
+                            }}
+                        />
+                        <h2>No Data Available</h2>
+                    </React.Fragment>
+                    
+                )
+            }
         </div>
     )
 }
