@@ -28,6 +28,7 @@ export default function userReducer(state = USER_INIT_STATE, action) {
                     profilePic: action.payload.profile_pic,
                     bannerURL: action.payload.banner_url,
                     followers: action.payload.followers,
+                    activeGraphs: action.payload.active_graphs,
                 };
 
         case UPDATE_USER_PROFILE_PIC: {

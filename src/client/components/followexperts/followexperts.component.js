@@ -99,14 +99,28 @@ function FollowExperts(props) {
              <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '5%' : 0 }}>
                 <div css={styles.header}>
                     <p css={styles.title}>Follow Experts</p>
-                    <Button 
-                        basic 
-                        color="blue" 
-                        content='Create Expert Signals' 
-                        icon={'add'}
-                        labelPosition='left' 
-                        onClick={navigateToFollowExperts}
-                    />
+                    <div style={{ display: 'flex' }}>
+                        <Button 
+                            basic 
+                            color="blue" 
+                            content='Create Expert Signals' 
+                            icon={'add'}
+                            labelPosition='left' 
+                            onClick={navigateToFollowExperts}
+                        />
+                        <Button 
+                            basic 
+                            color="blue" 
+                            content='My Expert Signals' 
+                            icon={'list'}
+                            labelPosition='left' 
+                            onClick={() => {
+                                const { history } = props;
+                                history.push('/expert-signal-list');
+                            }}
+                            style={{ marginLeft: 20 }}
+                        />
+                     </div>   
                 </div>
                 {
                     experts.length > 0 && (

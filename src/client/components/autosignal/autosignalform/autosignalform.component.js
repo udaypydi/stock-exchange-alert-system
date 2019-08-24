@@ -351,46 +351,6 @@ function renderAutoSignalForm(props) {
                                 <div style={{ marginTop: 20, marginLeft: '-50px' }}>
                                     <AlertTiming />
                                 </div> 
-                                <div style={{ marginLeft: '-50px' }}>
-                                    <MailConfigurationForm />
-                                </div>   
-                                {/* <div css={sstyles.dateContainer}>
-                                    <p>Signal Timeframe:</p>
-                                    <Input 
-                                        fluid 
-                                        style={{ width: 220, margin: 10 }} 
-                                        placeholder='Timeout in (seconds)' 
-                                        text={timeOut}
-                                        onChange={(event) => handleSignalTimeFrameChange(parseIntevent.target.value, 'timeOut')}
-                                        onFocus={() => setActiveElement('TIME_OUT')}
-                                        onBlur={() => setActiveElement('')}
-                                    />
-                                     {
-                                        activeElement === 'TIME_OUT' && (
-                                            <div class="tooltip">
-                                                <Icon name='info circle' />
-                                                <span class="tooltiptext">{FORM_TOOLIPS['TIME_OUT']}</span>
-                                            </div>
-                                        )
-                                    }
-                                    <Button.Group onClick={(event) => handleAlertExpiryTimeSelect(event, 'timeOutHours')}>
-                                        <Button inverted={timeOutHours !== 3} value={3} color='blue'>
-                                            3 Hours
-                                        </Button>
-                                        <Button.Or />
-                                        <Button inverted={timeOutHours !== 6} value={6} color='blue'>
-                                            6 Hours
-                                        </Button>
-                                        <Button.Or />
-                                        <Button inverted={timeOutHours !== 12} value={12} color='blue'>
-                                            12 Hours
-                                        </Button>
-                                        <Button.Or />
-                                        <Button inverted={timeOutHours !== 24} value={24} color='blue'>
-                                            24 Hours
-                                        </Button>
-                                    </Button.Group>
-                                </div> */}
                                 <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
                                     <Button 
                                         color="blue" 

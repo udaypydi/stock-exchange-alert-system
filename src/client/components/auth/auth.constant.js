@@ -11,5 +11,6 @@ export const USER_INIT_STATE = {
     alerts: [],
     profile_pic: '',
     bannerURL: '',
+    activeGraphs: [],
 };
 

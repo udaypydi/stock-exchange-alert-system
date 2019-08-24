@@ -22,6 +22,13 @@ module.exports = {
             callback: (req, res) => {
                 experts.fetchExperts(req, res);
             }
+        },
+
+        {
+            url: '/get-expert-signals',
+            callback: (req, res) => {
+                experts.getExpertSignals(req, res);
+            }
         }
     ]
 };

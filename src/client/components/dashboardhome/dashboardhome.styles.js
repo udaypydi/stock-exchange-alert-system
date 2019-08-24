@@ -47,20 +47,24 @@ const styles = {
     chartsContainer: css`
         display: flex;
         flex: 1;
-        justify-content: space-evenly;
+        justify-content: flex-start;
         padding-top: 160px;
         padding-left: 280px;
+        flex-wrap: wrap;
     `,
     mobileChartContainer: css`
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-top: 100px;
+        margin-top: 120px;
     `,
     container: css`
         width: 100%;
         background: #f5f5f5;
+    `,
+    deleteIcon: css`
+        display: none;
     `
 };
 

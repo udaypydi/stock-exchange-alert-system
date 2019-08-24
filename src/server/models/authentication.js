@@ -37,6 +37,7 @@ module.exports = {
                       alerts: result,
                       profile_pic: userData[0].profile_pic,
                       banner_url: userData[0].banner_url,
+                      active_graphs: userData[0].activeGraphs,
                     });
                   });
                 })
@@ -66,6 +67,12 @@ module.exports = {
         database.collection('users').updateOne({ email: req.session.user.email }, { $set: updatedData});
         res.json({ profile_pic: result.secure_url });
        });
+    },
+
+    addCurrencyPair: (req, res) => {
+      const updatedData = { activeGraphs: req.body };
+      database.collection('users').updateOne({ email: req.session.user.email }, { $set: updatedData });
+      res.json({ status: 200, active_graphs: req.body });
     },
 
     encryptPassword: (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(5), null),

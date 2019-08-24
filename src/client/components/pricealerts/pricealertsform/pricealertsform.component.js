@@ -182,13 +182,8 @@ function PriceAlertsForm(props) {
                         )
                     } 
                 </div>
-                
                 <div>
                     <AlertTiming />
-                </div>
-
-                <div>
-                    <MailConfigurationForm />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20, marginBottom: 20 }}>
                     <Button 

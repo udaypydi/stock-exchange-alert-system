@@ -377,9 +377,9 @@ function renderExpertSignal(props) {
                                 <div style={{ marginTop: 20, marginLeft: '-50px' }}>
                                     <AlertTiming />
                                 </div>
-                                <div style={{ marginLeft: '-50px' }}>
+                                {/* <div style={{ marginLeft: '-50px' }}>
                                     <MailConfigurationForm />
-                                </div>
+                                </div> */}
                                 
                                 <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
                                     <Button 

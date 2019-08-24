@@ -1,9 +1,6 @@
 export const FETCH_CURRENCY_DATA = 'FETCH_CURRENCY_DATA';
 export const DASHBOARD_HOME_INITIAL_STATE = {
-    eurusd: [],
-    usdjpy: [],
-    usdgyd: [],
-	audnzd: [],
+    currencyGraphs: [],
 	isLoading: false,
 };
 
@@ -78,3 +75,21 @@ export const ALERT_SIGNAL_HISTORY_DEMO = [
 ];
 
 export const IS_LOADING = 'IS_GRAPH_LOADING';
+
+export const COLOR_MAPPING = {
+	GRAPH_0: {
+		colors: ['#163469', '#FE9E15'],
+		strokeColor: '#4D95F3',
+	},
+	GRAPH_1: {
+		colors: ['#4ECDE4', '#06BB8A'],
+		strokeColor: '#4D95F3',
+	},
+	GRAPH_2: {
+		colors: ['#e81a24', '#FEEADA'],
+		strokeColor: '#FEEADA',
+	},
+	GRAPH_3: {
+		colors: ['#038FDE', '#007CD3'],
+	}
+}

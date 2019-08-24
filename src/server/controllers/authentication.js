@@ -51,6 +51,12 @@ module.exports = {
                 authentication.uploadProfilePic(req, res);
             }
         },
+        {
+            url: '/add-currency-pair',
+            callback: (req, res) => {
+                authentication.addCurrencyPair(req, res);
+            }
+        }
       
     ]
 }

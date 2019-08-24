@@ -13,6 +13,7 @@ import CreateExpertSignal from 'components/expertsignalform/expertsignalform.com
 import Auth from 'components/auth/auth.component';
 import SignUp from 'components/auth/signup/signup.component';
 import PriceAlertsForm from 'components/pricealerts/pricealertsform/pricealertsform.component';
+import ExpertSignalsList from 'components/followexperts/expertsignallist/expertsignallist.component';
 import MyProfile from 'components/myprofile/myprofile.component';
 import { getUser } from 'components/home/home.api';
 import { getUserState } from 'components/home/home.action';
@@ -49,6 +50,7 @@ class AppRouter extends Component {
                 <Route path="/sign-in" component={Auth} exact />
                 <Route path="/sign-up" component={SignUp} exact />
                 <Route path="/my-profile" component={MyProfile} exact />
+                <Route path="/expert-signal-list" component={ExpertSignalsList} exact />
             </Router>
         )
     }

@@ -53,6 +53,23 @@ passport.use('local.signup', new LocalStrategy({
       newUser.success_ratio = 0;
       newUser.user_role = 'trader';
       newUser.profile_pic = '';
+      newUser.activeGraphs = [
+        {
+          currency: 'EURUSD',
+          graphStyle: 'GRAPH_0',
+        },
+        {
+          currency: 'USDJPY',
+          graphStyle: 'GRAPH_1',
+        },
+        { 
+          currency: 'USDGYD',
+          graphStyle: 'GRAPH_2',
+        }, 
+        {
+          currency: 'AUDNZD',
+          graphStyle: 'GRAPH_3',
+        }];
       database.collection('users').insert(newUser, (err, result) => {
         if (err) {
           return done(err);

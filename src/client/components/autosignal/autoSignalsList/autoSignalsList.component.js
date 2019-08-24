@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Segment, Icon } from 'semantic-ui-react';
+import { Segment, Icon, Button } from 'semantic-ui-react';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { fetchAllAutoSignals, deleteSignalList } from './autoSignalsList.action';
 import styles from './autoSignalList.styles';
 function AutoSignalsList(props) {
@@ -57,19 +58,38 @@ function AutoSignalsList(props) {
                 ))
             }
             {
-                autoSignalsList.length > 0 && (
-                    <React.Fragment>
-                        <Icon 
-                            name='database'
-                            color='blue'
-                            style={{ 
-                                fontSize: 40,
-                            }}
-                        />
-                        <h2>No Data Available</h2>
-                    </React.Fragment>
-                    
-                )
+                autoSignalsList.signalsList.length === 0 && (
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: 200,
+                        textAlign: 'center'
+                    }}
+                >
+                    <Icon 
+                        name='database'
+                        color='blue'
+                        style={{ 
+                            fontSize: 40,
+                        }}
+                    />
+                    <h2 style={{ marginTop: 0 }}>No Data Available</h2>
+                    <Button 
+                        basic 
+                        color="blue"
+                        content='Create Indicator Signals' 
+                        icon={'add'}
+                        labelPosition='left' 
+                        onClick={() => {
+                            const { history } = props;
+                            history.push('/auto-signals-create');
+                        }}
+                    />
+                </div>
+            )
             }
         </div>
     )
@@ -79,4 +99,4 @@ const mapStateToProps = (state) => ({
     autoSignalsList: state.autoSignalsList,
 });
 
-export default connect(mapStateToProps)(AutoSignalsList);
+export default withRouter(connect(mapStateToProps)(AutoSignalsList));

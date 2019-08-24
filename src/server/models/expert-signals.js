@@ -308,5 +308,12 @@ module.exports = {
         });
         // database.collection('users').update({ email }, { $set: { followers:  }});
         
+    },
+
+    getExpertSignals: (req, res) => {
+        database.collection('expertsignals').find({ email: req.session.user.email }).toArray((err, result) => {
+            if (err) throw err;
+            res.json({ expertSignals: result });
+        })
     }
 }

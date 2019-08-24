@@ -14,8 +14,9 @@ import {
   } from "recharts";
   /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { CURRENCY_GRAPH_DATA, ALERT_SIGNAL_HISTORY, ALERT_SIGNAL_HISTORY_DEMO } from './dashboardhome.constant';
+import { COLOR_MAPPING, CURRENCY_GRAPH_DATA, ALERT_SIGNAL_HISTORY, ALERT_SIGNAL_HISTORY_DEMO } from './dashboardhome.constant';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
+import AddWidgets from 'components/addwidgets/addwidgets.component';
 import Header from 'commons/header/header.component';
 import { fetchCurrencyData, formatChartData } from './dashboardhome.action';
 import DashboardHomeMobile from './dashboardhome.mobile.component';
@@ -24,16 +25,20 @@ import styles from './dashboardhome.styles';
 // const currencies = [eurusd, usdjpy, usdgyd, audnzd];
 
 function renderCurrencyGraph(currencyData, props) {
-    const { eurusd, usdjpy, usdgyd, audnzd, isLoading } = currencyData;
-    const { sidebar } = props;
+    const { currencyGraphs, isLoading } = currencyData;
+    const { sidebar, user } = props;
 
     return (
         <div css={styles.chartsContainer} style={{ paddingLeft: sidebar.sidebarOpen ? 280 : 140, marginRight: sidebar.sidebarOpen ? 0 : '-35px' }}>
             {
-                [eurusd, usdjpy, usdgyd, audnzd].map((data, index) => (
-                    <Segment raised css={styles.chartCard} style={{ marginTop: 0, borderRadius: 10 }} key={index} loading={isLoading}>
+            currencyGraphs.length > 0 ? (
+                currencyGraphs.map((data, index) => (
+                    <Segment raised css={styles.chartCard} style={{ marginTop: 0, borderRadius: 10, margin: 20 }} key={index} loading={isLoading}>
+                         <div style={{ position: 'absolute', top: 10, right: 10 }} css={styles.deleteIcon}>
+                                <Icon name="close" color="blue"/>
+                        </div>
                         {
-                            data.length > 0 && (
+                            !isLoading && (
                                 <React.Fragment>
                                     <div css={styles.chartData}>
                                     <div>
@@ -45,28 +50,28 @@ function renderCurrencyGraph(currencyData, props) {
                                             marginTop: 20
                                         }}
                                         >
-                                        {data[0].price}
+                                        {data.data[0].price}
                                         </p>
                                         <p
                                         style={{ margin: 0, fontSize: 12, color: "rgba(0, 0, 0, 0.5) " }}
                                         >
-                                        {CURRENCY_GRAPH_DATA[index].exchange}
+                                        {data.currency}
                                         </p>
                                     </div>
                                     </div>
                                     {
-                                        index !== 3 ? (
+                                        data.graphStyle !== 'GRAPH_3' ? (
                                             <AreaChart
                                                 width={250}
                                                 height={75}
-                                                data={data}
+                                                data={data.data}
                                                 style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
                                                 margin={{top: 0, right: 0, left: 0, bottom: 0}}
                                                 >
                                                 <defs style={{ borderRadius: 10 }}>
                                                     <linearGradient id={`colorUv-${index}`} x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="5%" stopColor={CURRENCY_GRAPH_DATA[index].colors[0]} stopOpacity={0.9} />
-                                                    <stop offset="95%" stopColor={CURRENCY_GRAPH_DATA[index].colors[1]} stopOpacity={0.9} />
+                                                    <stop offset="5%" stopColor={COLOR_MAPPING[data.graphStyle].colors[0]} stopOpacity={0.9} />
+                                                    <stop offset="95%" stopColor={COLOR_MAPPING[data.graphStyle].colors[1]} stopOpacity={0.9} />
                                                     </linearGradient>
                                                 </defs>
                                                 <Tooltip />
@@ -75,23 +80,23 @@ function renderCurrencyGraph(currencyData, props) {
                                                     stroke='#4D95F3'
                                                     type="monotone"
                                                     dataKey="price"
-                                                    stroke={CURRENCY_GRAPH_DATA[index].colors[0]}
+                                                    stroke={COLOR_MAPPING[data.graphStyle].colors[0]}
                                                     fill={`url(#colorUv-${index})`}
                                                     fillOpacity={1}
                                                 />
-                                                <YAxis type="number" domain={CURRENCY_GRAPH_DATA[index].domain} hide />
+                                                <YAxis type="number" domain={[1, 2]} hide />
                                             </AreaChart>
                                         ) : (
                                             <LineChart
                                                 width={250}
                                                 height={75}
-                                                data={data}
+                                                data={data.data}
                                                 style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
                                                 margin={{top: 5, right: 5, left: 5, bottom: 5}}
                                             >
                                                 <Tooltip/>
                                                 <Line dataKey="price" stroke="#038FDE" dot={{stroke: '#FEA931', strokeWidth: 2}}/>
-                                                <YAxis type="number" domain={CURRENCY_GRAPH_DATA[index].domain} hide />
+                                                <YAxis type="number" domain={[1, 2]} hide />
                                             </LineChart>
                                         )
                                     }
@@ -101,6 +106,12 @@ function renderCurrencyGraph(currencyData, props) {
                      
                     </Segment>
                 ))
+                ) : (
+                    user.activeGraphs && user.activeGraphs.map((data, index) => (
+                        <Segment raised css={styles.chartCard} style={{ marginTop: 0, borderRadius: 10, margin: 20 }} key={index} loading={isLoading}>
+                         </Segment>
+                    ))
+                )
             }
         </div>
     );
@@ -167,19 +178,23 @@ function renderAlertsGraph(currencyData) {
 
 function DashboardHome(props) {
 
-    const { dashboardCurrencyData, user, sidebar } = props;
+    const { currencyGraphs, user, sidebar, dashboardCurrencyData } = props;
 
     useEffect(() => {
         const { dispatch } = props;
         dispatch(fetchCurrencyData());
-    }, []);
+    }, [user.activeGraphs.length]);
 
     return (
         <div css={styles.container} style={{ marginRight: sidebar.sidebarOpen ? 0 : 30 }}>
             <Header />
             <Responsive minWidth={701}>
-                <CustomSidebar />    
-                {renderCurrencyGraph(dashboardCurrencyData, props)}
+                <CustomSidebar />
+                <div style={{ position: 'absolute', top: 100, right: 30 }}>
+                    <AddWidgets />
+                </div>
+                
+                {renderCurrencyGraph({ currencyGraphs, isLoading: dashboardCurrencyData.isLoading }, props)}
                 <div style={{ display: 'flex', flex: 1, justifyContent: 'space-between', marginLeft: sidebar.sidebarOpen ? 310 : 200 }}>
                 {   
                     user.alerts && (
@@ -241,6 +256,7 @@ const mapStateToProps = (state) => ({
     dashboardCurrencyData: state.dashboard,
     user: state.user,
     sidebar: state.sidebar,
+    currencyGraphs: state.dashboard.currencyGraphs,
 });
 
 export default connect(mapStateToProps)(DashboardHome);

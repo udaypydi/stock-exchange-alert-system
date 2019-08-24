@@ -9,10 +9,7 @@ export default function DashboardHomeReducer(state = DASHBOARD_HOME_INITIAL_STAT
         case FETCH_CURRENCY_DATA:
             return {
                 ...state,
-                eurusd: action.value['eurusd'],
-                usdjpy: action.value['usdjpy'],
-                usdgyd: action.value['usdgyd'],
-                audnzd: action.value['audnzd']
+                currencyGraphs: action.value,
             };
 
         case IS_LOADING:
