@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Image, Icon, Divider, Button } from 'semantic-ui-react';
+import { Segment, Image, Icon, Divider, Button, Responsive } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
@@ -8,61 +8,10 @@ import Header from 'commons/header/header.component';
 import { updateUserProfilePic } from 'components/auth/auth.action';
 import { profilePicUpload } from './myprofile.api';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
+import { expertsFollow } from 'components/followexperts/followexperts.action';
+import MyProfileMobile from './myprofile.mobile.component';
 import styles from './myprofile.styles';
 
-const traderData = [
-    {
-      name: "Trader 1",
-      icon:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
-    },
-    {
-      name: "Trader 1",
-      icon:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
-    },
-    {
-      name: "Trader 1",
-      icon:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
-    },
-    {
-      name: "Trader 1",
-      icon:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
-    },
-    {
-      name: "Trader 1",
-      icon:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
-    },
-    {
-      name: "Trader 1",
-      icon:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
-    },
-    {
-      name: "Trader 1",
-      icon:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
-    },
-    {
-      name: "Trader 1",
-      icon:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
-    },
-    {
-      name: "Trader 1",
-      icon:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
-    },
-    {
-      name: "Trader 1",
-      icon:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXk-EoU6Kr37gwvVAOxsosdI2GvZD-7epQevo8dUshuwrLZO_2zw"
-    }
-  ];
-  
 
 class MyProfile extends Component {
     state = {
@@ -72,7 +21,15 @@ class MyProfile extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props;
-        dispatch(sideBarToggleStatus());
+        if (window.screen.availWidth > 700) {
+            dispatch(sideBarToggleStatus());
+        }
+
+    }
+
+    handleFollowExpert = (email) => {
+        const { dispatch } = this.props;
+        dispatch(expertsFollow(email));
     }
 
     handleProfilePicUpload = (key) => {
@@ -99,32 +56,43 @@ class MyProfile extends Component {
         
     }
 
+    renderNoData = () => (
+        <div css={styles.nodatafound}>
+            <Icon name="database" style={{ fontSize: 40 }} color="blue" />
+            <p style={{ fontSize: 20, fontWeight: 'bold' }}>No Data Found</p>
+        </div>
+    );
+
     render() {
         const { user, sidebar } = this.props;
 
         return (
-            <div>
-                <Header />
-                <CustomSidebar />
+            <React.Fragment>
+                <Responsive minWidth={701}>
                 <div>
-                <img
-                    height={300}
-                    width={1600}
-                    src={user.bannerURL}
-                />
-                <img
-                    height={150}
-                    width={150}
-                    style={{
-                        position: "absolute",
-                        left: 50,
-                        top: 250,
-                        borderRadius: "50%",
-                        zIndex: 9999,
-                        marginLeft: sidebar.sidebarOpen ? 240 : 120,
-                    }}
-                    src={user.profilePic}
-                />
+                    <Header />
+                    <CustomSidebar />
+                    <div>
+                    <img
+                        height={300}
+                        width={1600}
+                        src={user.bannerURL}
+                        onClick={() => this.handleProfilePicUpload('banner')}
+                    />
+                    <img
+                        height={150}
+                        width={150}
+                        style={{
+                            position: "absolute",
+                            left: 50,
+                            top: 250,
+                            borderRadius: "50%",
+                            zIndex: 9999,
+                            marginLeft: sidebar.sidebarOpen ? 240 : 120,
+                        }}
+                        onClick={() => this.handleProfilePicUpload('profile')}
+                        src={user.profilePic}
+                    />
                 <Segment
                     style={{
                     marginTop: "-10px",
@@ -202,7 +170,7 @@ class MyProfile extends Component {
                         textAlign: "center"
                     }}
                     >
-                    <p style={{ fontSize: 20, fontWeight: "bold" }}>John Doe</p>
+                    <p style={{ fontSize: 20, fontWeight: "bold" }}>{user.name}</p>
                     <div
                         style={{
                             display: "flex",
@@ -213,7 +181,7 @@ class MyProfile extends Component {
                         }}
                     >
                         <Icon name="mail" />
-                        <p>trader@gmail.com</p>
+                        <p>{user.email}</p>
                     </div>
                     <div
                         style={{
@@ -237,7 +205,7 @@ class MyProfile extends Component {
                         }}
                     >
                         <Icon name="call" />
-                        <p>9787752856</p>
+                        <p>-</p>
                     </div>
                     </div>
                     <div
@@ -277,7 +245,7 @@ class MyProfile extends Component {
                         </p>
                         </div>
                         <div style={{ height: 250, overflow: "auto", padding: 5 }}>
-                        {traderData.map(trader => (
+                        {user.followers.map(trader => (
                             <React.Fragment>
                             <div
                                 style={{
@@ -288,7 +256,7 @@ class MyProfile extends Component {
                                 }}
                             >
                                 <img
-                                src={trader.icon}
+                                src={trader.icon || 'https://cdn4.iconfinder.com/data/icons/documents-letters-and-stationery/400/doc-14-512.png'}
                                 style={{
                                     height: 50,
                                     width: 50,
@@ -301,96 +269,113 @@ class MyProfile extends Component {
                             <Divider />
                             </React.Fragment>
                         ))}
+                        {
+                            user.followers.length === 0 && (
+                                this.renderNoData()
+                            )
+                        }
                         </div>
                     </Segment>
                     <Segment
-                        style={{
-                        width: 300,
-                        height: 300,
-                        marginRight: 20,
-                        padding: 0,
-                        borderRadius: 5,
-                        marginTop: 0
-                        }}
-                        raised
-                    >
-                        <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            background: "#2566e8",
-                            height: 50,
-                            width: "100%",
-                            borderTopLeftRadius: 5,
-                            borderTopRightRadius: 5
-                        }}
+                            style={{
+                            width: 300,
+                            height: 300,
+                            marginRight: 20,
+                            padding: 0,
+                            borderRadius: 5,
+                            marginTop: 0
+                            }}
+                            raised
                         >
-                        <p
-                            style={{ color: "#ffffff", fontWeight: "bold", fontSize: 20 }}
-                        >
-                            Following
-                        </p>
-                        </div>
-                        <div style={{ height: 250, overflow: "auto", padding: 5 }}>
-                        {traderData.map(trader => (
-                            <React.Fragment>
                             <div
-                                style={{
+                            style={{
                                 display: "flex",
-                                justifyContent: "space-between",
+                                justifyContent: "center",
                                 alignItems: "center",
-                                marginBottom: 10
-                                }}
+                                background: "#2566e8",
+                                height: 50,
+                                width: "100%",
+                                borderTopLeftRadius: 5,
+                                borderTopRightRadius: 5
+                            }}
                             >
-                                <img
-                                src={trader.icon}
-                                style={{ height: 50, width: 50, borderRadius: "50%" }}
-                                />
-                                <p>{trader.name}</p>
-                                <Button primary inverted>
-                                Unfollow
-                                </Button>
+                            <p
+                                style={{ color: "#ffffff", fontWeight: "bold", fontSize: 20 }}
+                            >
+                                Following
+                            </p>
                             </div>
-                            <Divider />
-                            </React.Fragment>
-                        ))}
-                        </div>
-                    </Segment>
-                    <Segment
-                        style={{
-                        width: 300,
-                        height: 300,
-                        marginRight: 20,
-                        padding: 0,
-                        borderRadius: 5,
-                        marginTop: 0
-                        }}
-                        raised
-                    >
-                        <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            background: "#2566e8",
-                            height: 50,
-                            width: "100%",
-                            borderTopLeftRadius: 5,
-                            borderTopRightRadius: 5
-                        }}
+                            <div style={{ height: 250, overflow: "auto", padding: 5 }}>
+                            {user.following.map(trader => (
+                                <React.Fragment>
+                                <div
+                                    style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    marginBottom: 10
+                                    }}
+                                >
+                                    <img
+                                    src={trader.icon || 'https://cdn4.iconfinder.com/data/icons/documents-letters-and-stationery/400/doc-14-512.png'}
+                                    style={{ height: 50, width: 50, borderRadius: "50%" }}
+                                    />
+                                    <p>{trader}</p>
+                                    <Button primary inverted  onClick={() => this.handleFollowExpert(trader)}>
+                                    Unfollow
+                                    </Button>
+                                </div>
+                                <Divider />
+                                </React.Fragment>
+                            ))}
+                            {
+                                user.following.length === 0 && (
+                                    this.renderNoData()
+                                )
+                            }
+                            </div>
+                        </Segment>
+                        <Segment
+                            style={{
+                            width: 300,
+                            height: 300,
+                            marginRight: 20,
+                            padding: 0,
+                            borderRadius: 5,
+                            marginTop: 0
+                            }}
+                            raised
                         >
-                        <p
-                            style={{ color: "#ffffff", fontWeight: "bold", fontSize: 20 }}
-                        >
-                            Alerts
-                        </p>
+                            <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                background: "#2566e8",
+                                height: 50,
+                                width: "100%",
+                                borderTopLeftRadius: 5,
+                                borderTopRightRadius: 5
+                            }}
+                            >
+                            <p
+                                style={{ color: "#ffffff", fontWeight: "bold", fontSize: 20 }}
+                            >
+                                Alerts
+                            </p>
+                            </div>
+                        </Segment>
                         </div>
-                    </Segment>
                     </div>
+                    </div>
+                    <input type="file" id="profile-pic-uploader" onChange={this.handleImageUpload} style={ { display: 'none' } } />
                 </div>
-                </div>
-          </div>
+                </Responsive>
+              <Responsive maxWidth={700}>
+                   <MyProfileMobile />
+              </Responsive>
+            </React.Fragment>
+           
         );
     }
 }

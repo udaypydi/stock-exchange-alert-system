@@ -56,7 +56,7 @@ function startPipCountService(pipData) {
             uhlc_key = '1. open';
         }
 
-        const URL = `https://www.alphavantage.co/query?function=FX_INTRADAY&from_symbol=${currencyPair.split('').splice(0, 3).join('')}&to_symbol=${currencyPair.split('').splice(3, 6).join('')}&interval=1min&apikey=IFRN6HIL90MFHQP4`;
+        const URL = `https://www.alphavantage.co/query?function=FX_INTRADAY&from_symbol=${currencyPair.split('').splice(0, 3).join('')}&to_symbol=${currencyPair.split('').splice(3, 6).join('')}&interval=1min&apikey=MQ62D5C69AROUEGL`;
 
         fetch(URL)
             .then(res => res.json())
@@ -184,6 +184,7 @@ function createRSISignal(signalData) {
         targetProfit, 
         tradeLots,
         email,
+        followers,
     } = signalData;
     const { level, period } = indicatorParameters;
 
@@ -222,7 +223,7 @@ function createRSISignal(signalData) {
                         console.log('starting pip service');
                         console.log('stopping indicator alert service');
 
-                        startPipCountService({ ...pipData, followers: JSON.parse(req.session).user.followers });
+                        startPipCountService({ ...pipData, followers: followers });
                         // start pip count service
                         // stop indicator service
                     }
@@ -243,7 +244,7 @@ function createRSISignal(signalData) {
                         console.log('starting pip service');
                         console.log('stopping indicator alert service');
 
-                        startPipCountService({ ...pipData, followers: JSON.parse(req.session).user.followers });
+                        startPipCountService({ ...pipData, followers });
                         // start pip count service
                         // stop indicator service
                     }
@@ -268,7 +269,7 @@ module.exports = {
             const alert_id = result.insertedIds['0'];
             if (indicator === 'rsi') {
                 console.log('indicator', alert_id);
-                createRSISignal({ ...req.body, alert_id: alert_id, email: req.session.user.email });
+                createRSISignal({ ...req.body, alert_id: alert_id, email: req.session.user.email, followers: req.session.user.followers });
             }
             res.json({ status: 200 });
         });

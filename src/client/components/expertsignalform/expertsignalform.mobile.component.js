@@ -8,16 +8,13 @@ import {
     Segment,
     Message,
     Icon,
-    Responsive,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import Loader from 'commons/preLoader/preloader.component';
 import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import MailConfigurationForm from 'commons/mailconfiguration/mailconfiguration.component';
-import AlertTiming from 'commons/alerttiming/alerttiming.component';
-import ExpertSignalFormMobileComponent from './expertsignalform.mobile.component';
-
+import AlertTimingMobile from 'commons/alerttiming/alerttiming.mobile.component';
 import "react-datepicker/dist/react-datepicker.css";
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
@@ -61,7 +58,7 @@ function renderExpertSignal(props) {
         stopLoss,
         targetProfit,
     } = props.expertSignal;
-    const { signalMail, signalTiming } = props;
+    const { signalMail, signalTiming, sidebar} = props;
 
     const {
         period,
@@ -140,11 +137,15 @@ function renderExpertSignal(props) {
     return (
         <div>
             <Header />
-            <CustomSidebar />
+            {
+                sidebar.mobileSidebarOpen && (
+                    <CustomSidebar />
+                )
+            }
             {
                 !isLoading && !isSuccess ? (
-                <div css={styles.container}>
-                    <Segment fluid style={{ width: 1000 }}>
+                <div style={{ margin: 10, marginTop: 100 }}>
+                    <Segment fluid>
                         <div>
                             <div css={styles.headerContainer}>
                                 <div>
@@ -152,7 +153,7 @@ function renderExpertSignal(props) {
                                 </div>
                             </div>
                             <Divider />
-                            <div style={{ marginLeft: 60, marginRight: 60 }}>
+                            <div>
                                 <div css={styles.formContainer}>
                                     <Input 
                                         fluid 
@@ -181,7 +182,7 @@ function renderExpertSignal(props) {
                                         options={CURRENCY_OPTIONS} 
                                         css={styles.dropdownContainer}
                                         text={currencyPair}
-                                        style={{ width: '50%' }}
+                                        style={{ width: '100%' }}
                                         onChange={handleCurrencyPairChange}
                                         onFocus={() => setActiveElement('CURRENCY_PAIR')}
                                         onBlur={() => setActiveElement('')}
@@ -196,7 +197,7 @@ function renderExpertSignal(props) {
                                     }    
 
                                     <div 
-                                        style={{ width: '50%', justifyContent: 'space-evenly', display: 'flex', margin: 10 }}
+                                        style={{ width: '100%', justifyContent: 'space-evenly', display: 'flex', margin: 10 }}
                                         onFocus={() => setActiveElement('SIGNAL_TYPE')}
                                         onBlur={() => setActiveElement('')}
                                     >
@@ -215,7 +216,7 @@ function renderExpertSignal(props) {
                                 <div css={styles.formContainer}>
                                     <Input 
                                         fluid 
-                                        style={{ width: '50%', margin: 10 }} 
+                                        style={{ width: '100%', margin: 10 }} 
                                         placeholder='Trade Lots' 
                                         value={tradeLots}
                                         onChange={handleTradeLotsChange}
@@ -238,7 +239,7 @@ function renderExpertSignal(props) {
                                         options={INDICATOR_CONSTANTS} 
                                         css={styles.dropdownContainer}
                                         text={INDICATOR_KEY_VALUE_MAP[indicator]}
-                                        style={{ width: '50%' }}
+                                        style={{ width: '100%' }}
                                         onChange={handleIndicatorChange}
                                         onFocus={() => setActiveElement('INDICATOR')}
                                         onBlur={() => setActiveElement('')}
@@ -258,7 +259,7 @@ function renderExpertSignal(props) {
                                             indicator !== 'macd' && (
                                                 <Input 
                                                     fluid 
-                                                    style={{ width: '50%', margin: 10 }} 
+                                                    style={{ width: '100%', margin: 10 }} 
                                                     placeholder='Period' 
                                                     value={period}
                                                     onChange={(event) => handleIndicatorParamsChange(event, undefined, 'period')}
@@ -272,7 +273,7 @@ function renderExpertSignal(props) {
                                                 search
                                                 selection
                                                 options={OHLC} 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ width: '100%', margin: 10 }} 
                                                 css={styles.dropdownContainer}
                                                 text={ohlc}
                                                 onChange={(event, data) => handleIndicatorParamsChange(event, data, 'ohlc')}
@@ -280,7 +281,7 @@ function renderExpertSignal(props) {
                                         ) : (
                                             <Input 
                                                 fluid 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ width: '100%', margin: 10 }} 
                                                 placeholder='Level' 
                                                 text={level}
                                                 onChange={(event) => handleIndicatorParamsChange(event, undefined, 'level')}
@@ -293,7 +294,7 @@ function renderExpertSignal(props) {
                                                 search
                                                 selection
                                                 options={devitaionConstantGenerator()} 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ width: '100%', margin: 10 }} 
                                                 css={styles.dropdownContainer}
                                                 text={deviation}
                                                 onChange={(event, data) => handleIndicatorParamsChange(event, data, 'deviation')}
@@ -308,7 +309,7 @@ function renderExpertSignal(props) {
                                                         search
                                                         selection
                                                         options={MACD_PARAMETERS.fast} 
-                                                        style={{ width: '50%', margin: 10 }} 
+                                                        style={{ width: '100%', margin: 10 }} 
                                                         css={styles.dropdownContainer}
                                                         text={fast}
                                                         onChange={(event, data) => handleIndicatorParamsChange(event, data, 'fast')}
@@ -319,7 +320,7 @@ function renderExpertSignal(props) {
                                                         search
                                                         selection
                                                         options={MACD_PARAMETERS.slow} 
-                                                        style={{ width: '50%', margin: 10 }} 
+                                                        style={{ width: '100%', margin: 10 }} 
                                                         css={styles.dropdownContainer}
                                                         text={slow}
                                                         onChange={(event, data) => handleIndicatorParamsChange(event, data, 'slow')}
@@ -330,7 +331,7 @@ function renderExpertSignal(props) {
                                                         search
                                                         selection
                                                         options={MACD_PARAMETERS.signal} 
-                                                        style={{ width: '50%', margin: 10 }} 
+                                                        style={{ width: '100%', margin: 10 }} 
                                                         css={styles.dropdownContainer}
                                                         text={signal}
                                                         onChange={(event, data) => handleIndicatorParamsChange(event, data, 'signal')}
@@ -342,7 +343,7 @@ function renderExpertSignal(props) {
                                 <div css={styles.formContainer}>
                                     <Input 
                                         fluid 
-                                        style={{ width: '50%', margin: 10 }} 
+                                        style={{ width: '100%', margin: 10 }} 
                                         placeholder='Stop Loss (No of pips)' 
                                         text={level}
                                         value={stopLoss}
@@ -360,7 +361,7 @@ function renderExpertSignal(props) {
                                         }  
                                     <Input 
                                         fluid 
-                                        style={{ width: '50%', margin: 10 }} 
+                                        style={{ width: '100%', margin: 10 }} 
                                         placeholder='Target Profit (No of pips)' 
                                         text={level}
                                         targetProfit
@@ -377,8 +378,8 @@ function renderExpertSignal(props) {
                                         )
                                     }  
                                 </div>
-                                <div style={{ marginTop: 20, marginLeft: '-50px' }}>
-                                    <AlertTiming />
+                                <div style={{ marginTop: 20 }}>
+                                    <AlertTimingMobile />
                                 </div>
                                 {/* <div style={{ marginLeft: '-50px' }}>
                                     <MailConfigurationForm />
@@ -419,23 +420,11 @@ function renderExpertSignal(props) {
     );
 }
 
-function ExpertSignalFormComponent(props) {
+function ExpertSignalFormMobileComponent(props) {
     return (
-        <React.Fragment>
-
-            <Responsive minWidth={701}>
-                <div>
-                    <p>Create Expert Signal</p>
-                    <Divider />
-                    <div>
-                        {renderExpertSignal(props)}
-                    </div>
-                </div>
-            </Responsive>
-            <Responsive maxWidth={700}>
-                <ExpertSignalFormMobileComponent />
-            </Responsive>
-        </React.Fragment>
+        <div>
+            {renderExpertSignal(props)}
+        </div>
     )
 }
 
@@ -443,6 +432,7 @@ const mapStateToProps = (state) => ({
     expertSignal: state.expertSignal,
     signalMail: state.signalMail,
     signalTiming: state.signalTiming,
+    sidebar: state.sidebar,
 });
 
-export default connect(mapStateToProps)(ExpertSignalFormComponent);
+export default connect(mapStateToProps)(ExpertSignalFormMobileComponent);

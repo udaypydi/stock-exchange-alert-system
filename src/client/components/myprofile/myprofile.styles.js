@@ -20,6 +20,14 @@ const styles = {
         margin-left: 20px;
         font-size: 21px;
         font-weight: 400;
+    `,
+
+    nodatafound: css`
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        height: 240px;
     `
 };
 

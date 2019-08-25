@@ -119,7 +119,7 @@ function renderCurrencyGraph(currencyData, props) {
 
 function renderAlertsGraph(currencyData) {
     const { eurusd, usdjpy, usdgyd, audnzd } = currencyData;
-    const graphWidth = (window.innerWidth / 100) * 56;
+    const graphWidth = (window.innerWidth / 100) * 72;
     return (
         <Segment 
             raised 

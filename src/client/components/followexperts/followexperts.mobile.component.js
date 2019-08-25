@@ -7,14 +7,14 @@ import { css, jsx } from '@emotion/core';
 import Header from 'commons/header/header.component';
 import { fetchExperts } from './followexperts.api';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
-import FollowExpertsMobile from './followexperts.mobile.component';
 import { expertsFollow } from './followexperts.action';
 import styles from './followexperts.styles';
 
 
-function FollowExperts(props) {
+function FollowExpertsMobile(props) {
     const [experts, setExperts] = useState([]);
     const { sidebar } = props;
+
 
     useEffect(() => {
         fetchExperts()
@@ -22,6 +22,7 @@ function FollowExperts(props) {
                 setExperts(json.experts);
             });
     }, [props.user.following]);
+
 
     function navigateToFollowExperts() {
         const { history } = props;
@@ -39,12 +40,11 @@ function FollowExperts(props) {
             <Segment 
                 raised 
                 style={{ 
-                    width: '32%', 
+                    width: '90%', 
                     padding: 0, 
                     borderRadius: 10, 
-                    marginTop: 0, 
+                    marginTop: 20, 
                     maxHeight: 327 ,
-                    marginLeft: 10,
                 }}>
                 <img 
                     src={expert.banner_url} 
@@ -94,55 +94,50 @@ function FollowExperts(props) {
     }
 
     return (
-        <React.Fragment>
-            <Responsive minWidth={701}>
-                <div>
-                    <Header />
+
+        <div>
+            <Header />
+            {
+                sidebar.mobileSidebarOpen && (
                     <CustomSidebar />
-                    <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '5%' : 0 }}>
-                        <div css={styles.header}>
-                            <p css={styles.title}>Follow Experts</p>
-                            <div style={{ display: 'flex' }}>
-                                <Button 
-                                    basic 
-                                    color="blue" 
-                                    content='Create Expert Signals' 
-                                    icon={'add'}
-                                    labelPosition='left' 
-                                    onClick={navigateToFollowExperts}
-                                />
-                                <Button 
-                                    basic 
-                                    color="blue" 
-                                    content='My Expert Signals' 
-                                    icon={'list'}
-                                    labelPosition='left' 
-                                    onClick={() => {
-                                        const { history } = props;
-                                        history.push('/expert-signal-list');
-                                    }}
-                                    style={{ marginLeft: 20 }}
-                                />
-                            </div>   
-                        </div>
-                        {
-                            experts.length > 0 && (
-                                <div style={{ marginLeft: sidebar.sidebarOpen ? 220 : 100, marginTop: 30, display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
-                                    {renderExpertsCards()}
-                                </div>
-                            )
-                        }
-                    </div>
+                )
+            }
+
+            <div style={{ margin: 10 }}>
+                <p css={styles.title}>Follow Experts</p>
+                <div css={styles.header}>
+                    <div style={{ display: 'flex', marginTop: 20 }}>
+                        <Button 
+                            basic 
+                            color="blue" 
+                            content='Create Expert Signals' 
+                            icon={'add'}
+                            labelPosition='left' 
+                            onClick={navigateToFollowExperts}
+                        />
+                        <Button 
+                            basic 
+                            color="blue" 
+                            content='My Expert Signals' 
+                            icon={'list'}
+                            labelPosition='left' 
+                            onClick={() => {
+                                const { history } = props;
+                                history.push('/expert-signal-list');
+                            }}
+                            style={{ marginLeft: 20 }}
+                        />
+                    </div>   
                 </div>
-             </Responsive>   
-             <Responsive maxWidth={700}>
-                 <div style={{ marginTop: 100 }}>
-                    <FollowExpertsMobile /> 
-                 </div>       
-             </Responsive>
-        </React.Fragment>
-       
-        
+                {
+                    experts.length > 0 && (
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            {renderExpertsCards()}
+                        </div>
+                    )
+                }
+            </div>
+        </div>
     );
 }
 
@@ -151,4 +146,4 @@ const mapStateToProps = (state) => ({
     sidebar: state.sidebar,
 });
 
-export default withRouter(connect(mapStateToProps)(FollowExperts));
+export default withRouter(connect(mapStateToProps)(FollowExpertsMobile));

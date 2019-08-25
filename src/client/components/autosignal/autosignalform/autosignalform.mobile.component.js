@@ -8,17 +8,15 @@ import {
     Segment,
     Message,
     Icon,
-    Responsive,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import TimezonePicker from 'react-timezone';
 import MailConfigurationForm from 'commons/mailconfiguration/mailconfiguration.component';
-import AlertTiming from 'commons/alerttiming/alerttiming.component';
+import AlertTimingMobile from 'commons/alerttiming/alerttiming.mobile.component';
 import Header from 'commons/header/header.component';
 import Loader from 'commons/preLoader/preloader.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
-import AutoSignalFormMobileComponent from './autosignalform.mobile.component';
 import "react-datepicker/dist/react-datepicker.css";
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
@@ -147,11 +145,15 @@ function renderAutoSignalForm(props) {
     return (
         <div style={{ backgroundColor: '#f0f2f5'}}>
             <Header />
-            <CustomSidebar />
+            {
+                sidebar.mobileSidebarOpen && (
+                    <CustomSidebar />
+                )
+            }
             {
                 !isLoading && !isSuccess ? (
-                <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '65%' : '52%' }}>
-                    <Segment fluid style={{ width: sidebar.sidebarOpen ? 1000 : 1200 }}>
+                <div>
+                    <Segment fluid>
                         <div>
                             <div css={styles.headerContainer}>
                                 <div>
@@ -159,7 +161,7 @@ function renderAutoSignalForm(props) {
                                 </div>
                             </div>
                             <Divider />
-                            <div style={{ marginLeft: 60, marginRight: 60 }}>
+                            <div>
                                 <div css={styles.formContainer}>
                                     <Input 
                                         fluid 
@@ -189,7 +191,7 @@ function renderAutoSignalForm(props) {
                                         css={styles.dropdownContainer}
                                         text={currencyPair}
                                         onChange={handleCurrencyPairChange}
-                                        style={{ width: '50%' }}
+                                        style={{ width: '100%' }}
                                         onFocus={() => setActiveElement('CURRENCY_PAIR')}
                                         onBlur={() => setActiveElement('')}
                                     />
@@ -209,7 +211,7 @@ function renderAutoSignalForm(props) {
                                         css={styles.dropdownContainer}
                                         text={timeFrame}
                                         onChange={handleTimeFrameChange}
-                                        style={{ width: '50%' }}
+                                        style={{ width: '100%' }}
                                         onFocus={() => setActiveElement('TIME_FRAME')}
                                         onBlur={() => setActiveElement('')}
                                     />
@@ -269,7 +271,7 @@ function renderAutoSignalForm(props) {
                                                     search
                                                     selection
                                                     options={periodValueDropdownGenerator()}
-                                                    style={{ width: '50%', margin: 10 }} 
+                                                    style={{ width: '100%', margin: 10 }} 
                                                     css={styles.dropdownContainer}
                                                     text={period}
                                                     onChange={(event, data) => handleIndicatorParamsChange(event, data, 'period')}
@@ -283,7 +285,7 @@ function renderAutoSignalForm(props) {
                                                 search
                                                 selection
                                                 options={OHLC} 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ width: '100%', margin: 10 }} 
                                                 css={styles.dropdownContainer}
                                                 text={ohlc}
                                                 onChange={(event, data) => handleIndicatorParamsChange(event, data, 'ohlc')}
@@ -291,7 +293,7 @@ function renderAutoSignalForm(props) {
                                         ) : (
                                             <Input 
                                                 fluid 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ width: '100%', margin: 10 }} 
                                                 placeholder='Level' 
                                                 text={level}
                                                 onChange={(event) => handleIndicatorParamsChange(event, undefined, 'level')}
@@ -304,7 +306,7 @@ function renderAutoSignalForm(props) {
                                                 search
                                                 selection
                                                 options={devitaionConstantGenerator()} 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ width: '100%', margin: 10 }} 
                                                 css={styles.dropdownContainer}
                                                 text={deviation}
                                                 onChange={(event, data) => handleIndicatorParamsChange(event, data, 'deviation')}
@@ -321,7 +323,7 @@ function renderAutoSignalForm(props) {
                                             search
                                             selection
                                             options={MACD_PARAMETERS.fast} 
-                                            style={{ width: '50%', margin: 10 }} 
+                                            style={{ width: '100%', margin: 10 }} 
                                             css={styles.dropdownContainer}
                                             text={fast}
                                             onChange={(event, data) => handleIndicatorParamsChange(event, data, 'fast')}
@@ -332,7 +334,7 @@ function renderAutoSignalForm(props) {
                                             search
                                             selection
                                             options={MACD_PARAMETERS.slow} 
-                                            style={{ width: '50%', margin: 10 }} 
+                                            style={{ width: '100%', margin: 10 }} 
                                             css={styles.dropdownContainer}
                                             text={slow}
                                             onChange={(event, data) => handleIndicatorParamsChange(event, data, 'slow')}
@@ -343,15 +345,15 @@ function renderAutoSignalForm(props) {
                                             search
                                             selection
                                             options={MACD_PARAMETERS.signal} 
-                                            style={{ width: '50%', margin: 10 }} 
+                                            style={{ width: '100%', margin: 10 }} 
                                             css={styles.dropdownContainer}
                                             text={signal}
                                             onChange={(event, data) => handleIndicatorParamsChange(event, data, 'signal')}
                                         />
                                     </div>
                                 )}
-                                <div style={{ marginTop: 20, marginLeft: '-50px' }}>
-                                    <AlertTiming />
+                                <div style={{ marginTop: 20 }}>
+                                    <AlertTimingMobile />
                                 </div> 
                                 <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
                                     <Button 
@@ -388,23 +390,14 @@ function renderAutoSignalForm(props) {
     );
 }
 
-function AutoSignalFormComponent(props) {
+function AutoSignalFormMobileComponent(props) {
     return (
-        <React.Fragment>
-            <Responsive minWidth={701}>
-                <div style={{ backgroundColor: '#f0f2f5'}}>
-                    <p>Create AutoSignals</p>
-                    <Divider />
-                    <div>
-                        {renderAutoSignalForm(props)}
-                    </div>
-                </div>
-            </Responsive>
-            <Responsive maxWidth={700}>
-                <AutoSignalFormMobileComponent />
-            </Responsive>
-        </React.Fragment> 
-    );
+        <div style={{ backgroundColor: '#f0f2f5', marginTop: 100 }}>
+            <div>
+                {renderAutoSignalForm(props)}
+            </div>
+        </div>
+    )
 }
 
 const mapStateToProps = (state) => ({
@@ -414,4 +407,4 @@ const mapStateToProps = (state) => ({
     sidebar: state.sidebar,
 });
 
-export default connect(mapStateToProps)(AutoSignalFormComponent);
+export default connect(mapStateToProps)(AutoSignalFormMobileComponent);
