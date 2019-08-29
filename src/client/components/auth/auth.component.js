@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Segment, Input, Checkbox, Button } from 'semantic-ui-react';
+import { Grid, Segment, Input, Checkbox, Button, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
   /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
@@ -11,6 +11,7 @@ function Auth(props) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showErrors, setShowErrors] = useState(false);
 
     function logInUser() {
         const { dispatch } = props;
@@ -19,12 +20,24 @@ function Auth(props) {
             password,
         };
 
-        dispatch(signInUser(userData));
+        if (email && password) {
+            dispatch(signInUser(userData));
+        } else {
+            setShowErrors(true);
+        }
     }
 
     return (
         <div css={styles.container}>
-            <Segment style={{ width: '60%', height: 300, borderRadius: 10, backgroundColor: '#ffffff' }} raised>
+            <Segment 
+                style={{ 
+                    width: '60%', 
+                    height: 300, 
+                    borderRadius: 10, 
+                    backgroundColor: '#ffffff' 
+                }} 
+                raised
+            >
                 <Grid>
                     <Grid.Row style={{ padding: 0 }}>
                         <Grid.Column computer={8} mobile={16} style={{ padding: 0 }}>
@@ -63,7 +76,9 @@ function Auth(props) {
                                     <Input 
                                         placeholder="Email" 
                                         style={{ width: '80%' }}
+                                        value={email}
                                         onChange={(event) => { setEmail(event.target.value) }}
+                                        error={showErrors && !email}
                                     />
                                 </div>
                                 <div css={styles.formElement}>
@@ -71,7 +86,9 @@ function Auth(props) {
                                         type="password" 
                                         placeholder="Password" 
                                         style={{ width: '80%' }} 
+                                        value={password}
                                         onChange={(event) => { setPassword(event.target.value) }}
+                                        error={showErrors && !password}
                                     />
                                 </div> 
                                 <div css={styles.formElement}>

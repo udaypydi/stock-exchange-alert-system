@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { connect } from 'react-redux';
 import { Icon, Header, Dropdown, Modal, Button } from "semantic-ui-react";
-import { AddCurrencyPair } from './addiwdgets.api';
+import { AddCurrencyPair } from './addwidgets.api';
 import { getUserState } from 'components/home/home.action';
 import { CURRENCY_OPTIONS } from './addwidgets.constant';
 import "./addwidgets.css";

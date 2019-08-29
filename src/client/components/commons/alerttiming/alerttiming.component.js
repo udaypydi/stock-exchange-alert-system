@@ -8,7 +8,7 @@ import styles from './alerttiming.styles';
 
 function AlertTiming(props) {
 
-    const { signalTiming, dispatch } = props;
+    const { signalTiming, dispatch, showErrors } = props;
     const { total, daily } = signalTiming;
 
     const handleTimeExecutionChangeValue = (event, key) => {
@@ -29,6 +29,7 @@ function AlertTiming(props) {
                     placeholder='Total Alerts for this signal' 
                     type="number"
                     value={total}
+                    error={showErrors && !total}
                     onChange={(event) => handleTimeExecutionChangeValue(event, 'total')}
                 />
                 <label>Total</label>
@@ -38,6 +39,7 @@ function AlertTiming(props) {
                     placeholder='Alerts in a day' 
                     type="number"
                     value={daily}
+                    error={showErrors && !daily}
                     onChange={(event) => handleTimeExecutionChangeValue(event, 'daily')}
                 />
                 <label>Daily</label>
@@ -48,6 +50,6 @@ function AlertTiming(props) {
 
 const mapStateToProps = (state) => ({
     signalTiming: state.signalTiming,
-})
+});
 
 export default connect(mapStateToProps)(AlertTiming);

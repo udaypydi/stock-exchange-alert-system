@@ -22,7 +22,7 @@ export const SIDEBAR_MENU  = [
     {
         name: 'Price Alerts',
         iconName: 'dollar sign',
-        route: '/create-price-alerts',
+        route: '/price-alerts-list',
     },
     {
         name: 'Profile',
@@ -31,7 +31,7 @@ export const SIDEBAR_MENU  = [
     }
 ];
 
-export const DASHBOARD_ROUTE = ['#/home', '#/auto-signals', '#/follow-experts', '#/alerts-history', '#/create-price-alerts', '#/my-profile'];
+export const DASHBOARD_ROUTE = ['#/home', '#/auto-signals', '#/follow-experts', '#/alerts-history', '#/price-alerts-list', '#/my-profile'];
 
 export const SIDEBAR_HEADER = 'Signalant';
 

@@ -9,6 +9,7 @@ import {
     Button, 
     Icon,
     Responsive,
+    Message,
 } from 'semantic-ui-react';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
@@ -34,6 +35,9 @@ import './pricealertsform.css';
 
 function PriceAlertsForm(props) {
     const [activeElement, setActiveElement] = useState('');
+    const [showErrors, setShowErrors] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('Please fill all the form fields.');
+    const [showErrorNotification, setshowErrorNotification] = useState(false);
     const { priceAlert, dispatch, sidebar, signalMail, signalTiming } = props;
 
     const {
@@ -48,6 +52,34 @@ function PriceAlertsForm(props) {
     } = priceAlert;
 
     const { total, daily } = executionLimit;
+
+    function isFormDataValid() {
+        const { signalTiming } = props;
+        if (
+            currencyPair 
+            && name 
+            && alerts.length 
+            && price
+            && signalTiming.total
+            && signalTiming.daily
+            && signalTiming.total >= signalTiming.daily
+        ) {
+            return true;
+        }
+
+        if (
+            currencyPair 
+            && name 
+            && alerts.length 
+            && price
+            && signalTiming.total
+            && signalTiming.daily
+            && signalTiming.total < signalTiming.daily
+        ) {
+            setErrorMessage('Total count should be more or equal to daily count');
+        }
+        return false;
+    }
 
     const handlePriceAlertNameChange = (event) => {
         dispatch(priceAlertNameChange(event.target.value));
@@ -78,11 +110,32 @@ function PriceAlertsForm(props) {
         dispatch(priceAlertTypeSelect(key));
     }
 
+    function handleAlertSubmit() {
+        const { signalTiming, signalMail } = props;
+        const isValid = isFormDataValid();
+        if (isValid) {
+            createTraderPriceAlerts({ ...priceAlert, ...signalMail, ...signalTiming });
+        } else {
+            setShowErrors(true);
+            setshowErrorNotification(true);
+            setTimeout(() => {
+                setshowErrorNotification(false);
+            }, 3000);
+            console.log('Error');
+        }
+    }
     return (
         <div>
          <Responsive minWidth={701}>
                 <Header />
                 <CustomSidebar />
+                {
+                    showErrorNotification && (
+                        <Message negative style={{ position: 'absolute', top: 100, right: 10, zIndex: 99999 }}>
+                            <Message.Header>{errorMessage}</Message.Header>
+                        </Message>
+                    )
+                }
                 <Segment style={{ width: sidebar.sidebarOpen ? 1000 : 1200, marginLeft: sidebar.sidebarOpen ? 350 : 150, marginTop: '10%' }} raised>
                     <div>
                         <p>Calculation Properties</p>
@@ -97,6 +150,7 @@ function PriceAlertsForm(props) {
                             onChange={handlePriceAlertNameChange}
                             onFocus={() => setActiveElement('SIGNAL_NAME')}
                             onBlur={() => setActiveElement('')}
+                            error={showErrors && !name}
                         />
                         {
                             activeElement === 'SIGNAL_NAME' && (
@@ -120,6 +174,7 @@ function PriceAlertsForm(props) {
                             style={{ width: '50%' }}
                             onFocus={() => setActiveElement('CURRENCY_PAIR')}
                             onBlur={() => setActiveElement('')}
+                            error={showErrors && !currencyPair}
                         />
                         {
                             activeElement === 'CURRENCY_PAIR' && (
@@ -137,6 +192,7 @@ function PriceAlertsForm(props) {
                             onChange={handlePriceAlertPriceChange}
                             onFocus={() => setActiveElement('PRICE')}
                             onBlur={() => setActiveElement('')}
+                            error={showErrors && !price}
                         />
                         {
                             activeElement === 'PRICE' && (
@@ -160,9 +216,24 @@ function PriceAlertsForm(props) {
                             onBlur={() => setActiveElement('')}
                         >
                             <p style={{ margin: 0 }}>Direction:</p>
-                            <Checkbox label="Cross Above" onChange={() => handleAlertsSelect('high')} checked={alerts.indexOf('high') !== -1} />
-                            <Checkbox label="Cross Below" onChange={() => handleAlertsSelect('low')} checked={alerts.indexOf('low') !== -1} />
-                            <Checkbox label="Any" onChange={() => handleAlertsSelect('both')} checked={alerts.length === 2} />
+                            <Checkbox 
+                                label="Cross Above" 
+                                onChange={() => handleAlertsSelect('high')} 
+                                checked={alerts.indexOf('high') !== -1}
+                                error={showErrors && !alerts.length}
+                            />
+                            <Checkbox 
+                                label="Cross Below" 
+                                onChange={() => handleAlertsSelect('low')} 
+                                checked={alerts.indexOf('low') !== -1} 
+                                error={showErrors && !alerts.length}
+                            />
+                            <Checkbox 
+                                label="Any" 
+                                onChange={() => handleAlertsSelect('both')} 
+                                checked={alerts.length === 2}
+                                error={showErrors && !alerts.length}
+                            />
                         </div>
                         {
                             activeElement === 'SIGNAL_TYPE' && (
@@ -183,6 +254,7 @@ function PriceAlertsForm(props) {
                             style={{ width: '50%' }}
                             onFocus={() => setActiveElement('TIME_FRAME')}
                             onBlur={() => setActiveElement('')}
+                            error={showErrors && !timeFrame}
                         />
                         {
                             activeElement === 'TIME_FRAME' && (
@@ -194,13 +266,13 @@ function PriceAlertsForm(props) {
                         } 
                     </div>
                     <div>
-                        <AlertTiming />
+                        <AlertTiming showErrors={showErrors} />
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20, marginBottom: 20 }}>
                         <Button 
                             color="blue" 
                             content='Create Alert'
-                            onClick={() => createTraderPriceAlerts({ ...priceAlert, ...signalMail, ...signalTiming })}
+                            onClick={handleAlertSubmit}
                         />
                     </div>
                 </Segment>
@@ -331,7 +403,7 @@ function PriceAlertsForm(props) {
                         <Button 
                             color="blue" 
                             content='Create Alert'
-                            onClick={() => createTraderPriceAlerts({ ...priceAlert, ...signalMail, ...signalTiming })}
+                            onClick={handleAlertSubmit}
                         />
                     </div>
                 </Segment>

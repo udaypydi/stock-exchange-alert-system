@@ -8,7 +8,7 @@ import {
     PRICE_ALERT_TYPE_SELECT,
 } from './pricealertsform.constant';
 import { createPriceAlerts } from './pricealertsform.api';
-
+import history from '../../../history';
 
 export function priceAlertNameChange(value) {
     return {
@@ -64,5 +64,6 @@ export function createTraderPriceAlerts(payload) {
     createPriceAlerts(payload)
         .then(json => {
             console.log(json);
+            history.push('/price-alerts-list')
         })
 }

@@ -16,6 +16,7 @@ function SignUp(props) {
     const [email, setEmail] = useState('');
     const [countryCode, setCountryCode] = useState('IN');
     const [password, setPassword] = useState('');
+    const [showErrors, setShowErrors] = useState(false);
 
     function signupUser() {
         const { dispatch, history } = props; 
@@ -26,7 +27,13 @@ function SignUp(props) {
             password,
         };
 
-        userSignUp(data)
+        if (
+            userName
+            && email
+            && countryCode
+            && password
+        ) {
+            userSignUp(data)
             .then(json => {
                 if (json.status === 200) {
                     updateUserState(json);
@@ -34,6 +41,9 @@ function SignUp(props) {
                     history.push('/home');
                 }
             });
+        } else {
+            dispatch(setShowErrors(true));
+        }
     }
     
     return (
@@ -76,7 +86,9 @@ function SignUp(props) {
                                 <div css={styles.formElement}>
                                     <Input 
                                         placeholder="Name" 
-                                        style={{ width: '80%' }} 
+                                        style={{ width: '80%' }}
+                                        value={userName}
+                                        error={showErrors && !userName}
                                         onChange={(event) => { setUserName(event.target.value) }}
                                     />
                                 </div>
@@ -84,6 +96,8 @@ function SignUp(props) {
                                     <Input 
                                         placeholder="Email" 
                                         style={{ width: '80%' }}
+                                        value={email}
+                                        error={showErrors && !email}
                                         onChange={(event) => { setEmail(event.target.value) }}
                                     />
                                 </div>
@@ -100,14 +114,14 @@ function SignUp(props) {
                                         placeholder="Password" 
                                         style={{ width: '80%' }}
                                         type="password"
+                                        value={password}
+                                        error={showErrors && !password}
                                         onChange={(event) => { setPassword(event.target.value) }}
                                     />
                                 </div>
                                 <div css={styles.formElement}>
-                                    <Checkbox label="by signing up, I accept"/>
-                                    <label>Term & Condition</label>
-                                </div>
-                                
+                                    <Checkbox label="by signing up, I accept Term & Condition" />
+                                </div>             
                                 <div css={styles.formElement}>
                                     <Button onClick={signupUser}primary>Sign Up</Button>
                                 </div>

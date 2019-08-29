@@ -57,7 +57,7 @@ function renderCurrencyGraph(currencyData) {
                                     {
                                         data.graphStyle !== 'GRAPH_3' ? (
                                             <AreaChart
-                                                width={250}
+                                                width={areaChartWidth}
                                                 height={75}
                                                 data={data.data}
                                                 style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
@@ -79,11 +79,11 @@ function renderCurrencyGraph(currencyData) {
                                                     fill={`url(#colorUv-${index})`}
                                                     fillOpacity={1}
                                                 />
-                                                <YAxis type="number" domain={[1, 2]} hide />
+                                                <YAxis type="number" domain={data.domain} hide />
                                             </AreaChart>
                                         ) : (
                                             <LineChart
-                                                width={250}
+                                                width={areaChartWidth}
                                                 height={75}
                                                 data={data.data}
                                                 style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
@@ -91,7 +91,7 @@ function renderCurrencyGraph(currencyData) {
                                             >
                                                 <Tooltip/>
                                                 <Line dataKey="price" stroke="#038FDE" dot={{stroke: '#FEA931', strokeWidth: 2}}/>
-                                                <YAxis type="number" domain={[1, 2]} hide />
+                                                <YAxis type="number" domain={data.domain} hide />
                                             </LineChart>
                                         )
                                     }

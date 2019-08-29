@@ -255,8 +255,8 @@ export const NOTIFY_SUCCESS_ACTION = 'NOTIFY_SUCCESS_ACTION';
 export const EXPERT_SIGNAL_FORM_INITIAL_STATE = {
     currencyPair: '',
     alerts: '',
-    tradeLots: 0,
-    indicator: 'simple_moving_average',
+    tradeLots: '',
+    indicator: '',
     indicatorParameters: {
         period: '',
         ohlc: '',

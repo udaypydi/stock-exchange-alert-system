@@ -80,7 +80,7 @@ function FollowExperts(props) {
                         </div>
                         
                         <div css={styles.stats}>
-                            <p css={styles.statTitle}>97%</p>
+                            <p css={styles.statTitle}>-</p>
                             <p style={{ fontSize: 12, color: '#8c8c8c' }}>Success ratio</p>
                         </div>
                         <div css={styles.stats} style={{ border: 0 }}>

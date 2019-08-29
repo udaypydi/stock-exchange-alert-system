@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 const nodemailer = require('nodemailer');
+const { ObjectId } = require('mongodb');
+const moment = require('moment');
 const smtpTransport = require('nodemailer-smtp-transport');
 const { mongoconnection } = require('../config/mongoconnection');
 const { generateSignalantTemplate } = require('../common/mailTemplate');
@@ -37,111 +39,120 @@ module.exports = {
             price,
             alerts,
             timeFrame,
-            timeBetweenAlerts,
-            timeOutHours
+            total,
+            daily,
         } = req.body;
+
+        const email = req.session.user.email;
+
+        console.log('price alerts', req.body);
 
         
         database.collection('price_alerts_signals').insert({ email: req.session.user.email, ...req.body }, (err, res) => {
             const alert_id = res.ops[0]._id;
-            const created_at = (new Date()).getTime();
 
             priceAlerts[alert_id] = setInterval(() => {
-                const current_id = alert_id;
                 const compare_price = parseFloat(price);
-                const current_time = (new Date()).getTime();
-                if (current_time - created_at >= timeOutHours * 60 * 60 * 1000) {
-                    clearInterval(alertSignalInterval[current_id]);
-                }  else {
-                    fetch(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${currencyPair.split('').splice(0, 3).join('')}&to_currency=${currencyPair.split('').splice(3, 5).join('')}&apikey=QZ5AG7BLQD7TLXTZ`)
-                    .then(res => res.json())
-                    .then(json => {
-                        const currencyData = json['Realtime Currency Exchange Rate'];
-                        const currency_exchange = parseFloat(currencyData['5. Exchange Rate']);
+                const total_alerts = total;
+                const daily_alerts = daily;
 
-                        if (compare_price < currency_exchange) {
-                            const mailData = {  
-                                currencyPair,
-                                alertType: 'Price High',
-                                price: currency_exchange,
-                                indicator: 'Price Alerts',  
-                                profitLoss: '-',
-                            };
+                database.collection('price_alerts').find({ email, alert_id }).toArray((err, result) => {
+                    if (result.length <= total_alerts) {
+                        const todays_alerts = result.filter(alert => alert.created_at === moment().format("MMM Do YY"));
+                        if (todays_alerts.length <= daily_alerts) {
+                            fetch(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${currencyPair.split('').splice(0, 3).join('')}&to_currency=${currencyPair.split('').splice(3, 5).join('')}&apikey=QZ5AG7BLQD7TLXTZ`)
+                            .then(res => res.json())
+                            .then(json => {
+                                const currencyData = json['Realtime Currency Exchange Rate'];
+                                const currency_exchange = parseFloat(currencyData['5. Exchange Rate']);
         
-                            const alert_data = {
-                                currency_pair: currencyPair,
-                                alert_type: 'Price High',
-                                price: currency_exchange,
-                                created_time: new Date(),
-                            };
-
-                            const mail_template = generateSignalantTemplate(mailData)
-        
-                            const mailConfig = {
-                                from: 'udaypydi333@gmail.com',
-                                to: ['udaypydi333@gmail.com', 'mail@adithyan.in'],
-                                subject: 'Signalant Price Alerts',
-                                html: mail_template,
-                            };
-
-                            database.collection('price_alerts').insert({ email: req.session.user.email, ...alert_data}, (err, result) => {
-                                if (err) throw err;
-                                console.log('alert inserted');
-                            });
-
-                            transporter.sendMail(mailConfig, function(error, info){
-                                if (error) {
-                                  console.log(error);
-                                } else {
-                                  console.log('Email sent: ' + info.response);
-                                }
-                              });
-
-                              clearInterval(priceAlerts[alert_id]);
-                        } else {
-                            const mailData = {  
-                                currencyPair,
-                                alertType: 'Price Low',
-                                price: currency_exchange,
-                                indicator: 'Price Alerts',  
-                                profitLoss: '-',
-                            };
-        
-                            const alert_data = {
-                                currency_pair: currencyPair,
-                                alert_type: 'Price Low',
-                                price: currency_exchange,
-                                created_time: new Date(),
-                            };
-                            
-                            database.collection('price_alerts').insert({ email: req.session.user.email, ...alert_data}, (err, result) => {
-                                if (err) throw err;
-                                console.log('alert inserted');
-                            });
-
-                            const mail_template = generateSignalantTemplate(mailData)
-        
-                            const mailConfig = {
-                                from: 'udaypydi333@gmail.com',
-                                to: ['udaypydi333@gmail.com', 'mail@adithyan.in'],
-                                subject: 'Signalant Price Alerts Alerts',
-                                html: mail_template,
-                            };
-
-                            transporter.sendMail(mailConfig, function(error, info){
-                                if (error) {
-                                  console.log(error);
-                                } else {
-                                  console.log('Email sent: ' + info.response);
-                                }
-                              });
-                              clearInterval(priceAlerts[alert_id]);
-                        }
-                    });
-                }
+                                if (compare_price < currency_exchange && alerts.indexOf('high') !== -1) {
+                                    const mailData = {  
+                                        currencyPair,
+                                        alertType: 'Price High',
+                                        price: currency_exchange,
+                                        indicator: 'Price Alerts',  
+                                        profitLoss: '-',
+                                    };
                 
+                                    const alert_data = {
+                                        currency_pair: currencyPair,
+                                        alert_type: 'Price High',
+                                        price: currency_exchange,
+                                        created_at: moment().format("MMM Do YY"),
+                                        alert_id,
+                                    };
+        
+                                    const mail_template = generateSignalantTemplate(mailData)
+                
+                                    const mailConfig = {
+                                        from: 'udaypydi333@gmail.com',
+                                        to: ['udaypydi333@gmail.com', 'mail@adithyan.in'],
+                                        subject: 'Signalant Price Alerts',
+                                        html: mail_template,
+                                    };
+        
+                                    database.collection('price_alerts').insert({ email: req.session.user.email, ...alert_data}, (err, result) => {
+                                        if (err) throw err;
+                                        console.log('alert inserted');
+                                    });
+        
+                                    transporter.sendMail(mailConfig, function(error, info){
+                                        if (error) {
+                                          console.log(error);
+                                        } else {
+                                          console.log('Email sent: ' + info.response);
+                                        }
+                                      });
+                                } else if (compare_price > currency_exchange && alerts.indexOf('low') !== -1) {
+                                    const mailData = {  
+                                        currencyPair,
+                                        alertType: 'Price Low',
+                                        price: currency_exchange,
+                                        indicator: 'Price Alerts',  
+                                        profitLoss: '-',
+                                    };
+                
+                                    const alert_data = {
+                                        currency_pair: currencyPair,
+                                        alert_type: 'Price Low',
+                                        price: currency_exchange,
+                                        created_at: moment().format("MMM Do YY"),
+                                        alert_id,
+                                    };
+                                    
+                                    database.collection('price_alerts').insert({ email: req.session.user.email, ...alert_data}, (err, result) => {
+                                        if (err) throw err;
+                                        console.log('alert inserted');
+                                    });
+        
+                                    const mail_template = generateSignalantTemplate(mailData)
+                
+                                    const mailConfig = {
+                                        from: 'udaypydi333@gmail.com',
+                                        to: ['udaypydi333@gmail.com'],
+                                        subject: 'Signalant Price Alerts Alerts',
+                                        html: mail_template,
+                                    };
+        
+                                    transporter.sendMail(mailConfig, function(error, info){
+                                        if (error) {
+                                          console.log(error);
+                                        } else {
+                                          console.log('Email sent: ' + info.response);
+                                        }
+                                      });
+                                }
+                            });
+                        }
+                    } else {
+                        clearInterval(priceAlerts[alert_id]);
+                    }
+                });
             }, pricealertsmapping[timeFrame] * 1000);
         });
+
+        res.json({ status: 200, statusText: "OK" });
     },
 
     getPriceAlerts: (req, res) => {
@@ -160,6 +171,23 @@ module.exports = {
                 status: 200,
             });
         });
+    },
+
+    deletePriceAlertSignals: (req, res) => {
+        const { id } = req.query;
+        console.log(id);
+        mongoconnection.dbInstance((db) => {
+            const database = db.db('signalant');
+            database.collection('price_alerts_signals').remove({ _id: ObjectId(id) }, true);
+            database.collection('price_alerts_signals').find({ email: req.session.user.email }).toArray((err, result) => {
+                if (err) throw err;
+                console.log('alert signal deleted');
+                clearInterval(priceAlerts[id]);
+                console.log('indicator timer stopped with this id', id);
+                console.log(result);
+                res.json({ status: 200, 'alerts': result });
+            });
+        })
     }
 };
 

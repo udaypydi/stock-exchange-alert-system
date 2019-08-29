@@ -272,7 +272,7 @@ export const AUTO_SIGNAL_FORM_INITIAL_STATE = {
     timeFrame: '',
     alerts: [],
     tradeLots: 0,
-    indicator: 'simple_moving_average',
+    indicator: '',
     indicatorParameters: {
         period: '',
         ohlc: '',

@@ -49,7 +49,7 @@ const styles = {
         flex: 1;
         justify-content: flex-start;
         padding-top: 160px;
-        padding-left: 280px;
+        padding-left: 290px;
         flex-wrap: wrap;
     `,
     mobileChartContainer: css`

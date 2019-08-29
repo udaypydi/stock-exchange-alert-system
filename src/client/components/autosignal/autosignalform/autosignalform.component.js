@@ -53,7 +53,9 @@ import './autosignalform.css';
 function renderAutoSignalForm(props) {
     const [activeElement, setActiveElement] = useState('');
     const [ currentDate, setCurrentDate ] = useState(new Date());
-
+    const [showErrors, setShowErrors] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('Please fill all the form fields.');
+    const [showErrorNotification, setshowErrorNotification] = useState(false);
     const { sidebar } = props;
     const {    
         currencyPair,
@@ -88,6 +90,56 @@ function renderAutoSignalForm(props) {
         }
     }, []);
 
+    function isFormDataValid() {
+        const { signalTiming } = props;
+        if (
+            currencyPair 
+            && signalName 
+            && timeFrame 
+            && indicator
+            && signalTiming.total
+            && signalTiming.daily
+            && signalTiming.total >= signalTiming.daily
+        ) {
+            if (indicator === 'rsi') {
+                if (indicatorParameters.level && indicatorParameters.period) {
+                    return true;
+                }
+            } else if (indicator === 'bollinger_bands') {
+                if (indicatorParameters.ohlc && indicatorParameters.period && indicatorParameters.deviation) {
+                    return true;
+                }
+            } else if (indicator === 'simple_moving_average' || indicator === 'exponential_moving_average') {
+                if (indicatorParameters.ohlc && indicatorParameters.period) {
+                    return true;
+                }
+            } else if (indicator === 'macd') {
+                const {
+                    ohlc,
+                    fast,
+                    slow,
+                    signal,
+                } = indicatorParameters;
+                if (ohlc && fast && slow && signal) {
+                    return true;
+                }
+            }
+        }
+
+        if (
+            currencyPair 
+            && signalName 
+            && timeFrame 
+            && indicator
+            && signalTiming.total
+            && signalTiming.daily
+            && signalTiming.total < signalTiming.daily
+        ) {
+            setErrorMessage('Total count should be more or equal to daily count');
+        }
+        return false;
+    }
+
     function handleSignalNameChange(event) {
         const { dispatch } = props;
         const { value } = event.target; 
@@ -96,7 +148,18 @@ function renderAutoSignalForm(props) {
 
     function handleSubmitFormData() {
         const { dispatch, signalTiming, signalMail } = props;
-        dispatch(submitAutoSignalData({ ...props.autoSignal, ...signalTiming, ...signalMail }));
+        const isValid = isFormDataValid();
+        if (isValid) {
+            dispatch(submitAutoSignalData({ ...props.autoSignal, ...signalTiming, ...signalMail }));
+        } else {
+            setShowErrors(true);
+            setshowErrorNotification(true);
+            setTimeout(() => {
+                setshowErrorNotification(false);
+            }, 3000);
+            console.log('Error');
+        }
+        
     }
 
     function handleCurrencyPairChange(event, data) {
@@ -109,29 +172,9 @@ function renderAutoSignalForm(props) {
         dispatch(autoSignalTimeFrameChange(data.value));
     }
 
-    function handleTradeLotsChange(event) {
-        const { dispatch } = props;
-        dispatch(autoSignalTradeLotsChange(event.target.value));
-    }
-
     function handleIndicatorChange(event, data) {
         const { dispatch }  = props;
         dispatch(autoSignalIndicatorChange(data.value));
-    }
-
-    function handleAlertsSelect(key) {
-        const { dispatch } = props;
-        dispatch(autoSignalAlertsSelect(key));
-    }
-
-    function handleSignalTimeFrameChange(value, key) {
-        const { dispatch } = props;
-        dispatch(autoSignalIntervalUpdate(value, key));
-    }
-
-    function handleAlertExpiryTimeSelect(event, key) {
-        const { dispatch } = props;
-        dispatch(autoSignalIntervalUpdate(parseInt(event.target.value), key));
     }
 
     function handleIndicatorParamsChange(event, data, key) {
@@ -148,6 +191,13 @@ function renderAutoSignalForm(props) {
         <div style={{ backgroundColor: '#f0f2f5'}}>
             <Header />
             <CustomSidebar />
+            {
+                showErrorNotification && (
+                    <Message negative style={{ position: 'absolute', top: 100, right: 10, zIndex: 99999 }}>
+                        <Message.Header>{errorMessage}</Message.Header>
+                    </Message>
+                )
+            }
             {
                 !isLoading && !isSuccess ? (
                 <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '65%' : '52%' }}>
@@ -169,6 +219,7 @@ function renderAutoSignalForm(props) {
                                         onChange={handleSignalNameChange}
                                         onFocus={() => setActiveElement('SIGNAL_NAME')}
                                         onBlur={() => setActiveElement('')}
+                                        error={showErrors && !signalName}
                                     />
                                     {
                                         activeElement === 'SIGNAL_NAME' && (
@@ -192,6 +243,7 @@ function renderAutoSignalForm(props) {
                                         style={{ width: '50%' }}
                                         onFocus={() => setActiveElement('CURRENCY_PAIR')}
                                         onBlur={() => setActiveElement('')}
+                                        error={showErrors && !currencyPair}
                                     />
                                     {
                                         activeElement === 'CURRENCY_PAIR' && (
@@ -212,6 +264,7 @@ function renderAutoSignalForm(props) {
                                         style={{ width: '50%' }}
                                         onFocus={() => setActiveElement('TIME_FRAME')}
                                         onBlur={() => setActiveElement('')}
+                                        error={showErrors && !timeFrame}
                                     />
                                     {
                                         activeElement === 'TIME_FRAME' && (
@@ -251,6 +304,7 @@ function renderAutoSignalForm(props) {
                                         onChange={handleIndicatorChange}
                                         onFocus={() => setActiveElement('INDICATOR')}
                                         onBlur={() => setActiveElement('')}
+                                        error={showErrors && !indicator}
                                     />
                                      {
                                         activeElement === 'INDICATOR' && (
@@ -272,6 +326,7 @@ function renderAutoSignalForm(props) {
                                                     style={{ width: '50%', margin: 10 }} 
                                                     css={styles.dropdownContainer}
                                                     text={period}
+                                                    error={showErrors && !period}
                                                     onChange={(event, data) => handleIndicatorParamsChange(event, data, 'period')}
                                                 />
                                             )
@@ -286,6 +341,7 @@ function renderAutoSignalForm(props) {
                                                 style={{ width: '50%', margin: 10 }} 
                                                 css={styles.dropdownContainer}
                                                 text={ohlc}
+                                                error={showErrors && !ohlc}
                                                 onChange={(event, data) => handleIndicatorParamsChange(event, data, 'ohlc')}
                                             />
                                         ) : (
@@ -294,6 +350,7 @@ function renderAutoSignalForm(props) {
                                                 style={{ width: '50%', margin: 10 }} 
                                                 placeholder='Level' 
                                                 text={level}
+                                                error={showErrors && !level}
                                                 onChange={(event) => handleIndicatorParamsChange(event, undefined, 'level')}
                                             />
                                         )}
@@ -307,6 +364,7 @@ function renderAutoSignalForm(props) {
                                                 style={{ width: '50%', margin: 10 }} 
                                                 css={styles.dropdownContainer}
                                                 text={deviation}
+                                                error={showErrors && !deviation}
                                                 onChange={(event, data) => handleIndicatorParamsChange(event, data, 'deviation')}
                                             />
                                         )
@@ -324,6 +382,7 @@ function renderAutoSignalForm(props) {
                                             style={{ width: '50%', margin: 10 }} 
                                             css={styles.dropdownContainer}
                                             text={fast}
+                                            error={showErrors && !fast}
                                             onChange={(event, data) => handleIndicatorParamsChange(event, data, 'fast')}
                                         />
                                         <Dropdown
@@ -335,6 +394,7 @@ function renderAutoSignalForm(props) {
                                             style={{ width: '50%', margin: 10 }} 
                                             css={styles.dropdownContainer}
                                             text={slow}
+                                            error={showErrors && !slow}
                                             onChange={(event, data) => handleIndicatorParamsChange(event, data, 'slow')}
                                         />
                                         <Dropdown
@@ -346,12 +406,13 @@ function renderAutoSignalForm(props) {
                                             style={{ width: '50%', margin: 10 }} 
                                             css={styles.dropdownContainer}
                                             text={signal}
+                                            error={showErrors && !signal}
                                             onChange={(event, data) => handleIndicatorParamsChange(event, data, 'signal')}
                                         />
                                     </div>
                                 )}
                                 <div style={{ marginTop: 20, marginLeft: '-50px' }}>
-                                    <AlertTiming />
+                                    <AlertTiming showErrors={showErrors}/>
                                 </div> 
                                 <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
                                     <Button 

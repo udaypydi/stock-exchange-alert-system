@@ -13,6 +13,12 @@ module.exports = {
             callback: (req, res) => {
                 priceAlerts.getPriceAlerts(req, res);
             }
+        },
+        {
+            url: '/delete-price-alert-signal',
+            callback: (req, res) => {
+                priceAlerts.deletePriceAlertSignals(req, res);
+            }
         }
     ],
     post: [
