@@ -7,3 +7,14 @@ export const profilePicUpload = (data) => fetch(`/update-user-profile`, {
     },
     body: JSON.stringify(data),
 }).then(res => res.json());
+
+
+export const updateUserData = (data) =>fetch('/update-user-data', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
+}).then(res => res.json());

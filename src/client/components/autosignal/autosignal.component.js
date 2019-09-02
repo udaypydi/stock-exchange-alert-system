@@ -35,7 +35,7 @@ function AutoSignal(props) {
                         <div>
                             <div css={styles.headerContainer}>
                                 <div>
-                                    <p>Indicator Signals</p>
+                                    <h2>Indicator Signals</h2>
                                 </div>
                                 <Button 
                                     basic 

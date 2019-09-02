@@ -38,6 +38,8 @@ module.exports = {
                       profile_pic: userData[0].profile_pic,
                       banner_url: userData[0].banner_url,
                       active_graphs: userData[0].activeGraphs,
+                      phoneNumber: userData[0].phoneNumber,
+                      location: userData[0].location,
                     });
                   });
                 })
@@ -73,6 +75,16 @@ module.exports = {
       const updatedData = { activeGraphs: req.body };
       database.collection('users').updateOne({ email: req.session.user.email }, { $set: updatedData });
       res.json({ status: 200, active_graphs: req.body });
+    },
+
+    updateUserData: (req, res) => {
+      const userData = {
+        email: req.body.email,
+        phoneNumber: req.body.phoneNumber,
+        location: req.body.location,
+      };
+      database.collection('users').updateOne({ email: req.session.user.email }, { $set: userData });
+      res.json({ status: 200, statusText: 'OK' });
     },
 
     encryptPassword: (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(5), null),

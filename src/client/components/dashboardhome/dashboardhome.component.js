@@ -14,7 +14,7 @@ import {
 } from "recharts";
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { COLOR_MAPPING, CURRENCY_GRAPH_DATA, ALERT_SIGNAL_HISTORY, ALERT_SIGNAL_HISTORY_DEMO } from './dashboardhome.constant';
+import { COLOR_MAPPING, CURRENCY_GRAPH_DATA, ALERT_SIGNAL_HISTORY_DEMO } from './dashboardhome.constant';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import AddWidgets from 'components/addwidgets/addwidgets.component';
 import Header from 'commons/header/header.component';
@@ -38,7 +38,7 @@ function handleDeleteCurrencyPair(activeGraphs, index, props) {
 function renderCurrencyGraph(currencyData, props) {
     const [activeState, setActiveSetState] = useState(null);
     const { currencyGraphs, isLoading } = currencyData;
-    const { sidebar, user } = props;
+    const { sidebar, user,  } = props;
 
     return (
         <div css={styles.chartsContainer} style={{ paddingLeft: sidebar.sidebarOpen ? 290 : 180, marginRight: 0 }}>
@@ -186,9 +186,27 @@ function renderCurrencyGraph(currencyData, props) {
     );
 }
 
-function renderAlertsGraph(currencyData) {
-    const { eurusd, usdjpy, usdgyd, audnzd } = currencyData;
+function renderAlertsGraph(alertsGraph) {
     const graphWidth = (window.innerWidth / 100) * 52;
+
+    let domain = [];
+
+    if (alertsGraph && alertsGraph.length) {
+        let min = alertsGraph[0].alerts;
+        let max = alertsGraph[0].alerts;
+    
+        alertsGraph.forEach(alert => {
+            if (min > alert.alerts) {
+                min = alert.alerts;
+            }
+    
+            if (max < alert.alerts) {
+                max = alert.alerts;
+            }
+        });
+        domain = [min - 1, max + 1];
+    }
+
     return (
         <Segment
             raised
@@ -202,14 +220,14 @@ function renderAlertsGraph(currencyData) {
                 marginRight: 30
             }}
         >
-            <div css={ALERT_SIGNAL_HISTORY.length === 0 ? css`filter: blur(5px);` : ''}>
-                <div css={css`${styles.chartData}`}>
+            <div css={alertsGraph.length === 0 ? css`filter: blur(5px);` : ''}>
+                <div css={css`${styles.chartData}`} style={{ marginTop: 10 }}>
                     <h2>Alerts History</h2>
                 </div>
                 <AreaChart
                     width={graphWidth}
                     height={180}
-                    data={ALERT_SIGNAL_HISTORY.length ? ALERT_SIGNAL_HISTORY : ALERT_SIGNAL_HISTORY_DEMO}
+                    data={alertsGraph.length ? alertsGraph : ALERT_SIGNAL_HISTORY_DEMO}
                     style={{ bottom: 0, borderRadius: 10, bottom: 0 }}
                     margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
                 >
@@ -228,10 +246,10 @@ function renderAlertsGraph(currencyData) {
                         fill={`url(#colorUv-15)`}
                         fillOpacity={1}
                     />
-                    <YAxis type="number" domain={[0, 500]} hide />
+                    <YAxis type="number" domain={domain} hide />
                 </AreaChart>
             </div>
-            {ALERT_SIGNAL_HISTORY.length === 0 && (
+            {alertsGraph.length === 0 && (
                 <h2
                     style={{
                         position: 'absolute',
@@ -247,7 +265,7 @@ function renderAlertsGraph(currencyData) {
 
 function DashboardHome(props) {
 
-    const { currencyGraphs, user, sidebar, dashboardCurrencyData } = props;
+    const { currencyGraphs, user, sidebar, dashboardCurrencyData, alertsGraph } = props;
 
     useEffect(() => {
         const { dispatch } = props;
@@ -311,7 +329,7 @@ function DashboardHome(props) {
                             </Segment>
                         )
                     }
-                    {renderAlertsGraph(dashboardCurrencyData)}
+                    {renderAlertsGraph(alertsGraph)}
                 </div>
             </Responsive>
             <Responsive maxWidth={700}>
@@ -326,6 +344,7 @@ const mapStateToProps = (state) => ({
     user: state.user,
     sidebar: state.sidebar,
     currencyGraphs: state.dashboard.currencyGraphs,
+    alertsGraph: state.dashboard.alertsGraph,
 });
 
 export default connect(mapStateToProps)(DashboardHome);

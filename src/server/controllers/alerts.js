@@ -14,5 +14,11 @@ module.exports = {
                 alerts.getExpertAlerts(req, res);
             }
         },
+        {
+            url: '/get-alerts-count',
+            callback: (req, res) => {
+                alerts.getAlertCount(req, res);
+            }
+        }
     ],
 };

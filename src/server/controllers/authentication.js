@@ -56,6 +56,12 @@ module.exports = {
             callback: (req, res) => {
                 authentication.addCurrencyPair(req, res);
             }
+        },
+        {
+            url: '/update-user-data',
+            callback: (req, res) => {
+                authentication.updateUserData(req, res);
+            }
         }
       
     ]

@@ -10,8 +10,6 @@ mongoconnection.dbInstance((db) => {
 
 module.exports = {
     getCurrencyExchange: (req, res) => {
-
-
         database.collection('users').find({ email: req.session.user.email }).toArray((err, result) => {
             const { activeGraphs } = result[0];
             const graphs = activeGraphs.map(graph => graph.currency);

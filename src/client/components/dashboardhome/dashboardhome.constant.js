@@ -1,6 +1,9 @@
 export const FETCH_CURRENCY_DATA = 'FETCH_CURRENCY_DATA';
+export const UPDATE_GRAPH_DATA = 'UPDATE_GRAPH_DATA';
+
 export const DASHBOARD_HOME_INITIAL_STATE = {
-    currencyGraphs: [],
+	currencyGraphs: [],
+	alertsGraph: [],
 	isLoading: false,
 };
 

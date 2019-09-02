@@ -14,11 +14,12 @@ mongoconnection.dbInstance((db) => {
 
 
 const transporter = nodemailer.createTransport(smtpTransport({
-    service: 'gmail',
-    host: 'smtp.gmail.com',
+    host: 'smtp.zoho.com',
+    port: 465,
+    secure: true,
     auth: {
-      user: 'udaypydi333@gmail.com',
-      pass: 'dupkhotwvolgdgla'
+      user: 'noreply@signalant.com',
+      pass: 'Welcome@@@123'
     }
 }));
 
@@ -81,13 +82,14 @@ module.exports = {
                                         price: currency_exchange,
                                         created_at: moment().format("MMM Do YY"),
                                         alert_id,
+
                                     };
         
                                     const mail_template = generateSignalantTemplate(mailData)
                 
                                     const mailConfig = {
-                                        from: 'udaypydi333@gmail.com',
-                                        to: ['udaypydi333@gmail.com', 'mail@adithyan.in'],
+                                        from: 'noreply@signalant.com',
+                                        to: [req.session.user.email],
                                         subject: 'Signalant Price Alerts',
                                         html: mail_template,
                                     };
@@ -129,8 +131,8 @@ module.exports = {
                                     const mail_template = generateSignalantTemplate(mailData)
                 
                                     const mailConfig = {
-                                        from: 'udaypydi333@gmail.com',
-                                        to: ['udaypydi333@gmail.com'],
+                                        from: 'noreply@signalant.com',
+                                        to: [req.session.user.email],
                                         subject: 'Signalant Price Alerts Alerts',
                                         html: mail_template,
                                     };

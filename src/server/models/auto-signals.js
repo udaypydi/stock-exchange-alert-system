@@ -24,11 +24,12 @@ const INDICATOR_ALERTS_MAPPING = {
 };
 
 const transporter = nodemailer.createTransport(smtpTransport({
-    service: 'gmail',
-    host: 'smtp.gmail.com',
+    host: 'smtp.zoho.com',
+    port: 465,
+    secure: true,
     auth: {
-      user: 'udaypydi333@gmail.com',
-      pass: 'dupkhotwvolgdgla'
+      user: 'noreply@signalant.com',
+      pass: 'Welcome@@@123'
     }
 }));
 
@@ -96,11 +97,11 @@ function createSimpleMovingAverageSignal(signalData) {
                                     const mail_template = generateSignalantTemplate(mailData)
                     
                                     const mailConfig = {
-                                        from: 'udaypydi333@gmail.com',
-                                        to: ['udaypydi333@gmail.com'],
+                                        from: 'noreply@signalant.com',
+                                        to: [email],
                                         subject: 'Signalant Alerts',
                                         html: mail_template,
-                                    };
+                                    };            
     
                                     transporter.sendMail(mailConfig, function(error, info){
                                         if (error) {
@@ -135,11 +136,11 @@ function createSimpleMovingAverageSignal(signalData) {
                                     const mail_template = generateSignalantTemplate(mailData)
                     
                                     const mailConfig = {
-                                        from: 'udaypydi333@gmail.com',
-                                        to: ['udaypydi333@gmail.com'],
+                                        from: 'noreply@signalant.com',
+                                        to: [email],
                                         subject: 'Signalant Alerts',
                                         html: mail_template,
-                                    };
+                                    };            
     
                                     transporter.sendMail(mailConfig, function(error, info){
                                         if (error) {
@@ -232,11 +233,11 @@ function createExponentialMovingAverage(signalData) {
                                     const mail_template = generateSignalantTemplate(mailData)
                     
                                     const mailConfig = {
-                                        from: 'udaypydi333@gmail.com',
-                                        to: ['udaypydi333@gmail.com'],
+                                        from: 'noreply@signalant.com',
+                                        to: [email],
                                         subject: 'Signalant Alerts',
                                         html: mail_template,
-                                    };
+                                    };            
     
                                     transporter.sendMail(mailConfig, function(error, info){
                                         if (error) {
@@ -271,11 +272,11 @@ function createExponentialMovingAverage(signalData) {
                                     const mail_template = generateSignalantTemplate(mailData)
                     
                                     const mailConfig = {
-                                        from: 'udaypydi333@gmail.com',
-                                        to: ['udaypydi333@gmail.com'],
+                                        from: 'noreply@signalant.com',
+                                        to: [email],
                                         subject: 'Signalant Alerts',
                                         html: mail_template,
-                                    };
+                                    };            
     
                                     transporter.sendMail(mailConfig, function(error, info){
                                         if (error) {
@@ -368,8 +369,8 @@ function createRSISignal(signalData) {
                         const mail_template = generateSignalantTemplate(mailData)
         
                         const mailConfig = {
-                            from: 'udaypydi333@gmail.com',
-                            to: ['udaypydi333@gmail.com'],
+                            from: 'noreply@signalant.com',
+                            to: [email],
                             subject: 'Signalant Alerts',
                             html: mail_template,
                         };
@@ -431,8 +432,8 @@ function createRSISignal(signalData) {
                         const mail_template = generateSignalantTemplate(mailData)
         
                         const mailConfig = {
-                            from: 'udaypydi333@gmail.com',
-                            to: ['udaypydi333@gmail.com'],
+                            from: 'noreply@signalant.com',
+                            to: [email],
                             subject: 'Signalant Alerts',
                             html: mail_template,
                         };
@@ -527,11 +528,12 @@ function createBollingerBands(signalData) {
                                         const mail_template = generateSignalantTemplate(mailData)
                         
                                         const mailConfig = {
-                                            from: 'udaypydi333@gmail.com',
-                                            to: ['udaypydi333@gmail.com'],
+                                            from: 'noreply@signalant.com',
+                                            to: [email],
                                             subject: 'Signalant Alerts',
                                             html: mail_template,
                                         };
+                        
 
                                         transporter.sendMail(mailConfig, function(error, info){
                                             if (error) {
@@ -566,11 +568,11 @@ function createBollingerBands(signalData) {
                                         const mail_template = generateSignalantTemplate(mailData)
                         
                                         const mailConfig = {
-                                            from: 'udaypydi333@gmail.com',
-                                            to: ['udaypydi333@gmail.com'],
+                                            from: 'noreply@signalant.com',
+                                            to: [email],
                                             subject: 'Signalant Alerts',
                                             html: mail_template,
-                                        };
+                                        };                
 
                                         transporter.sendMail(mailConfig, function(error, info){
                                             if (error) {
@@ -662,11 +664,11 @@ function createMACDSignals(signalData) {
                                 const mail_template = generateSignalantTemplate(mailData)
                 
                                 const mailConfig = {
-                                    from: 'udaypydi333@gmail.com',
-                                    to: ['udaypydi333@gmail.com'],
+                                    from: 'noreply@signalant.com',
+                                    to: [email],
                                     subject: 'Signalant Alerts',
                                     html: mail_template,
-                                };
+                                };        
 
                                 transporter.sendMail(mailConfig, function(error, info){
                                     if (error) {
@@ -699,11 +701,11 @@ function createMACDSignals(signalData) {
                                 const mail_template = generateSignalantTemplate(mailData)
                 
                                 const mailConfig = {
-                                    from: 'udaypydi333@gmail.com',
-                                    to: ['udaypydi333@gmail.com'],
+                                    from: 'noreply@signalant.com',
+                                    to: [email],
                                     subject: 'Signalant Alerts',
                                     html: mail_template,
-                                };
+                                };        
 
                                 transporter.sendMail(mailConfig, function(error, info){
                                     if (error) {

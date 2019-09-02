@@ -28,11 +28,11 @@ function AutoSignalsList(props) {
                 style={{ backgroundColor: '#f8f8f8', padding: 10 }}
                 basic
             >
-                <p css={styles.autoSignalCell}>Signal Name</p>
-                <p css={styles.autoSignalCell}>Trade Timeframe</p>
-                <p css={styles.autoSignalCell}>Signal Timeout</p>
-                <p css={styles.autoSignalCell}>Status</p>
-                <p css={styles.autoSignalCell}>Action</p>
+                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Signal Name</p>
+                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Trade Timeframe</p>
+                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Signal Timeout</p>
+                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Status</p>
+                <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Action</p>
             </Segment>
             {
                 autoSignalsList && autoSignalsList.signalsList.map((signal, index) => (
@@ -44,9 +44,8 @@ function AutoSignalsList(props) {
                         <p css={styles.autoSignalCell}>{signal.signalName}</p>
                         <p css={styles.autoSignalCell}>{signal.timeFrame}</p>
                         <p css={styles.autoSignalCell}>{signal.signalTimeFrame.timeOutHours} Hours</p>
-                        <div css={styles.autoSignalCell}><p css={styles.statusButton}>Pending</p></div>
+                        <div css={styles.autoSignalCell}><p css={styles.statusButton}>ACTIVE</p></div>
                         <div css={styles.autoSignalCell}>
-                            <Icon name="pencil" style={{ marginRight: 20 }} />
                             <Icon 
                                 name="trash alternate outline" 
                                 color="red" 

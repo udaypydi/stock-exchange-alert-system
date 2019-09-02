@@ -1,5 +1,5 @@
-import { FETCH_CURRENCY_DATA,  IS_LOADING, CURRENCIES } from './dashboardhome.constant';
-import { fetchCurrencyExchangeData } from './dashboardhome.api';
+import { FETCH_CURRENCY_DATA,  IS_LOADING, UPDATE_GRAPH_DATA } from './dashboardhome.constant';
+import { fetchCurrencyExchangeData, fetchAlertsCount } from './dashboardhome.api';
 
 function updateCurrency(currencyData) {
     return {
@@ -11,6 +11,13 @@ function updateCurrency(currencyData) {
 function isGraphLoading() {
     return {
         type: IS_LOADING,
+    };
+}
+
+function updateAlertsGraph(data) {
+    return {
+        type: UPDATE_GRAPH_DATA,
+        payload: data,
     };
 }
 
@@ -53,8 +60,13 @@ export const fetchCurrencyData = () => (dispatch) => {
                 // dispatch(updateCurrency([]));
             }
             
-        })  
-    
+        });
+
+
+    fetchAlertsCount()
+        .then((json) => {
+            dispatch(updateAlertsGraph(json.alerts));
+        });
 }
 
 export function formatChartData(currency) {
@@ -63,4 +75,3 @@ export function formatChartData(currency) {
         price: parseFloat(data.currencyValue['1. open']),
     }))
 }
-

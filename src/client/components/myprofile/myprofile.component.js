@@ -5,8 +5,9 @@ import { connect } from 'react-redux';
 import { css, jsx } from '@emotion/core';
 import { sideBarToggleStatus } from 'commons/sidebar/customSidebar.action';
 import Header from 'commons/header/header.component';
+import { fetchAlertsCount } from 'components/dashboardhome/dashboardhome.api';
 import { updateUserProfilePic } from 'components/auth/auth.action';
-import { profilePicUpload } from './myprofile.api';
+import { profilePicUpload, updateUserData } from './myprofile.api';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import { expertsFollow } from 'components/followexperts/followexperts.action';
 import MyProfileMobile from './myprofile.mobile.component';
@@ -16,8 +17,12 @@ import styles from './myprofile.styles';
 class MyProfile extends Component {
     state = {
         imageUploadType: '',
+        alerts: '-',
+        formEdit: false,
+        email: this.props.user.email,
+        location: this.props.user.location,
+        phoneNumber: this.props.user.phoneNumber,
     };
-
 
     componentDidMount() {
         const { dispatch } = this.props;
@@ -25,6 +30,24 @@ class MyProfile extends Component {
             dispatch(sideBarToggleStatus());
         }
 
+        fetchAlertsCount()
+            .then(res => {
+                this.setState({ 
+                    alerts: res.alerts.length,
+                });
+            });
+
+        document.getElementById('location').addEventListener('input', (event) => {
+            this.setState({ location: event.target.innerHTML });
+        });
+
+        document.getElementById('phone-number').addEventListener('input', (event) => {
+            this.setState({ phoneNumber: event.target.innerHTML });
+        });
+
+        document.getElementById('email').addEventListener('input', (event) => {
+            this.setState({ email: event.target.innerHTML });
+        });
     }
 
     handleFollowExpert = (email) => {
@@ -65,6 +88,7 @@ class MyProfile extends Component {
 
     render() {
         const { user, sidebar } = this.props;
+        const { alerts } = this.state;
 
         return (
             <React.Fragment>
@@ -76,7 +100,7 @@ class MyProfile extends Component {
                     <img
                         height={300}
                         width={1600}
-                        src={user.bannerURL}
+                        src={user.bannerURL || 'https://hookagency.com/wp-content/uploads/2015/11/green-to-blue-ui-gradient-background.jpg'}
                         onClick={() => this.handleProfilePicUpload('banner')}
                     />
                     <img
@@ -91,7 +115,7 @@ class MyProfile extends Component {
                             marginLeft: sidebar.sidebarOpen ? 240 : 120,
                         }}
                         onClick={() => this.handleProfilePicUpload('profile')}
-                        src={user.profilePic}
+                        src={user.profilePic || 'https://www.agora-gallery.com/advice/wp-content/uploads/2015/10/image-placeholder-300x200.png'}
                     />
                 <Segment
                     style={{
@@ -151,7 +175,7 @@ class MyProfile extends Component {
                     >
                         Alerts
                     </p>
-                    <p style={{ fontWeight: 700 }}>250</p>
+                    <p style={{ fontWeight: 700 }}>{alerts}</p>
                     </div>
                 </Segment>
                 <div
@@ -165,11 +189,25 @@ class MyProfile extends Component {
                     style={{
                         marginTop: 50,
                         marginLeft: 30,
-                        width: 200,
+                        width: 250,
                         borderRight: "1px solid #cccccc",
-                        textAlign: "center"
+                        textAlign: "center",
+                        position: 'relative'
                     }}
                     >
+                        {
+                            !this.state.formEdit && (
+                                <Icon 
+                                    name="pencil"
+                                    color="#000000"
+                                    style={{ position: 'absolute', top: 0, right: 0, cursor: 'pointer' }}
+                                    onClick={() => this.setState({ 
+                                        formEdit: !this.state.formEdit,
+                                    })}
+                                />
+                            )
+                        }
+                  
                     <p style={{ fontSize: 20, fontWeight: "bold" }}>{user.name}</p>
                     <div
                         style={{
@@ -181,7 +219,11 @@ class MyProfile extends Component {
                         }}
                     >
                         <Icon name="mail" />
-                        <p>{user.email}</p>
+                        <p 
+                            style={{ width: 200, border: this.state.formEdit ? '1px solid #ccc' : '' }} 
+                            contentEditable={this.state.formEdit}
+                            id="email"
+                        >{user.email}</p>
                     </div>
                     <div
                         style={{
@@ -193,7 +235,14 @@ class MyProfile extends Component {
                         }}
                     >
                         <Icon name="point" />
-                        <p>India</p>
+                        <p 
+                            style={{ 
+                                width: 200,  
+                                border: this.state.formEdit ? '1px solid #ccc' : '' 
+                            }} 
+                            id="location"
+                            contentEditable={this.state.formEdit}
+                        >India</p>
                     </div>
                     <div
                         style={{
@@ -205,8 +254,36 @@ class MyProfile extends Component {
                         }}
                     >
                         <Icon name="call" />
-                        <p>-</p>
+                        <p 
+                            contentEditable={this.state.formEdit} 
+                            style={{ 
+                                width: 200, 
+                                border: this.state.formEdit ? '1px solid #ccc' : '' 
+                            }}
+                            id="phone-number"
+                        >-</p>
                     </div>
+                    {
+                        this.state.formEdit && (
+                            <Button 
+                                style={{ background: '#2666e8', color: '#fff' }}
+                                onClick={() => {
+                                    updateUserData({
+                                        email: this.state.email,
+                                        location: this.state.location,
+                                        phoneNumber: this.state.phoneNumber
+                                    })
+                                    .then(json => {
+                                        this.setState({ formEdit: false });
+                                    });
+                                }}
+                                color="#2666e8"
+                            >
+                                Save
+                            </Button>
+                        )
+                    }
+                   
                     </div>
                     <div
                     style={{

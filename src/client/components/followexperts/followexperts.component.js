@@ -100,7 +100,7 @@ function FollowExperts(props) {
                     <Header />
                     <CustomSidebar />
                     <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '5%' : 0 }}>
-                        <div css={styles.header}>
+                        <div css={styles.header} style={{ marginLeft: 40 }}>
                             <p css={styles.title}>Follow Experts</p>
                             <div style={{ display: 'flex' }}>
                                 <Button 

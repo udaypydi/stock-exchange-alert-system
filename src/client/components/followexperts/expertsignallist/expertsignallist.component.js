@@ -42,7 +42,7 @@ function ExpertSignal(props) {
                             <div>
                                 <div css={styles.headerContainer}>
                                     <div>
-                                        <p>Expert Signals</p>
+                                        <h2>Expert Signals</h2>
                                     </div>
                                 </div>
                                 <Divider />
@@ -52,14 +52,14 @@ function ExpertSignal(props) {
                                         style={{ backgroundColor: '#f8f8f8', padding: 10 }}
                                         basic
                                     >
-                                        <p css={styles.autoSignalCell}>Signal Name</p>
-                                        <p css={styles.autoSignalCell}>Currency Pair</p>
-                                        <p css={styles.autoSignalCell}>Signal Timeout</p>
-                                        <p css={styles.autoSignalCell}>Status</p>
-                                        <p css={styles.autoSignalCell}>Action</p>
+                                        <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Signal Name</p>
+                                        <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Currency Pair</p>
+                                        <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Signal Timeout</p>
+                                        <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Status</p>
+                                        <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Action</p>
                                     </Segment>
                                     {
-                                        expertSignalList && expertSignalList.map((signal, index) => (
+                                        expertSignalList && expertSignalList.reverse().map((signal, index) => (
                                             <Segment 
                                                 css={styles.signalsHeaderContainer} 
                                                 style={{ borderBottom: index !== signal.length - 1 ? '1px solid #ccc' : '', padding: 0 }}
@@ -70,7 +70,6 @@ function ExpertSignal(props) {
                                                 <p css={styles.autoSignalCell}>1 Hours</p>
                                                 <div css={styles.autoSignalCell}><p css={styles.statusButton}>ACTIVE</p></div>
                                                 <div css={styles.autoSignalCell}>
-                                                    <Icon name="pencil" style={{ marginRight: 20 }} />
                                                     <Icon 
                                                         name="trash alternate outline" 
                                                         color="red" 
