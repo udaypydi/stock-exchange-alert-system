@@ -270,7 +270,7 @@ function DashboardHome(props) {
     useEffect(() => {
         const { dispatch } = props;
         dispatch(fetchCurrencyData());
-    }, [user.activeGraphs.length]);
+    }, [user.activeGraphs && user.activeGraphs.length]);
 
     return (
         <div css={styles.container} style={{ marginRight: sidebar.sidebarOpen ? 0 : 30 }}>

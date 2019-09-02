@@ -12,5 +12,7 @@ export const USER_INIT_STATE = {
     profile_pic: '',
     bannerURL: '',
     activeGraphs: [],
+    phoneNumber: '',
+    location: '',
 };
 

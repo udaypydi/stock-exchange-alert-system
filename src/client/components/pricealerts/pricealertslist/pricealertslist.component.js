@@ -40,7 +40,7 @@ function PriceAlertsList(props) {
                                 <Button 
                                     basic 
                                     color="blue" 
-                                    content='Create Indicator Signals' 
+                                    content='Create Price Alerts' 
                                     icon={'add'}
                                     labelPosition='left' 
                                     onClick={() => {

@@ -9,6 +9,7 @@ import { fetchAlertsCount } from 'components/dashboardhome/dashboardhome.api';
 import { updateUserProfilePic } from 'components/auth/auth.action';
 import { profilePicUpload, updateUserData } from './myprofile.api';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
+import { getUserState } from 'components/home/home.action';
 import { expertsFollow } from 'components/followexperts/followexperts.action';
 import MyProfileMobile from './myprofile.mobile.component';
 import styles from './myprofile.styles';
@@ -19,9 +20,9 @@ class MyProfile extends Component {
         imageUploadType: '',
         alerts: '-',
         formEdit: false,
-        email: this.props.user.email,
-        location: this.props.user.location,
-        phoneNumber: this.props.user.phoneNumber,
+        email: '',
+        location: '',
+        phoneNumber: '',
     };
 
     componentDidMount() {
@@ -29,6 +30,7 @@ class MyProfile extends Component {
         if (window.screen.availWidth > 700) {
             dispatch(sideBarToggleStatus());
         }
+        dispatch(getUserState());
 
         fetchAlertsCount()
             .then(res => {
@@ -242,7 +244,7 @@ class MyProfile extends Component {
                             }} 
                             id="location"
                             contentEditable={this.state.formEdit}
-                        >India</p>
+                        >{user.location}</p>
                     </div>
                     <div
                         style={{
@@ -261,7 +263,7 @@ class MyProfile extends Component {
                                 border: this.state.formEdit ? '1px solid #ccc' : '' 
                             }}
                             id="phone-number"
-                        >-</p>
+                        >{user.phoneNumber || '-'}</p>
                     </div>
                     {
                         this.state.formEdit && (
@@ -269,9 +271,9 @@ class MyProfile extends Component {
                                 style={{ background: '#2666e8', color: '#fff' }}
                                 onClick={() => {
                                     updateUserData({
-                                        email: this.state.email,
-                                        location: this.state.location,
-                                        phoneNumber: this.state.phoneNumber
+                                        email: this.state.email || user.email,
+                                        location: this.state.location || user.location,
+                                        phoneNumber: this.state.phoneNumber || user.phoneNumber,
                                     })
                                     .then(json => {
                                         this.setState({ formEdit: false });
