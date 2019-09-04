@@ -15,6 +15,7 @@ import {
   /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import AddWidgets from 'components/addwidgets/addwidgets.component';
+import { mobileSidebarToggleStatus } from 'commons/sidebar/customSidebar.action';
 import { COLOR_MAPPING, CURRENCY_GRAPH_DATA, ALERT_SIGNAL_HISTORY } from './dashboardhome.constant';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import Header from 'commons/header/header.component';
@@ -150,7 +151,13 @@ function renderAlertsGraph(currencyData) {
 
 function DashboardHomeMobile(props) {
 
-    const { dashboardCurrencyData, user, sidebar } = props;
+    const { dashboardCurrencyData, user, sidebar, dispatch } = props;
+
+    useEffect(() => {
+        if (sidebar.mobileSidebarOpen) {
+            dispatch(mobileSidebarToggleStatus());
+        }
+    }, []);
 
     return (
         <div css={styles.container}>

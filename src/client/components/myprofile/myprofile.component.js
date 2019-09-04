@@ -29,27 +29,27 @@ class MyProfile extends Component {
         const { dispatch } = this.props;
         if (window.screen.availWidth > 700) {
             dispatch(sideBarToggleStatus());
-        }
-        dispatch(getUserState());
+            dispatch(getUserState());
 
-        fetchAlertsCount()
-            .then(res => {
-                this.setState({ 
-                    alerts: res.alerts.length,
+            fetchAlertsCount()
+                .then(res => {
+                    this.setState({ 
+                        alerts: res.alerts.length,
+                    });
                 });
+    
+            document.getElementById('location').addEventListener('input', (event) => {
+                this.setState({ location: event.target.innerHTML });
             });
-
-        document.getElementById('location').addEventListener('input', (event) => {
-            this.setState({ location: event.target.innerHTML });
-        });
-
-        document.getElementById('phone-number').addEventListener('input', (event) => {
-            this.setState({ phoneNumber: event.target.innerHTML });
-        });
-
-        document.getElementById('email').addEventListener('input', (event) => {
-            this.setState({ email: event.target.innerHTML });
-        });
+    
+            document.getElementById('phone-number').addEventListener('input', (event) => {
+                this.setState({ phoneNumber: event.target.innerHTML });
+            });
+    
+            document.getElementById('email').addEventListener('input', (event) => {
+                this.setState({ email: event.target.innerHTML });
+            });
+        }
     }
 
     handleFollowExpert = (email) => {

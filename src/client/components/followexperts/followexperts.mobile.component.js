@@ -7,16 +7,21 @@ import { css, jsx } from '@emotion/core';
 import Header from 'commons/header/header.component';
 import { fetchExperts } from './followexperts.api';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
+import { mobileSidebarToggleStatus } from 'commons/sidebar/customSidebar.action';
 import { expertsFollow } from './followexperts.action';
 import styles from './followexperts.styles';
 
 
 function FollowExpertsMobile(props) {
     const [experts, setExperts] = useState([]);
-    const { sidebar } = props;
+    const { sidebar, dispatch } = props;
 
 
     useEffect(() => {
+        if (sidebar.mobileSidebarOpen) {
+            dispatch(mobileSidebarToggleStatus());
+        }
+        
         fetchExperts()
             .then(json => {
                 setExperts(json.experts);
@@ -80,7 +85,7 @@ function FollowExpertsMobile(props) {
                         </div>
                         
                         <div css={styles.stats}>
-                            <p css={styles.statTitle}>97%</p>
+                            <p css={styles.statTitle}>-</p>
                             <p style={{ fontSize: 12, color: '#8c8c8c' }}>Success ratio</p>
                         </div>
                         <div css={styles.stats} style={{ border: 0 }}>

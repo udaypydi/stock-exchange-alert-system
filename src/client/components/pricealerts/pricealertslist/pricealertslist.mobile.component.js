@@ -4,9 +4,10 @@ import { Segment, Icon, Button } from 'semantic-ui-react';
 import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import styles from './autoSignalList.styles';
+import styles from './pricealertslist.styles';
+import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import { mobileSidebarToggleStatus } from 'commons/sidebar/customSidebar.action';
-import { fetchAllAutoSignals, deleteSignalList } from './autoSignalsList.action';
+import { fetchAllAutoSignals, deleteSignalList } from './pricealertslist.action';
 import {
     AreaChart,
     Area,
@@ -27,9 +28,9 @@ const data = [
     { name: "Page A", uv: 150, pv: 2400, amt: 2400 }
   ];
 
-function AutoSignalMobile(props) {
+function PriceAlertsList(props) {
 
-    const { autoSignalsList, sidebar } = props;
+    const { priceAlertsList, sidebar } = props;
 
     useEffect(() => {
         const { dispatch } = props;
@@ -40,8 +41,8 @@ function AutoSignalMobile(props) {
     }, []);
 
     function handleDeleteSignals(index) {
-        const { autoSignalsList, dispatch } = props;
-        const { signalsList } = autoSignalsList;
+        const { priceAlertsList, dispatch } = props;
+        const { signalsList } = priceAlertsList;
         dispatch(deleteSignalList(signalsList[index]._id));
     }
 
@@ -67,9 +68,8 @@ function AutoSignalMobile(props) {
                 padding: 10,
               }}
             >
-              <Icon name="pencil" style={{ fontSize: 20 }} color="#fff" />
               <p style={{ fontSize: 18, fontWeight: "bold", margin: 0 }}>
-                {signal.signalName}
+                {signal.name}
               </p>
               <Icon 
                 name="trash" 
@@ -86,13 +86,13 @@ function AutoSignalMobile(props) {
               }}
             >
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontWeight: 'bold', color: 'rgba(4, 143, 222, 0.9)' }}>{signal.timeFrame}</p>
-                <p>TIME FRAME</p>
+                <p style={{ fontWeight: 'bold', color: 'rgba(4, 143, 222, 0.9)' }}>{signal.currencyPair}</p>
+                <p>CURRENCY PAIR</p>
               </div>
     
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontWeight: 'bold', color: 'rgba(4, 143, 222, 0.9)' }}>{signal.signalTimeFrame.timeOutHours}</p>
-                <p>TIME OUT</p>
+                <p style={{ fontWeight: 'bold', color: 'rgba(4, 143, 222, 0.9)' }}>{signal.price}</p>
+                <p>PRICE</p>
               </div>
               <div style={{ textAlign: 'center' }}>
                 <p css={styles.statusButton} style={{ marginBottom: 8 }}>ACTIVE</p>
@@ -131,8 +131,13 @@ function AutoSignalMobile(props) {
     
     return (
         <div>
+             {
+                sidebar.mobileSidebarOpen && (
+                    <CustomSidebar />
+                )
+            }
             {
-                autoSignalsList.signalsList.length > 0 ? (
+                priceAlertsList.signalsList.length > 0 ? (
                     <div 
                         style={{ 
                             marginTop: 100, 
@@ -144,15 +149,15 @@ function AutoSignalMobile(props) {
                          <Button 
                             basic 
                             color="blue"
-                            content='Create Indicator Signals' 
+                            content='Create Price Alerts' 
                             icon={'add'}
                             labelPosition='left' 
                             onClick={() => {
                                 const { history } = props;
-                                history.push('/auto-signals-create');
+                                history.push('/create-price-alerts');
                             }}
                         />
-                        {renderSignalData(autoSignalsList.signalsList)}
+                        {renderSignalData(priceAlertsList.signalsList)}
                     </div>
                 ) : (
                     <div
@@ -177,12 +182,12 @@ function AutoSignalMobile(props) {
                         <Button 
                             basic 
                             color="blue"
-                            content='Create Indicator Signals' 
+                            content='Create Price Alerts' 
                             icon={'add'}
                             labelPosition='left' 
                             onClick={() => {
                                 const { history } = props;
-                                history.push('/auto-signals-create');
+                                history.push('/create-price-alerts');
                             }}
                         />
                     </div>
@@ -194,8 +199,8 @@ function AutoSignalMobile(props) {
 
 
 const mapStateToProps = (state) => ({
-    autoSignalsList: state.autoSignalsList,
+    priceAlertsList: state.priceAlertsList,
     sidebar: state.sidebar,
 });
 
-export default withRouter(connect(mapStateToProps)(AutoSignalMobile));
+export default withRouter(connect(mapStateToProps)(PriceAlertsList));

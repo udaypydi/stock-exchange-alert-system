@@ -13,6 +13,7 @@ function AddWidgetModal(props) {
   const [selectedCurrencyOptions, setSelectedCurrencyOptions] = useState([]);
 
   function handleClick() {
+    console.log('icon clicked');
     setShowWidgetsModal(!showWidgetsModal);
   }
 
@@ -52,6 +53,9 @@ function AddWidgetModal(props) {
         }}
         open={showWidgetsModal}
         closeIcon
+        dimmer
+        closeOnDimmerClick
+        onClose={handleClick}
       >
         <Modal.Header>Add a currency pair</Modal.Header>
         <Modal.Content image>

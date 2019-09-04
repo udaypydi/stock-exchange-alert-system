@@ -35,14 +35,16 @@ function SignUp(props) {
         ) {
             userSignUp(data)
             .then(json => {
-                if (json.status === 200) {
+                if (json.isRegistered) {
                     updateUserState(json);
                     dispatch(getUserState());
                     history.push('/home');
+                } else if(!json.isRegistered && json.message === 'Email already in use') {
+                    setShowErrors(true)
                 }
             });
         } else {
-            dispatch(setShowErrors(true));
+            setShowErrors(true);
         }
     }
     
@@ -119,6 +121,11 @@ function SignUp(props) {
                                         onChange={(event) => { setPassword(event.target.value) }}
                                     />
                                 </div>
+                                {
+                                    showErrors && password && email && (
+                                        <p style={{ color: 'red' }}>Email already exist</p>
+                                    )
+                                }
                                 <div css={styles.formElement}>
                                     <Checkbox label="by signing up, I accept Term & Condition" />
                                 </div>             

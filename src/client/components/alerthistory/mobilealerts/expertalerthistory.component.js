@@ -59,7 +59,7 @@ function ExpertAlertHistory(props) {
                         {alert.buy_sell_price}
                     </p>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", width: 180 }}>
+                    <div style={{ display: "flex", alignItems: "center", width: 130 }}>
                     <Icon
                         style={{ fontSize: 18, color: "#fff" }}
                         name="clock outline"
@@ -70,7 +70,7 @@ function ExpertAlertHistory(props) {
                         color: "#fff"
                         }}
                     >
-                       {Moment(alert.created_at).format("MMM Do YY")}
+                       {alert.created_at}
                     </p>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", width: 100 }}>

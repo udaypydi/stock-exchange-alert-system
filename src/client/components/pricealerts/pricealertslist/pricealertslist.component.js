@@ -7,6 +7,7 @@ import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { fetchAllAutoSignals, deleteSignalList } from './pricealertslist.action';
+import PriceListMobile from './pricealertslist.mobile.component';
 import styles from './pricealertslist.styles';
 
 function PriceAlertsList(props) {
@@ -121,7 +122,10 @@ function PriceAlertsList(props) {
                         </div>
                     </Segment>
                 </div>
-        </Responsive>
+            </Responsive>
+            <Responsive maxWidth={700}>
+                <PriceListMobile />
+            </Responsive>
         </div>
         
     )

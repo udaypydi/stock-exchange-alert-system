@@ -16,4 +16,4 @@ export const userSignUp = (userData) => fetch('/sign-up', {
         'Content-Type': 'application/json'
     },
     body: JSON.stringify(userData),
-});
+}).then(res => res.json());

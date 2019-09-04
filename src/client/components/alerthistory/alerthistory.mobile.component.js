@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Segment } from 'semantic-ui-react';
+import { mobileSidebarToggleStatus } from 'commons/sidebar/customSidebar.action';
 import IndicatorAlerts from './mobilealerts/indicatoralerthistory.component';
 import ExpertAlertsMobile from './mobilealerts/expertalerthistory.component';
 import PriceAlerts from './mobilealerts/pricealertshistory.mobile.component';
 
 function AlertHistoryMobile(props) {
     const [activeIndex, setActiveIndex] = useState(0);
+    const { dispatch, sidebar } = props;
+
+    useEffect(() => {
+      if (sidebar.mobileSidebarOpen) {
+        dispatch(mobileSidebarToggleStatus());
+      }
+    }, []);
+
     return (
       <div style={{ overflow: 'hidden' }}>
         <Segment
@@ -81,4 +90,8 @@ function AlertHistoryMobile(props) {
     );
 }
 
-export default AlertHistoryMobile;
+const mapStateToProps = (state) => ({
+  sidebar: state.sidebar,
+});
+
+export default connect(mapStateToProps)(AlertHistoryMobile);

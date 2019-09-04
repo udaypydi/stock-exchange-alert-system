@@ -45,6 +45,9 @@ import './expertsignalform.css';
 
 function renderExpertSignal(props) {
     const [activeElement, setActiveElement] = useState('');
+    const [showErrors, setShowErrors] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('Please fill all the form fields.');
+    const [showErrorNotification, setshowErrorNotification] = useState(false);
     const {    
         currencyPair,
         alerts,
@@ -78,6 +81,115 @@ function renderExpertSignal(props) {
         }
     }, []);
 
+    function isFormDataValid() {
+        const { signalTiming } = props;
+        if (
+            currencyPair 
+            && signalName 
+            && alerts.length 
+            && indicator
+            && stopLoss
+            && targetProfit
+            && signalTiming.total
+            && signalTiming.daily
+            && signalTiming.total >= signalTiming.daily
+        ) {
+            if (indicator === 'rsi') {
+                if (indicatorParameters.level && indicatorParameters.period) {
+                    return true;
+                }
+            } else if (indicator === 'bollinger_bands') {
+                if (indicatorParameters.ohlc && indicatorParameters.period && indicatorParameters.deviation) {
+                    return true;
+                }
+            } else if (indicator === 'simple_moving_average' || indicator === 'exponential_moving_average') {
+                if (indicatorParameters.ohlc && indicatorParameters.period) {
+                    return true;
+                }
+            } else if (indicator === 'macd') {
+                const {
+                    ohlc,
+                    fast,
+                    slow,
+                    signal,
+                } = indicatorParameters;
+                if (ohlc && fast && slow && signal) {
+                    return true;
+                }
+            }
+        }
+
+        if (
+            currencyPair 
+            && signalName 
+            && alerts.length 
+            && indicator
+            && stopLoss
+            && targetProfit
+            && signalTiming.total
+            && signalTiming.daily
+            && signalTiming.total < signalTiming.daily
+        ) {
+            setErrorMessage('Total count should be more or equal to daily count');
+        }
+        return false;
+    }
+
+    function isFormDataValid() {
+        const { signalTiming } = props;
+        if (
+            currencyPair 
+            && signalName 
+            && alerts.length 
+            && indicator
+            && stopLoss
+            && targetProfit
+            && signalTiming.total
+            && signalTiming.daily
+            && signalTiming.total >= signalTiming.daily
+        ) {
+            if (indicator === 'rsi') {
+                if (indicatorParameters.level && indicatorParameters.period) {
+                    return true;
+                }
+            } else if (indicator === 'bollinger_bands') {
+                if (indicatorParameters.ohlc && indicatorParameters.period && indicatorParameters.deviation) {
+                    return true;
+                }
+            } else if (indicator === 'simple_moving_average' || indicator === 'exponential_moving_average') {
+                if (indicatorParameters.ohlc && indicatorParameters.period) {
+                    return true;
+                }
+            } else if (indicator === 'macd') {
+                const {
+                    ohlc,
+                    fast,
+                    slow,
+                    signal,
+                } = indicatorParameters;
+                if (ohlc && fast && slow && signal) {
+                    return true;
+                }
+            }
+        }
+
+        if (
+            currencyPair 
+            && signalName 
+            && alerts.length 
+            && indicator
+            && stopLoss
+            && targetProfit
+            && signalTiming.total
+            && signalTiming.daily
+            && signalTiming.total < signalTiming.daily
+        ) {
+            setErrorMessage('Total count should be more or equal to daily count');
+        }
+        return false;
+    }
+
+
     function handleSignalNameChange(event) {
         const { dispatch } = props;
         const { value } = event.target; 
@@ -86,7 +198,17 @@ function renderExpertSignal(props) {
 
     function handleSubmitFormData() {
         const { dispatch, signalTiming, signalMail } = props;
-        dispatch(submitExpertSignalData({ ...props.expertSignal, ...signalTiming, ...signalMail }));
+        const isValid = isFormDataValid();
+        if (isValid) {
+            dispatch(submitExpertSignalData({ ...props.expertSignal, ...signalTiming, ...signalMail }));
+        } else {
+            setShowErrors(true);
+            setshowErrorNotification(true);
+            setTimeout(() => {
+                setshowErrorNotification(false);
+            }, 3000);
+            console.log('Error');
+        }
     }
 
     function handleCurrencyPairChange(event, data) {
@@ -161,6 +283,7 @@ function renderExpertSignal(props) {
                                         placeholder='Signal name (ex: My golden crossover)' 
                                         value={signalName}
                                         onChange={handleSignalNameChange}
+                                        error={showErrors && !signalName}
                                         onFocus={() => setActiveElement('SIGNAL_NAME')}
                                         onBlur={() => setActiveElement('')}
                                     /> 
@@ -186,6 +309,7 @@ function renderExpertSignal(props) {
                                         onChange={handleCurrencyPairChange}
                                         onFocus={() => setActiveElement('CURRENCY_PAIR')}
                                         onBlur={() => setActiveElement('')}
+                                        error={showErrors && !currencyPair}
                                     />
                                     {
                                         activeElement === 'CURRENCY_PAIR' && (
@@ -220,6 +344,7 @@ function renderExpertSignal(props) {
                                         placeholder='Trade Lots' 
                                         value={tradeLots}
                                         onChange={handleTradeLotsChange}
+                                        error={showErrors && !tradeLots}
                                         onFocus={() => setActiveElement('TRADE_LOTS')}
                                         onBlur={() => setActiveElement('')}
                                     />
@@ -241,6 +366,7 @@ function renderExpertSignal(props) {
                                         text={INDICATOR_KEY_VALUE_MAP[indicator]}
                                         style={{ width: '100%' }}
                                         onChange={handleIndicatorChange}
+                                        error={showErrors && !indicator}
                                         onFocus={() => setActiveElement('INDICATOR')}
                                         onBlur={() => setActiveElement('')}
                                     />
@@ -262,6 +388,7 @@ function renderExpertSignal(props) {
                                                     style={{ width: '100%', margin: 10 }} 
                                                     placeholder='Period' 
                                                     value={period}
+                                                    error={showErrors && !period}
                                                     onChange={(event) => handleIndicatorParamsChange(event, undefined, 'period')}
                                                 />
                                             )
@@ -276,6 +403,7 @@ function renderExpertSignal(props) {
                                                 style={{ width: '100%', margin: 10 }} 
                                                 css={styles.dropdownContainer}
                                                 text={ohlc}
+                                                error={showErrors && !ohlc}
                                                 onChange={(event, data) => handleIndicatorParamsChange(event, data, 'ohlc')}
                                             />
                                         ) : (
@@ -284,6 +412,7 @@ function renderExpertSignal(props) {
                                                 style={{ width: '100%', margin: 10 }} 
                                                 placeholder='Level' 
                                                 text={level}
+                                                error={showErrors && !level}
                                                 onChange={(event) => handleIndicatorParamsChange(event, undefined, 'level')}
                                             />
                                         )}
@@ -297,6 +426,7 @@ function renderExpertSignal(props) {
                                                 style={{ width: '100%', margin: 10 }} 
                                                 css={styles.dropdownContainer}
                                                 text={deviation}
+                                                error={showErrors && !deviation}
                                                 onChange={(event, data) => handleIndicatorParamsChange(event, data, 'deviation')}
                                             />
                                         )
@@ -312,6 +442,7 @@ function renderExpertSignal(props) {
                                                         style={{ width: '100%', margin: 10 }} 
                                                         css={styles.dropdownContainer}
                                                         text={fast}
+                                                        error={showErrors && !fast}
                                                         onChange={(event, data) => handleIndicatorParamsChange(event, data, 'fast')}
                                                     />
                                                     <Dropdown
@@ -323,6 +454,7 @@ function renderExpertSignal(props) {
                                                         style={{ width: '100%', margin: 10 }} 
                                                         css={styles.dropdownContainer}
                                                         text={slow}
+                                                        error={showErrors && !slow}
                                                         onChange={(event, data) => handleIndicatorParamsChange(event, data, 'slow')}
                                                     />
                                                     <Dropdown
@@ -334,6 +466,7 @@ function renderExpertSignal(props) {
                                                         style={{ width: '100%', margin: 10 }} 
                                                         css={styles.dropdownContainer}
                                                         text={signal}
+                                                        error={showErrors && !signal}
                                                         onChange={(event, data) => handleIndicatorParamsChange(event, data, 'signal')}
                                                     />
                                                 </div>
@@ -347,6 +480,7 @@ function renderExpertSignal(props) {
                                         placeholder='Stop Loss (No of pips)' 
                                         text={level}
                                         value={stopLoss}
+                                        error={showErrors && !stopLoss}
                                         onChange={(event) => handleProfitLossChange('loss', event.target.value)}
                                         onFocus={() => setActiveElement('STOP_LOSS')}
                                         onBlur={() => setActiveElement('')}
@@ -363,8 +497,10 @@ function renderExpertSignal(props) {
                                         fluid 
                                         style={{ width: '100%', margin: 10 }} 
                                         placeholder='Target Profit (No of pips)' 
-                                        text={level}
+                                        text={targetProfit}
+                                        value={targetProfit}
                                         targetProfit
+                                        error={showErrors && !targetProfit}
                                         onChange={(event) => handleProfitLossChange('profit', event.target.value)}
                                         onFocus={() => setActiveElement('TARGET_PROFIT')}
                                         onBlur={() => setActiveElement('')}
@@ -379,12 +515,18 @@ function renderExpertSignal(props) {
                                     }  
                                 </div>
                                 <div style={{ marginTop: 20 }}>
-                                    <AlertTimingMobile />
+                                    <AlertTimingMobile showErrors={showErrors} />
                                 </div>
                                 {/* <div style={{ marginLeft: '-50px' }}>
                                     <MailConfigurationForm />
                                 </div> */}
-                                
+                                 {
+                                    showErrorNotification && (
+                                        <Message negative style={{ width: '90%' }}>
+                                            <Message.Header>{errorMessage}</Message.Header>
+                                        </Message>
+                                    )
+                                }
                                 <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
                                     <Button 
                                         color="blue" 

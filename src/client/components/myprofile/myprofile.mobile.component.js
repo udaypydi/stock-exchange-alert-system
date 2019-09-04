@@ -3,7 +3,7 @@ import { Segment, Image, Icon, Divider, Button, Responsive } from 'semantic-ui-r
 import { connect } from 'react-redux';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { sideBarToggleStatus } from 'commons/sidebar/customSidebar.action';
+import { sideBarToggleStatus, mobileSidebarToggleStatus } from 'commons/sidebar/customSidebar.action';
 import Header from 'commons/header/header.component';
 import { updateUserProfilePic } from 'components/auth/auth.action';
 import { profilePicUpload } from './myprofile.api';
@@ -18,11 +18,14 @@ class MyProfile extends Component {
 
 
     componentDidMount() {
-        const { dispatch } = this.props;
+        const { dispatch, sidebar } = this.props;
         if (window.screen.availWidth > 700) {
             dispatch(sideBarToggleStatus());
         }
 
+        if (sidebar.mobileSidebarOpen) {
+            dispatch(mobileSidebarToggleStatus());
+        }
     }
 
 
