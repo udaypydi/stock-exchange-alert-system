@@ -11,7 +11,7 @@ import styles from './header.styles';
 const iconStyles = {
     fontSize: 20,
     marginLeft: 20,
-    color: '#545454',
+    color: '#b1b1b5',
 };
 
 function Header(props) {
@@ -31,18 +31,28 @@ function Header(props) {
             <Responsive minWidth={701}>
                 <div css={styles.headerContainer}>
                     <div css={styles.titleContainer}>
-                        <Icon style={iconStyles} name={sideBar.sidebarOpen ? "outdent" : 'indent'}  onClick={handleSideBarToggle} />
+                        <Icon 
+                            style={iconStyles}
+                            name={sideBar.sidebarOpen ? "outdent" : 'indent'}  
+                            onClick={handleSideBarToggle} 
+                        />
                         {
                             sideBar.sidebarOpen && (
-                                <img src={COMPANY_LOGO} height={47} style={{ marginLeft: 20 }} />
+                                <p style={{ 
+                                    fontWeight: 'bold', 
+                                    fontSize: 40, 
+                                    color: '#b1b1b5',
+                                    marginLeft: 5,
+                                    letterSpacing: 1,
+                                }}>Signalant</p>
                             )
                         }    
                     </div>
                     <Icon 
                         css={styles.sidebarIcon} 
                         name="shutdown" 
-                        color="blue"
-                        style={{ fontSize: 22 }}
+                        color="white"
+                        style={{ fontSize: 22, color: '#b1b1b5' }}
                         onClick={handleLogOut}
                     />
                 </div>

@@ -43,7 +43,7 @@ function AddWidgetModal(props) {
         trigger={
           <Icon
             style={{ fontSize: 20, marginTop: 20 }}
-            color="blue"
+            color="orange"
             name="plus"
             onClick={handleClick}
           />

@@ -46,14 +46,13 @@ function renderCurrencyGraph(currencyData, props) {
                 currencyGraphs.length > 0 ? (
                     currencyGraphs.map((data, index) => (
                         <Segment
-                            raised
                             css={styles.chartCard}
                             style={{
                                 marginTop: 0,
-                                borderRadius: 10,
                                 margin: 20,
                                 height: 180,
-                                width: 300
+                                width: 300,
+                                backgroundColor: '#131633'
                             }}
                             key={index}
                             loading={isLoading}
@@ -64,7 +63,7 @@ function renderCurrencyGraph(currencyData, props) {
                                 activeState === index && (
                                     <Icon
                                         name='trash alternate outline'
-                                        color="blue"
+                                        color="orange"
                                         style={{
                                             position: 'absolute',
                                             top: 10,
@@ -86,13 +85,14 @@ function renderCurrencyGraph(currencyData, props) {
                                                         fontWeight: "bold",
                                                         fontSize: 30,
                                                         margin: 0,
-                                                        marginTop: 20
+                                                        marginTop: 20,
+                                                        color: '#b1b1b5'
                                                     }}
                                                 >
                                                     {data.data[0].price}
                                                 </p>
                                                 <p
-                                                    style={{ margin: 0, fontSize: 12, color: "rgba(0, 0, 0, 0.5) " }}
+                                                    style={{ margin: 0, fontSize: 12, color: "#545454" }}
                                                 >
                                                     {data.currency}
                                                 </p>
@@ -148,11 +148,9 @@ function renderCurrencyGraph(currencyData, props) {
                 ) : (
                         user.activeGraphs && user.activeGraphs.map((data, index) => (
                             <Segment
-                                raised
                                 css={styles.chartCard}
                                 style={{
                                     marginTop: 0,
-                                    borderRadius: 10,
                                     margin: 20,
                                     height: 180,
                                     width: 300
@@ -209,15 +207,15 @@ function renderAlertsGraph(alertsGraph) {
 
     return (
         <Segment
-            raised
             css={styles.chartCard}
             style={{
                 marginTop: 20,
-                borderRadius: 10,
                 width: '68%',
                 height: 250,
                 float: 'right',
-                marginRight: 30
+                marginRight: 30,
+                backgroundColor: '#131633',
+                color: '#b1b1b5',
             }}
         >
             <div css={alertsGraph.length === 0 ? css`filter: blur(5px);` : ''}>
@@ -253,7 +251,7 @@ function renderAlertsGraph(alertsGraph) {
                 <h2
                     style={{
                         position: 'absolute',
-                        color: '#000000',
+                        color: '#b1b1b5',
                         fontWeight: 'bold',
                         marginTop: 0,
                     }}>No Data Available</h2>
@@ -277,7 +275,7 @@ function DashboardHome(props) {
             <Header />
             <Responsive minWidth={701}>
                 <CustomSidebar />
-                <div style={{ position: 'absolute', top: 100, right: 30 }}>
+                <div style={{ position: 'absolute', top: 100, right: 30,  }}>
                     <AddWidgets />
                 </div>
 
@@ -286,17 +284,18 @@ function DashboardHome(props) {
                     {
                         user.alerts && (
 
-                            <Segment style={{ width: '22%', height: 250, marginTop: 20 }} raised>
-                                <h2 style={{ textAlign: 'center' }}>Profile Summary</h2>
+                            <Segment style={{ width: '22%', height: 250, marginTop: 20, backgroundColor: '#131633' }}>
+                                <h2 style={{ textAlign: 'center', color: '#b1b1b5' }}>Profile Summary</h2>
                                 <div>
                                     <div
                                         style={{
                                             display: "flex",
                                             marginTop: 30,
-                                            justifyContent: "space-between"
+                                            justifyContent: "space-between",
+                                            color: '#b1b1b5'
                                         }}
                                     >
-                                        <Icon name="bell" color="blue" style={{ fontSize: 20 }} />
+                                        <Icon name="bell" style={{ fontSize: 20, color: '#b1b1b5' }} />
                                         <p>Total Alerts</p>
                                         <p>-</p>
                                         <p>{user.alerts.length}</p>
@@ -305,11 +304,12 @@ function DashboardHome(props) {
                                         style={{
                                             display: "flex",
                                             marginTop: 30,
-                                            justifyContent: "space-between"
+                                            justifyContent: "space-between",
+                                            color: '#b1b1b5'
                                         }}
                                     >
-                                        <Icon name="mail forward" color="blue" style={{ fontSize: 20 }} />
-                                        <p>No of Followers</p>
+                                        <Icon name="mail forward" style={{ fontSize: 20, color: '#b1b1b5' }} />
+                                        <p style={{ color: '#b1b1b5' }}>No of Followers</p>
                                         <p>-</p>
                                         <p>{user.followers.length}</p>
                                     </div>
@@ -317,10 +317,11 @@ function DashboardHome(props) {
                                         style={{
                                             display: "flex",
                                             marginTop: 30,
-                                            justifyContent: "space-between"
+                                            justifyContent: "space-between",
+                                            color: '#b1b1b5'
                                         }}
                                     >
-                                        <Icon name="chart pie" color="blue" style={{ fontSize: 20 }} />
+                                        <Icon name="chart pie" style={{ fontSize: 20 }} />
                                         <p>Followed by You</p>
                                         <p>-</p>
                                         <p>{user.following.length}</p>

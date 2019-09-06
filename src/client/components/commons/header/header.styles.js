@@ -9,7 +9,7 @@ const styles = {
         left: 0;
         right: 0;
         top: 0;
-        background: #ffffff;
+        background: #131633;
         z-index: 999999;
         align-items: center;
         -webkit-box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.08);
@@ -28,6 +28,7 @@ const styles = {
     sidebarIcon: css`
         font-size: 20px;
         margin-right: 20px;
+        color: #b1b1b5;
     `,
 
     companyName: css`

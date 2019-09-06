@@ -9,7 +9,7 @@ const styles = {
 
     sidebarHeader: css`
         font-size: 30px;
-        color: #000000;
+        color: #b1b1b5;
     `,
 
     menuItem: css`
@@ -19,8 +19,7 @@ const styles = {
         color: #545454;
         font-size: 14px;
         &:hover {
-            color: #2185d0;
-            background: #ffffff;
+            color: #b1b1b5;
         }
     `,
 
@@ -28,18 +27,17 @@ const styles = {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        color: #545454;
+        color: #b1b1b5;
         font-size: 14px;
-        background: #e6faff;
         &:hover {
-            color: #2185d0;
+            color: #b1b1b5;
         }
     `,
 
     profileImageContainer: css`
         height: 120px;
         width: 100%;
-        background: #ffffff;
+        background: #131633;
         flex: 1;
         display: flex;
         justify-content: center;
@@ -48,7 +46,7 @@ const styles = {
 
     profileType: css`
         padding: 10px;
-        color: #000000;
+        color: #b1b1b5;
         font-weight: 400;
     `,
 };

@@ -53,7 +53,7 @@ function CustomSideBar(props) {
                 visible={sideBar.sidebarOpen}
                 width='thin'
                 animation="push"
-                style={{ color: '#fefefe', width: 278, zIndex: 99999 }}
+                style={{  backgroundColor: '#131633', color: '#b1b1b5', width: 278, zIndex: 99999 }}
             >
                 <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
                 <div css={styles.profileImageContainer}>
@@ -72,8 +72,8 @@ function CustomSideBar(props) {
                     SIDEBAR_MENU.map((sidebarElement, index) => (
                         <Menu.Item 
                             style={{ 
-                                backgroundColor: activeIndex === index ? '#e6faff' : '#ffffff',
-                                borderRight: activeIndex === index ? '4px solid #038fde' : '0px',
+                                backgroundColor: '#131633',
+                                borderRight: '0px',
                                 borderBottom: 0,
                             }} 
                             onClick={() => handleRouteClick(sidebarElement.route, index)}
@@ -93,7 +93,7 @@ function CustomSideBar(props) {
                 visible={!sideBar.sidebarOpen}
                 width='thin'
                 animation="push"
-                style={{ color: '#fefefe', width: 80, overflow: 'hidden', zIndex: 99999 }}
+                style={{ color: '#b1b1b5', backgroundColor: '#131633', width: 80, overflow: 'hidden', zIndex: 99999 }}
             >
                 <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
                 <div css={styles.profileImageContainer}>
@@ -111,8 +111,8 @@ function CustomSideBar(props) {
                     SIDEBAR_MENU.map((sidebarElement, index) => (
                         <Menu.Item 
                             style={{ 
-                                backgroundColor: activeIndex === index ? '#e6faff' : '#ffffff',
-                                borderRight: activeIndex === index ? '4px solid #038fde' : '0px',
+                                backgroundColor: '#131633',
+                                borderRight: '0px',
                                 borderBottom: 0,
                                 width: 40,
                             }} 
