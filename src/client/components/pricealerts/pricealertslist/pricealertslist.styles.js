@@ -22,6 +22,8 @@ const styles = {
         /* align-items: center; */
         display: flex;
         justify-content: center;
+        color: #9c9fa6;
+        font-weight: bold;
     `,
     container: css`
         display: flex;

@@ -25,7 +25,7 @@ function AutoSignalsList(props) {
         <div style={{ marginTop: 30 }}>
             <Segment 
                 css={styles.signalsHeaderContainer} 
-                style={{ backgroundColor: '#f8f8f8', padding: 10 }}
+                style={{ backgroundColor: '#222840', padding: 10 }}
                 basic
             >
                 <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Signal Name</p>
@@ -38,7 +38,10 @@ function AutoSignalsList(props) {
                 autoSignalsList && autoSignalsList.signalsList.map((signal, index) => (
                     <Segment 
                         css={styles.signalsHeaderContainer} 
-                        style={{ borderBottom: index !== signal.length - 1 ? '1px solid #ccc' : '', padding: 0 }}
+                        style={{ 
+                            borderBottom: index !== signal.length - 1 ? '1px solid #ccc' : '', 
+                            padding: 0 
+                        }}
                         basic
                     > 
                         <p css={styles.autoSignalCell}>{signal.signalName}</p>
@@ -49,7 +52,7 @@ function AutoSignalsList(props) {
                             <Icon 
                                 name="trash alternate outline" 
                                 color="red" 
-                                style={{ marginRight: 20 }} 
+                                style={{ marginRight: 20, cursor: 'pointer' }} 
                                 onClick={() => handleDeleteSignals(index)}
                             />
                         </div>
@@ -70,23 +73,29 @@ function AutoSignalsList(props) {
                 >
                     <Icon 
                         name='database'
-                        color='blue'
                         style={{ 
                             fontSize: 40,
+                            color: "rgb(64, 81, 137)",
                         }}
                     />
-                    <h2 style={{ marginTop: 0 }}>No Data Available</h2>
-                    <Button 
-                        basic 
-                        color="blue"
-                        content='Create Indicator Signals' 
-                        icon={'add'}
-                        labelPosition='left' 
+                    <h2 style={{ marginTop: 0, color: '#9c9fa6' }}>No Data Available</h2>
+                     <button
+                        style={{
+                            border: "1px solid rgb(64, 81, 137)",
+                            color: "rgb(64, 81, 137)",
+                            backgroundColor: "transparent",
+                            display: "flex",
+                            padding: 10,
+                            cursor: 'pointer'
+                        }}
                         onClick={() => {
                             const { history } = props;
                             history.push('/auto-signals-create');
                         }}
-                    />
+                    >
+                        <Icon name="plus" style={{ color: "rgb(64, 81, 137)" }} />
+                        <p>Create Indicator Signals</p>
+                    </button>
                 </div>
             )
             }

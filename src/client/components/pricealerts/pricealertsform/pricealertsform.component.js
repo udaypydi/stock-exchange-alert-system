@@ -136,17 +136,32 @@ function PriceAlertsForm(props) {
                         </Message>
                     )
                 }
-                <Segment style={{ width: sidebar.sidebarOpen ? 1000 : 1200, marginLeft: sidebar.sidebarOpen ? 350 : 150, marginTop: '10%' }} raised>
+                <Segment 
+                    style={{ 
+                        width: sidebar.sidebarOpen ? 1000 : 1200, 
+                        marginLeft: sidebar.sidebarOpen ? 350 : 150, 
+                        marginTop: '10%',
+                        backgroundColor: '#131633',
+                        border: '1px solid #313452',
+                        padding: 20
+                    }} basic>
                     <div>
-                        <p>Calculation Properties</p>
+                        <p style={{ color: '#9c9fa6', fontSize: 20, fontWeight: 'bold' }}>Calculation Properties</p>
                     </div>
-                    <Divider />
+                    <Divider style={{ backgroundColor: '#34426f' }} />
                     <div css={styles.formContainer}>
-                        <Input 
+                        <input 
                             fluid 
                             style={{ width: '100%', margin: 10 }}
                             placeholder='Signal Name' 
                             value={name}
+                            style={{ 
+                                width: '100%', 
+                                margin: 10, 
+                                backgroundColor: '#2b2e4c',
+                                padding: 10,
+                                border: 0, 
+                            }}
                             onChange={handlePriceAlertNameChange}
                             onFocus={() => setActiveElement('SIGNAL_NAME')}
                             onBlur={() => setActiveElement('')}
@@ -171,7 +186,7 @@ function PriceAlertsForm(props) {
                             css={styles.dropdownContainer}
                             onChange={handleCurrencyPairChange}
                             options={CURRENCY_OPTIONS} 
-                            style={{ width: '50%' }}
+                            style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
                             onFocus={() => setActiveElement('CURRENCY_PAIR')}
                             onBlur={() => setActiveElement('')}
                             error={showErrors && !currencyPair}
@@ -184,9 +199,15 @@ function PriceAlertsForm(props) {
                                 </div>
                             )
                         } 
-                        <Input 
+                        <input 
                             fluid 
-                            style={{ width: '50%', margin: 10 }}
+                            style={{ 
+                                width: '50%', 
+                                margin: 10, 
+                                backgroundColor: '#2b2e4c',
+                                padding: 10,
+                                border: 0, 
+                            }}
                             placeholder='Price' 
                             value={price}
                             onChange={handlePriceAlertPriceChange}
@@ -215,21 +236,21 @@ function PriceAlertsForm(props) {
                             onFocus={() => setActiveElement('SIGNAL_TYPE')}
                             onBlur={() => setActiveElement('')}
                         >
-                            <p style={{ margin: 0 }}>Direction:</p>
+                            <p style={{ margin: 0, color: '#9c9fa6' }}>Direction:</p>
                             <Checkbox 
-                                label="Cross Above" 
+                                label={<label style={{ color: '#9c9fa6' }}>Cross Above</label>}
                                 onChange={() => handleAlertsSelect('high')} 
                                 checked={alerts.indexOf('high') !== -1}
                                 error={showErrors && !alerts.length}
                             />
                             <Checkbox 
-                                label="Cross Below" 
+                                 label={<label style={{ color: '#9c9fa6' }}>Cross Below</label>} 
                                 onChange={() => handleAlertsSelect('low')} 
                                 checked={alerts.indexOf('low') !== -1} 
                                 error={showErrors && !alerts.length}
                             />
                             <Checkbox 
-                                label="Any" 
+                                 label={<label style={{ color: '#9c9fa6' }}>Any</label>}
                                 onChange={() => handleAlertsSelect('both')} 
                                 checked={alerts.length === 2}
                                 error={showErrors && !alerts.length}
@@ -251,7 +272,7 @@ function PriceAlertsForm(props) {
                             css={styles.dropdownContainer}
                             text={timeFrame}
                             onChange={handleTimeFrameChange}
-                            style={{ width: '50%' }}
+                            style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
                             onFocus={() => setActiveElement('TIME_FRAME')}
                             onBlur={() => setActiveElement('')}
                             error={showErrors && !timeFrame}
@@ -269,11 +290,18 @@ function PriceAlertsForm(props) {
                         <AlertTiming showErrors={showErrors} />
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20, marginBottom: 20 }}>
-                        <Button 
-                            color="blue" 
-                            content='Create Alert'
+                        <button 
+                            style={{
+                                color: '#fff',
+                                backgroundColor: '#405189',
+                                borderColor: '#405189',
+                                padding: 10,
+                                cursor: 'pointer'
+                            }}
                             onClick={handleAlertSubmit}
-                        />
+                        >
+                            Create Alerts
+                        </button>
                     </div>
                 </Segment>
           </Responsive>

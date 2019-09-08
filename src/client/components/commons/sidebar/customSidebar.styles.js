@@ -14,24 +14,29 @@ const styles = {
 
     menuItem: css`
         display: flex;
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: center;
         color: #545454;
         font-size: 14px;
+        height: 50px;
+        padding-left: 20px;
+        padding-right: 20px;
         &:hover {
-            color: #b1b1b5;
+            background: #191e3c;
+            color: #d0cfcf;
         }
     `,
 
     activeMenuItem: css`
         display: flex;
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: center;
-        color: #b1b1b5;
+        color: #d0cfcf;
         font-size: 14px;
-        &:hover {
-            color: #b1b1b5;
-        }
+        height: 50px;
+        background: #191e3c;
+        padding-left: 20px;
+        padding-right: 20px;
     `,
 
     profileImageContainer: css`

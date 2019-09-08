@@ -15,9 +15,9 @@ import styles from './alerthistory.styles';
 
 
 const panes = [
-    { menuItem: 'Indicator Alerts', render: () => <Tab.Pane attached={false}><AutoAlerts /> </Tab.Pane>},
-    { menuItem: 'Expert Alerts', render: () => <Tab.Pane attached={false} onClick={() => { console.log('tab clicked')}}><ExpertAlerts /></Tab.Pane>},
-    { menuItem: 'Price Alerts', render: () => <Tab.Pane attached={false}><PriceAlerts /></Tab.Pane>},
+    { menuItem: 'Indicator Alerts', render: () => <Tab.Pane attached={false} style={{ backgroundColor: '#131633', color: '#fff' }}><AutoAlerts /> </Tab.Pane>},
+    { menuItem: 'Expert Alerts', render: () => <Tab.Pane attached={false} style={{ backgroundColor: '#131633', color: '#fff' }}><ExpertAlerts /></Tab.Pane>},
+    { menuItem: 'Price Alerts', render: () => <Tab.Pane attached={false} style={{ backgroundColor: '#131633', color: '#fff' }}><PriceAlerts /></Tab.Pane>},
 ];
 
 
@@ -38,11 +38,18 @@ function AlerstHistory(props) {
                     <Header />
                     <CustomSidebar />
                     <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '65%' : '52%' }}>
-                        <Segment fluid style={{ width: sidebar.sidebarOpen ? 1000 : 1200 }}>
+                        <Segment 
+                            fluid 
+                            basic
+                            style={{ 
+                                width: sidebar.sidebarOpen ? 1000 : 1200,
+                                backgroundColor: '#131633',
+                                border: '1px solid #313452',
+                            }}>
                             <div>
                                 <div css={styles.headerContainer}>
                                     <div>
-                                        <p>Alerts History</p>
+                                        <h2 style={{ color: '#9c9fa6' }}>Alerts History</h2>
                                     </div>
                                 </div>
                                 <Divider />

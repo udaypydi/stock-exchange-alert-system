@@ -19,6 +19,12 @@ module.exports = {
             callback: (req, res) => {
                 alerts.getAlertCount(req, res);
             }
+        },
+        {
+            url: '/get-all-alerts-data',
+            callback: (req, res) => {
+                alerts.getAllAlertsData(req, res);
+            }
         }
     ],
 };

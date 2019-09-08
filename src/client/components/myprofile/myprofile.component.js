@@ -83,147 +83,79 @@ class MyProfile extends Component {
 
     renderNoData = () => (
         <div css={styles.nodatafound}>
-            <Icon name="database" style={{ fontSize: 40 }} color="blue" />
-            <p style={{ fontSize: 20, fontWeight: 'bold' }}>No Data Found</p>
+            <Icon name="database" style={{ fontSize: 40, color: 'rgb(64, 81, 137)' }} />
+            <p style={{ fontSize: 20,  color: '#9c9fa6', fontWeight: 'bold' }}>No Data Found</p>
         </div>
     );
 
-    render() {
-        const { user, sidebar } = this.props;
-        const { alerts } = this.state;
+    renderUserProfile = (props) => {
+
+        const { sidebar, user } = props;
 
         return (
-            <React.Fragment>
-                <Responsive minWidth={701}>
-                <div>
-                    <Header />
-                    <CustomSidebar />
-                    <div>
-                    <img
-                        height={300}
-                        width={1600}
-                        src={user.bannerURL || 'https://hookagency.com/wp-content/uploads/2015/11/green-to-blue-ui-gradient-background.jpg'}
-                        onClick={() => this.handleProfilePicUpload('banner')}
-                    />
-                    <img
-                        height={150}
-                        width={150}
-                        style={{
-                            position: "absolute",
-                            left: 50,
-                            top: 250,
-                            borderRadius: "50%",
-                            zIndex: 9999,
-                            marginLeft: sidebar.sidebarOpen ? 240 : 120,
-                        }}
-                        onClick={() => this.handleProfilePicUpload('profile')}
-                        src={user.profilePic || 'https://www.agora-gallery.com/advice/wp-content/uploads/2015/10/image-placeholder-300x200.png'}
-                    />
-                <Segment
+            <Segment
+                style={{
+                    width: 400,
+                    textAlign: "center",
+                    position: "absolute",
+                    left: 50,
+                    top: 220,
+                    marginLeft: sidebar.sidebarOpen ? 220 : 60,
+                    zIndex: 9999,
+                    backgroundColor: '#131633',
+                    border: '1px solid #34426f',
+                    display: 'flex'
+                }}
+                raised
+            >
+                 <img
+                    height={150}
+                    width={150}
                     style={{
-                    marginTop: "-10px",
-                    height: 80,
-                    display: "flex",
-                    justifyContent: "center"
+                        borderRadius: "1%",
+                        height: 100,
+                        width: 100,
                     }}
-                    raised
-                >
-                    <div
-                    style={{
-                        marginLeft: 30,
-                        paddingRight: 20,
-                        borderRight: "1px solid #ccc"
-                    }}
-                    >
-                    <p
-                        style={{
-                        fontSize: 18,
-                        margin: 0,
-                        fontWeight: 700,
-                        color: "#2566e8"
-                        }}
-                    >
-                        Followers
-                    </p>
-                    <p style={{ fontWeight: 700 }}>{user.followers.length}</p>
-                    </div>
-                    <div
-                    style={{
-                        marginLeft: 30,
-                        paddingRight: 20,
-                        borderRight: "1px solid #ccc"
-                    }}
-                    >
-                    <p
-                        style={{
-                        fontSize: 18,
-                        margin: 0,
-                        fontWeight: 700,
-                        color: "#2566e8"
-                        }}
-                    >
-                        Following
-                    </p>
-                    <p style={{ fontWeight: 700 }}>{user.following.length}</p>
-                    </div>
-                    <div style={{ marginLeft: 30 }}>
-                    <p
-                        style={{
-                        fontSize: 18,
-                        margin: 0,
-                        fontWeight: 700,
-                        color: "#2566e8"
-                        }}
-                    >
-                        Alerts
-                    </p>
-                    <p style={{ fontWeight: 700 }}>{alerts}</p>
-                    </div>
-                </Segment>
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        marginLeft: sidebar.sidebarOpen ? 240 : 120,
-                    }}
-                >
-                    <div
-                    style={{
-                        marginTop: 50,
-                        marginLeft: 30,
-                        width: 250,
-                        borderRight: "1px solid #cccccc",
-                        textAlign: "center",
-                        position: 'relative'
-                    }}
-                    >
-                        {
-                            !this.state.formEdit && (
-                                <Icon 
-                                    name="pencil"
-                                    color="#000000"
-                                    style={{ position: 'absolute', top: 0, right: 0, cursor: 'pointer' }}
-                                    onClick={() => this.setState({ 
-                                        formEdit: !this.state.formEdit,
-                                    })}
-                                />
-                            )
-                        }
-                  
-                    <p style={{ fontSize: 20, fontWeight: "bold" }}>{user.name}</p>
+                    onClick={() => this.handleProfilePicUpload('profile')}
+                    src={user.profilePic || 'https://www.agora-gallery.com/advice/wp-content/uploads/2015/10/image-placeholder-300x200.png'}
+                />
+                <div style={{ flexDirection: 'column' }}>
+                    {
+                        !this.state.formEdit && (
+                            <Icon 
+                                name="pencil"
+                                style={{ position: 'absolute', top: 0, right: 0, cursor: 'pointer', color: '#9c9fa6', }}
+                                onClick={() => this.setState({ 
+                                    formEdit: !this.state.formEdit,
+                                })}
+                            />
+                        )
+                    }
+                    {
+                        this.state.formEdit && (
+                            <Icon 
+                                name="close"
+                                style={{ position: 'absolute', top: 0, right: 0, cursor: 'pointer', color: '#9c9fa6', }}
+                                onClick={() => this.setState({ 
+                                    formEdit: !this.state.formEdit,
+                                })}
+                            />
+                        )
+                    }
+                    <p style={{ fontSize: 20, fontWeight: "bold", color: '#9c9fa6', }}>{user.name}</p>
                     <div
                         style={{
                             display: "flex",
                             justifyContent: "flex-start",
                             fontSize: 17,
                             margin: 10,
-                            marginLeft: 20
+                            marginLeft: 20,
+                            color: '#9c9fa6',
                         }}
                     >
                         <Icon name="mail" />
                         <p 
-                            style={{ width: 200, border: this.state.formEdit ? '1px solid #ccc' : '' }} 
-                            contentEditable={this.state.formEdit}
+                            style={{ width: 200 }} 
                             id="email"
                         >{user.email}</p>
                     </div>
@@ -233,7 +165,8 @@ class MyProfile extends Component {
                             justifyContent: "flex-start",
                             fontSize: 17,
                             margin: 10,
-                            marginLeft: 20
+                            marginLeft: 20,
+                            color: '#9c9fa6',
                         }}
                     >
                         <Icon name="point" />
@@ -252,7 +185,8 @@ class MyProfile extends Component {
                             justifyContent: "flex-start",
                             fontSize: 17,
                             margin: 10,
-                            marginLeft: 20
+                            marginLeft: 20,
+                            color: '#9c9fa6',
                         }}
                     >
                         <Icon name="call" />
@@ -268,7 +202,7 @@ class MyProfile extends Component {
                     {
                         this.state.formEdit && (
                             <Button 
-                                style={{ background: '#2666e8', color: '#fff' }}
+                                style={{ background: '#00c689', color: '#fff', borderRadius: 0 }}
                                 onClick={() => {
                                     updateUserData({
                                         email: this.state.email || user.email,
@@ -285,40 +219,133 @@ class MyProfile extends Component {
                             </Button>
                         )
                     }
-                   
-                    </div>
-                    <div
+                </div>
+            </Segment>
+        )
+    };
+
+    render() {
+        const { user, sidebar } = this.props;
+        const { alerts } = this.state;
+
+        return (
+            <React.Fragment>
+                <Responsive minWidth={701}>
+                <div>
+                    <Header />
+                    <CustomSidebar />
+                    <div>
+                    <img
+                        height={300}
+                        width={1600}
+                        src={user.bannerURL || 'https://hookagency.com/wp-content/uploads/2015/11/green-to-blue-ui-gradient-background.jpg'}
+                        onClick={() => this.handleProfilePicUpload('banner')}
+                    />
+                    {this.renderUserProfile(this.props)}
+                <Segment
                     style={{
+                        marginTop: "-10px",
+                        height: 80,
                         display: "flex",
                         justifyContent: "center",
-                        flex: 1,
-                        marginTop: 40
+                        backgroundColor: '#131633',
+                        border: '1px solid #313452',
                     }}
+                    basic
+                >
+                    <div
+                        style={{
+                            marginLeft: 30,
+                            paddingRight: 20,
+                            borderRight: "1px solid #ccc"
+                        }}
+                    >
+                    <p
+                        style={{
+                            fontSize: 18,
+                            margin: 0,
+                            fontWeight: 700,
+                            color: '#9c9fa6',
+                        }}
+                    >
+                        Followers
+                    </p>
+                    <p style={{ fontWeight: 700, color: '#9c9fa6', }}>{user.followers.length}</p>
+                    </div>
+                    <div
+                        style={{
+                            marginLeft: 30,
+                            paddingRight: 20,
+                            borderRight: "1px solid #ccc"
+                        }}
+                    >
+                    <p
+                        style={{
+                            fontSize: 18,
+                            margin: 0,
+                            fontWeight: 700,
+                            color: '#9c9fa6',
+                        }}
+                    >
+                        Following
+                    </p>
+                    <p style={{ fontWeight: 700, color: '#9c9fa6', }}>{user.following.length}</p>
+                    </div>
+                    <div style={{ marginLeft: 30 }}>
+                    <p
+                        style={{
+                            fontSize: 18,
+                            margin: 0,
+                            fontWeight: 700,
+                            color: '#9c9fa6',
+                        }}
+                    >
+                        Alerts
+                    </p>
+                    <p style={{ fontWeight: 700, color: '#9c9fa6', }}>{alerts}</p>
+                    </div>
+                </Segment>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        marginLeft: sidebar.sidebarOpen ? 240 : 120,
+                    }}
+                >
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            flex: 1,
+                            marginTop: 40
+                        }}
                     >
                     <Segment
                         style={{
-                        width: 300,
-                        height: 300,
-                        marginRight: 20,
-                        padding: 0,
-                        borderRadius: 5
+                            width: 400,
+                            height: 400,
+                            marginRight: 20,
+                            padding: 0,
+                            borderRadius: 5,
+                            backgroundColor: '#131633',
+                            border: '1px solid #313452',
                         }}
                         raised
                     >
                         <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            background: "#2566e8",
-                            height: 50,
-                            width: "100%",
-                            borderTopLeftRadius: 5,
-                            borderTopRightRadius: 5
-                        }}
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                background: "#222840",
+                                height: 50,
+                                width: "100%",
+                                borderTopLeftRadius: 5,
+                                borderTopRightRadius: 5
+                            }}
                         >
                         <p
-                            style={{ color: "#ffffff", fontWeight: "bold", fontSize: 20 }}
+                            style={{ color: '#9c9fa6', fontWeight: "bold", fontSize: 20 }}
                         >
                             Followers
                         </p>
@@ -357,12 +384,14 @@ class MyProfile extends Component {
                     </Segment>
                     <Segment
                             style={{
-                            width: 300,
-                            height: 300,
-                            marginRight: 20,
-                            padding: 0,
-                            borderRadius: 5,
-                            marginTop: 0
+                                width: 400,
+                                height: 400,
+                                marginRight: 20,
+                                padding: 0,
+                                borderRadius: 5,
+                                marginTop: 0,
+                                backgroundColor: '#131633',
+                                border: '1px solid #313452',
                             }}
                             raised
                         >
@@ -371,7 +400,7 @@ class MyProfile extends Component {
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
-                                background: "#2566e8",
+                                background: "#222840",
                                 height: 50,
                                 width: "100%",
                                 borderTopLeftRadius: 5,
@@ -379,7 +408,7 @@ class MyProfile extends Component {
                             }}
                             >
                             <p
-                                style={{ color: "#ffffff", fontWeight: "bold", fontSize: 20 }}
+                                style={{ color: '#9c9fa6', fontWeight: "bold", fontSize: 20 }}
                             >
                                 Following
                             </p>
@@ -396,10 +425,10 @@ class MyProfile extends Component {
                                     }}
                                 >
                                     <img
-                                    src={trader.icon || 'https://cdn4.iconfinder.com/data/icons/documents-letters-and-stationery/400/doc-14-512.png'}
-                                    style={{ height: 50, width: 50, borderRadius: "50%" }}
+                                        src={trader.icon || 'https://cdn4.iconfinder.com/data/icons/documents-letters-and-stationery/400/doc-14-512.png'}
+                                        style={{ height: 50, width: 50, borderRadius: "50%" }}
                                     />
-                                    <p>{trader}</p>
+                                    <p style={{ color: '#9c9fa6' }}>{trader}</p>
                                     <Button primary inverted  onClick={() => this.handleFollowExpert(trader)}>
                                     Unfollow
                                     </Button>
@@ -416,12 +445,14 @@ class MyProfile extends Component {
                         </Segment>
                         <Segment
                             style={{
-                            width: 300,
-                            height: 300,
-                            marginRight: 20,
-                            padding: 0,
-                            borderRadius: 5,
-                            marginTop: 0
+                                width: 400,
+                                height: 400,
+                                marginRight: 20,
+                                padding: 0,
+                                borderRadius: 5,
+                                marginTop: 0,
+                                backgroundColor: '#131633',
+                                border: '1px solid #313452',
                             }}
                             raised
                         >
@@ -430,7 +461,7 @@ class MyProfile extends Component {
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
-                                background: "#2566e8",
+                                background: "#222840",
                                 height: 50,
                                 width: "100%",
                                 borderTopLeftRadius: 5,
@@ -438,7 +469,7 @@ class MyProfile extends Component {
                             }}
                             >
                             <p
-                                style={{ color: "#ffffff", fontWeight: "bold", fontSize: 20 }}
+                                style={{ color: '#9c9fa6', fontWeight: "bold", fontSize: 20 }}
                             >
                                 Alerts
                             </p>

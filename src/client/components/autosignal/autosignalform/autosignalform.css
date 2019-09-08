@@ -23,3 +23,14 @@
   .tooltip:hover .tooltiptext {
     visibility: visible;
   }
+
+  input:focus {
+    outline: none;
+    color: #e9e6e6;
+    background-color: #2b2e4c;
+    border-color: #80bdff;
+  }
+
+  button:focus {
+    outline: none;
+  }

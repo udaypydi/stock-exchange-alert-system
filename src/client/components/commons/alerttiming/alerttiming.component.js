@@ -18,31 +18,33 @@ function AlertTiming(props) {
     return (
         <div>
             <div>
-                <p>Timing</p>
+                <p style={{ color: 'rgb(156, 159, 166)' }}>Timing</p>
             </div>
-            <Divider />
+            <Divider style={{ backgroundColor: '#34426f' }}/>
             <div css={styles.formContainer} style={{ justifyContent: 'flex-start', marginLeft: 20 }}>
-                <p style={{ marginBottom: 0 }}>Execution Limit:</p>
-                <Input 
+                <p style={{ marginBottom: 0, color: 'rgb(156, 159, 166)' }}>Execution Limit:</p>
+                <input 
                     fluid 
                     style={{ width: '30%', margin: 10 }}
+                    css={styles.customInput}
                     placeholder='Total Alerts for this signal' 
                     type="number"
                     value={total}
                     error={showErrors && !total}
                     onChange={(event) => handleTimeExecutionChangeValue(event, 'total')}
                 />
-                <label>Total</label>
-                    <Input 
+                <label style={{ color: 'rgb(156, 159, 166)' }}>Total</label>
+                <input 
                     fluid 
                     style={{ width: '30%', margin: 10 }}
+                    css={styles.customInput}
                     placeholder='Alerts in a day' 
                     type="number"
                     value={daily}
                     error={showErrors && !daily}
                     onChange={(event) => handleTimeExecutionChangeValue(event, 'daily')}
                 />
-                <label>Daily</label>
+                <label style={{ color: 'rgb(156, 159, 166)' }}>Daily</label>
             </div>
         </div>
     )

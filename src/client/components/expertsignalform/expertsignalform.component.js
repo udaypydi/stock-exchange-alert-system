@@ -64,7 +64,7 @@ function renderExpertSignal(props) {
         stopLoss,
         targetProfit,
     } = props.expertSignal;
-    const { signalMail, signalTiming } = props;
+    const { signalMail, signalTiming, sidebar } = props;
 
     const {
         period,
@@ -205,7 +205,7 @@ function renderExpertSignal(props) {
     }
 
     return (
-        <div>
+        <div style={{ backgroundColor: '#222840' }}>
             <Header />
             <CustomSidebar />
             {
@@ -218,19 +218,33 @@ function renderExpertSignal(props) {
             {
                 !isLoading && !isSuccess ? (
                 <div css={styles.container}>
-                    <Segment fluid style={{ width: 1000 }}>
+                    <Segment 
+                        fluid 
+                        basic
+                        style={{ 
+                            width: sidebar.sidebarOpen ? 1000 : 1200, 
+                            backgroundColor: '#131633',
+                            border: '1px solid #313452',
+                        }}
+                    >
                         <div>
                             <div css={styles.headerContainer}>
                                 <div>
-                                    <p>Create Expert Signals</p>
+                                    <p style={{ color: '#9c9fa6', fontSize: 20, fontWeight: 'bold' }}>Create Expert Signals</p>
                                 </div>
                             </div>
                             <Divider />
                             <div style={{ marginLeft: 60, marginRight: 60 }}>
                                 <div css={styles.formContainer}>
-                                    <Input 
+                                    <input 
                                         fluid 
-                                        style={{ width: '100%', margin: 10 }}
+                                        style={{ 
+                                            width: '100%', 
+                                            margin: 10, 
+                                            backgroundColor: '#2b2e4c',
+                                            padding: 10,
+                                            border: 0, 
+                                        }}
                                         placeholder='Signal name (ex: My golden crossover)' 
                                         value={signalName}
                                         onChange={handleSignalNameChange}
@@ -256,7 +270,7 @@ function renderExpertSignal(props) {
                                         options={CURRENCY_OPTIONS} 
                                         css={styles.dropdownContainer}
                                         text={currencyPair}
-                                        style={{ width: '50%' }}
+                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
                                         error={showErrors && !currencyPair}
                                         onChange={handleCurrencyPairChange}
                                         onFocus={() => setActiveElement('CURRENCY_PAIR')}
@@ -272,14 +286,44 @@ function renderExpertSignal(props) {
                                     }    
 
                                     <Segment 
-                                        style={{ width: '50%', justifyContent: 'space-evenly', display: 'flex', margin: 10 }}
+                                        style={{ 
+                                            width: '50%', 
+                                            justifyContent: 'space-evenly', 
+                                            display: 'flex', 
+                                            margin: 10, 
+                                            color: '#9c9fa6' 
+                                        }}
                                         onFocus={() => setActiveElement('SIGNAL_TYPE')}
                                         onBlur={() => setActiveElement('')}
                                         error={showErrors && !alerts.length}
                                         basic
                                     >
-                                        <Radio name='radioGroup' label="Buy Alerts" onChange={() => handleAlertsSelect('buy')} checked={alerts === 'buy'} />
-                                        <Radio name='radioGroup' label="Sell Alerts" onChange={() => handleAlertsSelect('sell')} checked={alerts === 'sell'} />
+                                        <Radio 
+                                            name='radioGroup' 
+                                            onChange={() => handleAlertsSelect('buy')} 
+                                            checked={alerts === 'buy'}
+                                            style={{ 
+                                                color: '#9c9fa6',
+                                            }}
+                                        />
+                                        <label 
+                                            style={{ 
+                                                color: '#9c9fa6',
+                                            }}
+                                        >Buy Alerts</label>
+                                        <Radio 
+                                            name='radioGroup' 
+                                            onChange={() => handleAlertsSelect('sell')} 
+                                            checked={alerts === 'sell'} 
+                                            style={{ 
+                                                color: '#9c9fa6',
+                                            }}
+                                        />
+                                        <label
+                                            style={{ 
+                                                color: '#9c9fa6',
+                                            }}
+                                        >Sell Alerts</label>
                                     </Segment>
                                     {
                                         activeElement === 'SIGNAL_TYPE' && (
@@ -291,9 +335,15 @@ function renderExpertSignal(props) {
                                     } 
                                 </div>
                                 <div css={styles.formContainer}>
-                                    <Input 
+                                    <input 
                                         fluid 
-                                        style={{ width: '50%', margin: 10 }} 
+                                        style={{ 
+                                            width: '50%', 
+                                            margin: 10, 
+                                            backgroundColor: '#2b2e4c',
+                                            padding: 10,
+                                            border: 0, 
+                                        }}
                                         placeholder='Trade Lots' 
                                         value={tradeLots}
                                         onChange={handleTradeLotsChange}
@@ -317,7 +367,7 @@ function renderExpertSignal(props) {
                                         options={INDICATOR_CONSTANTS} 
                                         css={styles.dropdownContainer}
                                         text={INDICATOR_KEY_VALUE_MAP[indicator]}
-                                        style={{ width: '50%' }}
+                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
                                         onChange={handleIndicatorChange}
                                         error={showErrors && !indicator}
                                         onFocus={() => setActiveElement('INDICATOR')}
@@ -336,9 +386,15 @@ function renderExpertSignal(props) {
                                     <React.Fragment>
                                         {
                                             indicator !== 'macd' && (
-                                                <Input 
+                                                <input 
                                                     fluid 
-                                                    style={{ width: '50%', margin: 10 }} 
+                                                    style={{ 
+                                                        width: '50%', 
+                                                        margin: 10, 
+                                                        backgroundColor: '#2b2e4c',
+                                                        padding: 10,
+                                                        border: 0, 
+                                                    }}
                                                     placeholder='Period' 
                                                     value={period}
                                                     error={showErrors && !period}
@@ -353,16 +409,22 @@ function renderExpertSignal(props) {
                                                 search
                                                 selection
                                                 options={OHLC} 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
                                                 css={styles.dropdownContainer}
                                                 text={ohlc}
                                                 error={showErrors && !ohlc}
                                                 onChange={(event, data) => handleIndicatorParamsChange(event, data, 'ohlc')}
                                             />
                                         ) : (
-                                            <Input 
+                                            <input 
                                                 fluid 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ 
+                                                    width: '50%', 
+                                                    margin: 10, 
+                                                    backgroundColor: '#2b2e4c',
+                                                    padding: 10,
+                                                    border: 0, 
+                                                }}
                                                 placeholder='Level' 
                                                 text={level}
                                                 error={showErrors && !level}
@@ -376,7 +438,7 @@ function renderExpertSignal(props) {
                                                 search
                                                 selection
                                                 options={devitaionConstantGenerator()} 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
                                                 css={styles.dropdownContainer}
                                                 text={deviation}
                                                 error={showErrors && !deviation}
@@ -392,7 +454,7 @@ function renderExpertSignal(props) {
                                                         search
                                                         selection
                                                         options={MACD_PARAMETERS.fast} 
-                                                        style={{ width: '50%', margin: 10 }} 
+                                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
                                                         css={styles.dropdownContainer}
                                                         text={fast}
                                                         error={showErrors && !fast}
@@ -404,7 +466,7 @@ function renderExpertSignal(props) {
                                                         search
                                                         selection
                                                         options={MACD_PARAMETERS.slow} 
-                                                        style={{ width: '50%', margin: 10 }} 
+                                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
                                                         css={styles.dropdownContainer}
                                                         text={slow}
                                                         error={showErrors && !slow}
@@ -416,7 +478,7 @@ function renderExpertSignal(props) {
                                                         search
                                                         selection
                                                         options={MACD_PARAMETERS.signal} 
-                                                        style={{ width: '50%', margin: 10 }} 
+                                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
                                                         css={styles.dropdownContainer}
                                                         text={signal}
                                                         error={showErrors && !signal}
@@ -427,9 +489,15 @@ function renderExpertSignal(props) {
                                     </React.Fragment>    
                                 </div>
                                 <div css={styles.formContainer}>
-                                    <Input 
+                                    <input 
                                         fluid 
-                                        style={{ width: '50%', margin: 10 }} 
+                                        style={{ 
+                                            width: '50%', 
+                                            margin: 10, 
+                                            backgroundColor: '#2b2e4c',
+                                            padding: 10,
+                                            border: 0, 
+                                        }} 
                                         placeholder='Stop Loss (No of pips)' 
                                         text={stopLoss}
                                         value={stopLoss}
@@ -447,9 +515,15 @@ function renderExpertSignal(props) {
                                             </div>
                                         )
                                         }  
-                                    <Input 
+                                    <input 
                                         fluid 
-                                        style={{ width: '50%', margin: 10 }} 
+                                        style={{ 
+                                            width: '50%', 
+                                            margin: 10, 
+                                            backgroundColor: '#2b2e4c',
+                                            padding: 10,
+                                            border: 0, 
+                                        }}
                                         placeholder='Target Profit (No of pips)' 
                                         text={targetProfit}
                                         value={targetProfit}
@@ -476,11 +550,18 @@ function renderExpertSignal(props) {
                                 </div> */}
                                 
                                 <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
-                                    <Button 
-                                        color="blue" 
-                                        content='Create Signals'
+                                    <button 
+                                        style={{
+                                            color: '#fff',
+                                            backgroundColor: '#405189',
+                                            borderColor: '#405189',
+                                            padding: 10,
+                                            cursor: 'pointer'
+                                        }}
                                         onClick={handleSubmitFormData}
-                                    />
+                                    >
+                                        Create Signals
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -534,6 +615,7 @@ const mapStateToProps = (state) => ({
     expertSignal: state.expertSignal,
     signalMail: state.signalMail,
     signalTiming: state.signalTiming,
+    sidebar: state.sidebar,
 });
 
 export default connect(mapStateToProps)(ExpertSignalFormComponent);

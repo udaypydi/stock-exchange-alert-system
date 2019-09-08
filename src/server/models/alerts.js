@@ -36,7 +36,7 @@ module.exports = {
                         database.collection('alerts').find({ email: req.session.user.email }).toArray((err, alerts) => {
                             const alertsCount = [];
                             const alertsMap = {};
-
+                    
                             [...expertAlerts, ...priceAlerts, ...alerts].forEach(alert => {
                                 if (!alertsMap[alert.created_at]) {
                                     alertsMap[alert.created_at] = [alert];
@@ -51,8 +51,22 @@ module.exports = {
                                     alerts: alertsMap[key].length,
                                 });
                             });
-
+                            
                             res.json({ status: 200, alerts: alertsCount });
+                        });
+                    }
+                });
+            }
+        });
+    },
+
+    getAllAlertsData: (req, res) => {
+        database.collection('expert_alerts').find({ email: req.session.user.email }).toArray((err, expertAlerts) => {
+            if (!err) {
+                database.collection('price_alerts').find({ email: req.session.user.email }).toArray((err, priceAlerts) => {
+                    if (!err) {
+                        database.collection('alerts').find({ email: req.session.user.email }).toArray((err, alerts) => {
+                            res.json({ status: 200, alerts: [...expertAlerts, ...priceAlerts, ...alerts] });
                         });
                     }
                 });

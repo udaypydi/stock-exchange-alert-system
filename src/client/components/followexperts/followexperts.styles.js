@@ -21,6 +21,7 @@ const styles = {
     title: css`
         font-size: 20px;
         margin-bottom: 0;
+        color: #9c9fa6;
     `,
 
     cardImage: css`

@@ -103,26 +103,38 @@ function FollowExperts(props) {
                         <div css={styles.header} style={{ marginLeft: 40 }}>
                             <p css={styles.title}>Follow Experts</p>
                             <div style={{ display: 'flex' }}>
-                                <Button 
-                                    basic 
-                                    color="blue" 
-                                    content='Create Expert Signals' 
-                                    icon={'add'}
-                                    labelPosition='left' 
-                                    onClick={navigateToFollowExperts}
-                                />
-                                <Button 
-                                    basic 
-                                    color="blue" 
-                                    content='My Expert Signals' 
-                                    icon={'list'}
-                                    labelPosition='left' 
-                                    onClick={() => {
-                                        const { history } = props;
-                                        history.push('/expert-signal-list');
-                                    }}
-                                    style={{ marginLeft: 20 }}
-                                />
+                            <button
+                                style={{
+                                    border: "1px solid rgb(64, 81, 137)",
+                                    color: "rgb(64, 81, 137)",
+                                    backgroundColor: "transparent",
+                                    display: "flex",
+                                    padding: 10,
+                                    cursor: 'pointer'
+                                }}
+                                onClick={navigateToFollowExperts}
+                            >
+                                <Icon name="plus" style={{ color: "rgb(64, 81, 137)" }} />
+                                <p>Create Expert Signals</p>
+                            </button>
+                            <button
+                                style={{
+                                    border: "1px solid rgb(64, 81, 137)",
+                                    color: "rgb(64, 81, 137)",
+                                    backgroundColor: "transparent",
+                                    display: "flex",
+                                    padding: 10,
+                                    cursor: 'pointer',
+                                    marginLeft: 20
+                                }}
+                                onClick={() => {
+                                    const { history } = props;
+                                    history.push('/expert-signal-list');
+                                }}
+                            >
+                                <Icon name="list" style={{ color: "rgb(64, 81, 137)" }} />
+                                <p>My Expert Signals</p>
+                            </button>
                             </div>   
                         </div>
                         {

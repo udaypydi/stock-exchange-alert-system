@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Segment, Icon, Responsive } from 'semantic-ui-react';
+import CountUp from 'react-countup';
 import { connect } from 'react-redux';
 import {
     AreaChart,
@@ -41,7 +42,14 @@ function renderCurrencyGraph(currencyData, props) {
     const { sidebar, user,  } = props;
 
     return (
-        <div css={styles.chartsContainer} style={{ paddingLeft: sidebar.sidebarOpen ? 290 : 180, marginRight: 0 }}>
+        <div 
+            css={styles.chartsContainer} 
+            style={{ 
+                marginRight: 0,
+                width: '70%',
+                paddingLeft: sidebar.sidebarOpen ? 330 : 100
+            }}
+        >
             {
                 currencyGraphs.length > 0 ? (
                     currencyGraphs.map((data, index) => (
@@ -49,9 +57,9 @@ function renderCurrencyGraph(currencyData, props) {
                             css={styles.chartCard}
                             style={{
                                 marginTop: 0,
-                                margin: 20,
+                                margin: 5,
                                 height: 180,
-                                width: 300,
+                                width: 250,
                                 backgroundColor: '#131633'
                             }}
                             key={index}
@@ -101,7 +109,7 @@ function renderCurrencyGraph(currencyData, props) {
                                         {
                                             data.graphStyle !== 'GRAPH_3' ? (
                                                 <AreaChart
-                                                    width={300}
+                                                    width={250}
                                                     height={75}
                                                     data={data.data}
                                                     style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
@@ -127,7 +135,7 @@ function renderCurrencyGraph(currencyData, props) {
                                                 </AreaChart>
                                             ) : (
                                                     <LineChart
-                                                        width={300}
+                                                        width={250}
                                                         height={75}
                                                         data={data.data}
                                                         style={{ position: "absolute", bottom: 0, borderRadius: 10 }}
@@ -151,10 +159,12 @@ function renderCurrencyGraph(currencyData, props) {
                                 css={styles.chartCard}
                                 style={{
                                     marginTop: 0,
-                                    margin: 20,
+                                    margin: 5,
                                     height: 180,
-                                    width: 300
+                                    width: 250,
+                                    backgroundColor: '#131633'
                                 }}
+                                inverted
                                 key={index}
                                 loading={isLoading}
                                 onMouseEnter={() => setActiveSetState(index)}
@@ -164,7 +174,7 @@ function renderCurrencyGraph(currencyData, props) {
                                     activeState === index && (
                                         <Icon
                                             name='trash alternate outline'
-                                            color="blue"
+                                            color="orange"
                                             style={{
                                                 position: 'absolute',
                                                 top: 10,
@@ -180,85 +190,100 @@ function renderCurrencyGraph(currencyData, props) {
                         ))
                     )
             }
+             <Segment
+                css={styles.chartCard}
+                style={{
+                    marginTop: 0,
+                    margin: 5,
+                    height: 180,
+                    width: 250,
+                    backgroundColor: '#131633',
+                    cursor: 'pointer'
+                }}
+            >
+                <AddWidgets iconSize={30} />
+            </Segment>
         </div>
     );
 }
 
-function renderAlertsGraph(alertsGraph) {
-    const graphWidth = (window.innerWidth / 100) * 52;
+function renderLatestAlerts() {
+    const [latestAlerts, setLatestAlerts] = useState([]);
 
-    let domain = [];
+    useEffect(() => {
+        setTimeout(() => {
+            fetch('/get-all-alerts-data')
+                .then(res => res.json())
+                .then(json => {
+                    setLatestAlerts(json.alerts)
+                });
+        }, 4000);
+    },[latestAlerts.length]);
 
-    if (alertsGraph && alertsGraph.length) {
-        let min = alertsGraph[0].alerts;
-        let max = alertsGraph[0].alerts;
-    
-        alertsGraph.forEach(alert => {
-            if (min > alert.alerts) {
-                min = alert.alerts;
+    return latestAlerts.reverse().map(alert => (
+        <div 
+            style={{ 
+                backgroundColor: '#131633', 
+                minHeight: 50, 
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+                margin: 0,
+                border: '1px solid #565e84', 
+            }}>
+            <p style={{ color: '#9c9fa6', marginBottom: 0 }}>{alert.currencyPair}</p>
+            <p style={{ color: '#9c9fa6',  marginBottom: 0 }}>{alert.price || alert.buyPrice || alert.sellPrice}</p>
+            {
+                alert.buyPrice && (
+                    <Icon name="arrow up" color="green" />
+                )
             }
-    
-            if (max < alert.alerts) {
-                max = alert.alerts;
+            {
+                alert.sellPrice && (
+                    <Icon name="arrow down" color="red" />
+                )
             }
-        });
-        domain = [min - 1, max + 1];
-    }
+        </div>
+    )
+    );
+}
+
+function renderStatsBar(user) {
+    const height = window.screen.availHeight;
 
     return (
-        <Segment
-            css={styles.chartCard}
-            style={{
-                marginTop: 20,
-                width: '68%',
-                height: 250,
-                float: 'right',
-                marginRight: 30,
-                backgroundColor: '#131633',
-                color: '#b1b1b5',
-            }}
-        >
-            <div css={alertsGraph.length === 0 ? css`filter: blur(5px);` : ''}>
-                <div css={css`${styles.chartData}`} style={{ marginTop: 10 }}>
-                    <h2>Alerts History</h2>
-                </div>
-                <AreaChart
-                    width={graphWidth}
-                    height={180}
-                    data={alertsGraph.length ? alertsGraph : ALERT_SIGNAL_HISTORY_DEMO}
-                    style={{ bottom: 0, borderRadius: 10, bottom: 0 }}
-                    margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
-                >
-                    <defs style={{ borderRadius: 10 }}>
-                        <linearGradient id={`colorUv-15`} x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor={'#38AAE5'} stopOpacity={0.8} />
-                            <stop offset="95%" stopColor={'#F5FCFD'} stopOpacity={0.8} />
-                        </linearGradient>
-                    </defs>
-                    <Tooltip />
-                    <Area
-                        strokeWidth={2}
-                        stroke='#10316B'
-                        dataKey="alerts"
-                        stroke={CURRENCY_GRAPH_DATA[0].colors[0]}
-                        fill={`url(#colorUv-15)`}
-                        fillOpacity={1}
-                    />
-                    <YAxis type="number" domain={domain} hide />
-                </AreaChart>
-            </div>
-            {alertsGraph.length === 0 && (
-                <h2
-                    style={{
-                        position: 'absolute',
-                        color: '#b1b1b5',
-                        fontWeight: 'bold',
-                        marginTop: 0,
-                    }}>No Data Available</h2>
-            )
-            }
-        </Segment>
-    );
+    <div style={{ width: '20%', backgroundColor: '#131633', height, paddingTop: 100 }}>
+        <div css={styles.statsContainer}>
+            {/* <p css={styles.statsCount}>{user.followers.length}</p> */}
+            <CountUp end={user.followers.length} css={styles.statsCount} />
+            <p css={styles.statsTitle}>FOLLOWERS</p>
+        </div>
+        <div css={styles.statsContainer}>
+            {/* <p css={styles.statsCount}>{user.following.length}</p> */}
+            <CountUp end={user.following.length} css={styles.statsCount} />
+            <p css={styles.statsTitle}>FOLLOWING</p>
+        </div>
+        <div css={styles.statsContainer}>
+            {/* <p css={styles.statsCount}>{user.alerts.length}</p> */}
+            <CountUp end={user.alerts.length} css={styles.statsCount} />
+            <p css={styles.statsTitle}>ALERTS</p>
+        </div>
+        <div 
+            css={styles.statsContainer} 
+            style={{ 
+                border: '1px solid #565e84', 
+                minHeight: height / 3 + 100, 
+                maxHeight: height / 3 + 100,
+                justifyContent: 'flex-start',
+                overflow: 'auto',
+                padding: 10,
+            }}>
+                 <p css={styles.statsTitle}>RECENT ALERTS</p>
+                {renderLatestAlerts()}
+        </div>
+    </div>
+    )
 }
 
 function DashboardHome(props) {
@@ -275,62 +300,9 @@ function DashboardHome(props) {
             <Header />
             <Responsive minWidth={701}>
                 <CustomSidebar />
-                <div style={{ position: 'absolute', top: 100, right: 30,  }}>
-                    <AddWidgets />
-                </div>
-
-                {renderCurrencyGraph({ currencyGraphs, isLoading: dashboardCurrencyData.isLoading }, props)}
-                <div style={{ display: 'flex', flex: 1, justifyContent: 'space-between', marginLeft: sidebar.sidebarOpen ? 310 : 200 }}>
-                    {
-                        user.alerts && (
-
-                            <Segment style={{ width: '22%', height: 250, marginTop: 20, backgroundColor: '#131633' }}>
-                                <h2 style={{ textAlign: 'center', color: '#b1b1b5' }}>Profile Summary</h2>
-                                <div>
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            marginTop: 30,
-                                            justifyContent: "space-between",
-                                            color: '#b1b1b5'
-                                        }}
-                                    >
-                                        <Icon name="bell" style={{ fontSize: 20, color: '#b1b1b5' }} />
-                                        <p>Total Alerts</p>
-                                        <p>-</p>
-                                        <p>{user.alerts.length}</p>
-                                    </div>
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            marginTop: 30,
-                                            justifyContent: "space-between",
-                                            color: '#b1b1b5'
-                                        }}
-                                    >
-                                        <Icon name="mail forward" style={{ fontSize: 20, color: '#b1b1b5' }} />
-                                        <p style={{ color: '#b1b1b5' }}>No of Followers</p>
-                                        <p>-</p>
-                                        <p>{user.followers.length}</p>
-                                    </div>
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            marginTop: 30,
-                                            justifyContent: "space-between",
-                                            color: '#b1b1b5'
-                                        }}
-                                    >
-                                        <Icon name="chart pie" style={{ fontSize: 20 }} />
-                                        <p>Followed by You</p>
-                                        <p>-</p>
-                                        <p>{user.following.length}</p>
-                                    </div>
-                                </div>
-                            </Segment>
-                        )
-                    }
-                    {renderAlertsGraph(alertsGraph)}
+                <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                    {renderCurrencyGraph({ currencyGraphs, isLoading: dashboardCurrencyData.isLoading }, props)}
+                    {renderStatsBar(user)}
                 </div>
             </Responsive>
             <Responsive maxWidth={700}>

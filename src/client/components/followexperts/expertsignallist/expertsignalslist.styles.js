@@ -8,9 +8,8 @@ const styles = {
     `,
 
     statusButton: css`
-        border: 1px solid #038fde;
-        color: #038fde;
-        border-radius: 5px;
+        background: green;
+        color: #ffffff;
         width: 80px;
         padding: 2px 15px 2px 15px;
         height: 25px;
@@ -22,6 +21,7 @@ const styles = {
         /* align-items: center; */
         display: flex;
         justify-content: center;
+        color: #9c9fa6;
     `
 };
 

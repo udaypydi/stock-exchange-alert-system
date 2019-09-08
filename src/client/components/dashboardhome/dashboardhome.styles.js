@@ -37,7 +37,7 @@ const styles = {
         display: flex;
         flex: 1;
         justify-content: flex-start;
-        padding-top: 160px;
+        padding-top: 120px;
         padding-left: 290px;
         flex-wrap: wrap;
     `,
@@ -54,6 +54,30 @@ const styles = {
     `,
     deleteIcon: css`
         display: none;
+    `,
+
+    statsContainer: css`
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        border-bottom: 1px solid #565e84;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    `,
+
+    statsCount: css`
+        margin-bottom: 0;
+        font-size: 30px;
+        color: #9c9fa6 ;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    `,
+
+    statsTitle: css`
+        color: #9c9fa6 ;
+        font-size: 20px;
+        font-weight: bold;
     `
 };
 

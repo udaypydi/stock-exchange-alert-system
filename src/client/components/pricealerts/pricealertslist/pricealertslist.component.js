@@ -28,32 +28,53 @@ function PriceAlertsList(props) {
             <Header />
             <Responsive minWidth={701}>
                 <CustomSidebar />
-                <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '65%' : '52%' }}>
+                <div 
+                    css={styles.container} 
+                    style={{ 
+                        marginLeft: sidebar.sidebarOpen ? '65%' : '52%',
+                    }}
+                >
                     <Segment 
                         fluid 
-                        style={{ width: sidebar.sidebarOpen ? 1000 : 1200 }}
+                        basic
+                        style={{ 
+                            width: sidebar.sidebarOpen ? 1000 : 1200,
+                            backgroundColor: '#131633',
+                            border: '1px solid #313452',
+                        }}
                     >
                         <div>
                             <div css={styles.headerContainer}>
                                 <div>
-                                    <p>Indicator Signals</p>
+                                    <h2 style={{ color: '#9c9fa6' }}>Price Alerts</h2>
                                 </div>
-                                <Button 
-                                    basic 
-                                    color="blue" 
-                                    content='Create Price Alerts' 
-                                    icon={'add'}
-                                    labelPosition='left' 
-                                    onClick={() => {
-                                        const { history } = props;
-                                        history.push('/create-price-alerts');
-                                    }}
-                                />
+                                {
+                                    priceAlertsList && priceAlertsList.signalsList.length && (
+                                        <button 
+                                            style={{
+                                                border: "1px solid rgb(64, 81, 137)",
+                                                color: "rgb(64, 81, 137)",
+                                                backgroundColor: "transparent",
+                                                display: "flex",
+                                                padding: 10,
+                                                cursor: 'pointer'
+                                            }}
+                                            onClick={() => {
+                                                const { history } = props;
+                                                history.push('/create-price-alerts');
+                                            }}
+                                        >
+                                            <Icon name="plus" style={{ color: "rgb(64, 81, 137)" }} />
+                                            <p>Create Price Alerts</p>
+                                        </button>
+                                    )
+                                }
+                                
                             </div>
                             <Divider />
                             <Segment 
                                 css={styles.signalsHeaderContainer} 
-                                style={{ backgroundColor: '#f8f8f8', padding: 10 }}
+                                style={{ backgroundColor: '#222840', padding: 10 }}
                                 basic
                             >
                                 <p css={styles.autoSignalCell}>Signal Name</p>
@@ -97,25 +118,31 @@ function PriceAlertsList(props) {
                                         textAlign: 'center'
                                     }}
                                 >
-                                    <Icon 
+                                     <Icon 
                                         name='database'
-                                        color='blue'
                                         style={{ 
                                             fontSize: 40,
+                                            color: "rgb(64, 81, 137)",
                                         }}
                                     />
-                                    <h2 style={{ marginTop: 0 }}>No Data Available</h2>
-                                    <Button 
-                                        basic 
-                                        color="blue"
-                                        content='Create Price Alerts' 
-                                        icon={'add'}
-                                        labelPosition='left' 
+                                    <h2 style={{ marginTop: 0, color: '#9c9fa6' }}>No Data Available</h2>
+                                    <button
+                                        style={{
+                                            border: "1px solid rgb(64, 81, 137)",
+                                            color: "rgb(64, 81, 137)",
+                                            backgroundColor: "transparent",
+                                            display: "flex",
+                                            padding: 10,
+                                            cursor: 'pointer'
+                                        }}
                                         onClick={() => {
                                             const { history } = props;
                                             history.push('/create-price-alerts');
                                         }}
-                                    />
+                                    >
+                                        <Icon name="plus" style={{ color: "rgb(64, 81, 137)" }} />
+                                        <p>Create Price Alerts</p>
+                                    </button>
                                 </div>
                             )
                             }

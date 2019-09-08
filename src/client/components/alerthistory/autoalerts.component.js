@@ -20,13 +20,13 @@ function AutoAlerts(props) {
     }, []);
 
     return (
-        <div>
-            <Segment basic fluid style={{ border: 0 }}>
+        <div style={{ border: 0, backgroundColor: '#131633', }}>
+            <Segment basic fluid style={{ border: 0, backgroundColor: '#131633', }}>
                 <div>
                     <div style={{ marginTop: 30 }}>
                         <Segment 
                             css={styles.signalsHeaderContainer} 
-                            style={{ backgroundColor: '#f8f8f8', padding: 10 }}
+                            style={{ backgroundColor: '#222840', padding: 10 }}
                             basic
                         >
                             <p css={styles.autoSignalCell} style={{ fontWeight: 'bold' }}>Currency Pair</p>
@@ -58,8 +58,8 @@ function AutoAlerts(props) {
                                 <p 
                                     css={styles.signalPaginationButtons} 
                                     style={{ 
-                                        color: 'rgb(3, 143, 222)', 
-                                        border: '1px solid rgb(3, 143, 222)'
+                                        color: 'rgb(64, 81, 137)',
+                                        border: '1px solid rgb(64, 81, 137)'
                                     }}
                                 >{pageCount + 1}</p>
                                 {

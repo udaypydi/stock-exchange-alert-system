@@ -53,7 +53,7 @@ function CustomSideBar(props) {
                 visible={sideBar.sidebarOpen}
                 width='thin'
                 animation="push"
-                style={{  backgroundColor: '#131633', color: '#b1b1b5', width: 278, zIndex: 99999 }}
+                style={{  backgroundColor: '#131633', color: '#656a8f', width: 278, zIndex: 99999 }}
             >
                 <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
                 <div css={styles.profileImageContainer}>
@@ -72,15 +72,21 @@ function CustomSideBar(props) {
                     SIDEBAR_MENU.map((sidebarElement, index) => (
                         <Menu.Item 
                             style={{ 
-                                backgroundColor: '#131633',
+                                backgroundColor: activeIndex === index ? '#191e3c' : '#131633',
                                 borderRight: '0px',
                                 borderBottom: 0,
+                                padding: 0,
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
                             }} 
                             onClick={() => handleRouteClick(sidebarElement.route, index)}
                         >
                             <div css={activeIndex === index ? styles.activeMenuItem : styles.menuItem}>
-                                <Icon name={sidebarElement.iconName} style={{ marginLeft: 40, fontSize: 18 }} />
-                                <p style={{ marginLeft: 20 }}>{sidebarElement.name}</p>
+                                <div style={{ display: 'flex' }}>
+                                    <Icon name={sidebarElement.iconName} style={{ fontSize: 18, color: '#656a8f' }} />
+                                    <p style={{ marginBottom : 0, marginLeft: 20 }}>{sidebarElement.name}</p>
+                                </div>
+                                <Icon name={'angle right'} style={{ fontSize: 18, color: '#656a8f' }} />
                             </div>
                         </Menu.Item>
                     ))
@@ -93,7 +99,7 @@ function CustomSideBar(props) {
                 visible={!sideBar.sidebarOpen}
                 width='thin'
                 animation="push"
-                style={{ color: '#b1b1b5', backgroundColor: '#131633', width: 80, overflow: 'hidden', zIndex: 99999 }}
+                style={{ color: '#656a8f', backgroundColor: '#131633', width: 80, overflow: 'hidden', zIndex: 99999 }}
             >
                 <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
                 <div css={styles.profileImageContainer}>
@@ -111,15 +117,16 @@ function CustomSideBar(props) {
                     SIDEBAR_MENU.map((sidebarElement, index) => (
                         <Menu.Item 
                             style={{ 
-                                backgroundColor: '#131633',
+                                backgroundColor: activeIndex === index ? '#191e3c' : '#131633',
                                 borderRight: '0px',
                                 borderBottom: 0,
                                 width: 40,
+                                padding: 0,
                             }} 
                             onClick={() => handleRouteClick(sidebarElement.route, index)}
                         >
                             <div css={activeIndex === index ? styles.activeMenuItem : styles.menuItem}>
-                                <Icon name={sidebarElement.iconName} style={{ marginLeft: 10, fontSize: 18 }} />
+                                <Icon name={sidebarElement.iconName} style={{ fontSize: 18, color: 'rgb(101, 106, 143)' }} />
                             </div>
                         </Menu.Item>
                     ))

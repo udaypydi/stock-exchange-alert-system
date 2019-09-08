@@ -43,6 +43,14 @@ const styles = {
         display: flex;
         align-self: flex-start;
         margin: 10px;
+    `,
+
+    customInput: css`
+        background-color: #2b2e4c;
+        margin: 0;
+        padding: 10px;
+        border: 0;
+        color: #ffffff;
     `
 
 };

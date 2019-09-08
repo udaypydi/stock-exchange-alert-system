@@ -188,7 +188,7 @@ function renderAutoSignalForm(props) {
     }
 
     return (
-        <div style={{ backgroundColor: '#f0f2f5'}}>
+        <div style={{ backgroundColor: '#222840' }}>
             <Header />
             <CustomSidebar />
             {
@@ -200,23 +200,30 @@ function renderAutoSignalForm(props) {
             }
             {
                 !isLoading && !isSuccess ? (
-                <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '65%' : '52%' }}>
-                    <Segment fluid style={{ width: sidebar.sidebarOpen ? 1000 : 1200 }}>
+                <div css={styles.container} style={{ marginLeft: sidebar.sidebarOpen ? '65%' : '52%', backgroundColor: '#222840' }}>
+                    <Segment 
+                        fluid 
+                        basic
+                        style={{ 
+                            width: sidebar.sidebarOpen ? 1000 : 1200, 
+                            backgroundColor: '#131633',
+                            border: '1px solid #313452',
+                        }}>
                         <div>
                             <div css={styles.headerContainer}>
                                 <div>
-                                    <p>Create Indicator Signals</p>
+                                    <p style={{ color: '#9c9fa6', fontSize: 20, fontWeight: 'bold' }}>Create Indicator Signals</p>
                                 </div>
                             </div>
-                            <Divider />
+                            <Divider style={{ backgroundColor: '#34426f' }} />
                             <div style={{ marginLeft: 60, marginRight: 60 }}>
                                 <div css={styles.formContainer}>
-                                    <Input 
-                                        fluid 
-                                        style={{ width: '100%', margin: 10 }}
+                                    <input
+                                        style={{ width: '100%', margin: 10, backgroundColor: '#2b2e4c' }}
                                         placeholder='Signal name (ex: My golden crossover)' 
+                                        css={styles.customInput}
                                         value={signalName}
-                                        onChange={handleSignalNameChange}
+                                        onInput={handleSignalNameChange}
                                         onFocus={() => setActiveElement('SIGNAL_NAME')}
                                         onBlur={() => setActiveElement('')}
                                         error={showErrors && !signalName}
@@ -240,7 +247,7 @@ function renderAutoSignalForm(props) {
                                         css={styles.dropdownContainer}
                                         text={currencyPair}
                                         onChange={handleCurrencyPairChange}
-                                        style={{ width: '50%' }}
+                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
                                         onFocus={() => setActiveElement('CURRENCY_PAIR')}
                                         onBlur={() => setActiveElement('')}
                                         error={showErrors && !currencyPair}
@@ -261,7 +268,7 @@ function renderAutoSignalForm(props) {
                                         css={styles.dropdownContainer}
                                         text={timeFrame}
                                         onChange={handleTimeFrameChange}
-                                        style={{ width: '50%' }}
+                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
                                         onFocus={() => setActiveElement('TIME_FRAME')}
                                         onBlur={() => setActiveElement('')}
                                         error={showErrors && !timeFrame}
@@ -301,6 +308,7 @@ function renderAutoSignalForm(props) {
                                         options={INDICATOR_CONSTANTS} 
                                         css={styles.dropdownContainer}
                                         text={INDICATOR_KEY_VALUE_MAP[indicator]}
+                                        style={{ backgroundColor: '#2b2e4c', borderRadius: 0 }}
                                         onChange={handleIndicatorChange}
                                         onFocus={() => setActiveElement('INDICATOR')}
                                         onBlur={() => setActiveElement('')}
@@ -323,7 +331,7 @@ function renderAutoSignalForm(props) {
                                                     search
                                                     selection
                                                     options={periodValueDropdownGenerator()}
-                                                    style={{ width: '50%', margin: 10 }} 
+                                                    style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
                                                     css={styles.dropdownContainer}
                                                     text={period}
                                                     error={showErrors && !period}
@@ -338,16 +346,17 @@ function renderAutoSignalForm(props) {
                                                 search
                                                 selection
                                                 options={OHLC} 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
                                                 css={styles.dropdownContainer}
                                                 text={ohlc}
                                                 error={showErrors && !ohlc}
                                                 onChange={(event, data) => handleIndicatorParamsChange(event, data, 'ohlc')}
                                             />
                                         ) : (
-                                            <Input 
+                                            <input 
                                                 fluid 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c' }} 
+                                                css={styles.customInput}
                                                 placeholder='Level' 
                                                 text={level}
                                                 error={showErrors && !level}
@@ -361,7 +370,7 @@ function renderAutoSignalForm(props) {
                                                 search
                                                 selection
                                                 options={devitaionConstantGenerator()} 
-                                                style={{ width: '50%', margin: 10 }} 
+                                                style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
                                                 css={styles.dropdownContainer}
                                                 text={deviation}
                                                 error={showErrors && !deviation}
@@ -379,7 +388,7 @@ function renderAutoSignalForm(props) {
                                             search
                                             selection
                                             options={MACD_PARAMETERS.fast} 
-                                            style={{ width: '50%', margin: 10 }} 
+                                            style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
                                             css={styles.dropdownContainer}
                                             text={fast}
                                             error={showErrors && !fast}
@@ -391,7 +400,7 @@ function renderAutoSignalForm(props) {
                                             search
                                             selection
                                             options={MACD_PARAMETERS.slow} 
-                                            style={{ width: '50%', margin: 10 }} 
+                                            style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
                                             css={styles.dropdownContainer}
                                             text={slow}
                                             error={showErrors && !slow}
@@ -403,7 +412,7 @@ function renderAutoSignalForm(props) {
                                             search
                                             selection
                                             options={MACD_PARAMETERS.signal} 
-                                            style={{ width: '50%', margin: 10 }} 
+                                            style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
                                             css={styles.dropdownContainer}
                                             text={signal}
                                             error={showErrors && !signal}
@@ -415,11 +424,18 @@ function renderAutoSignalForm(props) {
                                     <AlertTiming showErrors={showErrors}/>
                                 </div> 
                                 <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
-                                    <Button 
-                                        color="blue" 
-                                        content='Create Signals'
+                                    <button 
+                                        style={{
+                                            color: '#fff',
+                                            backgroundColor: '#405189',
+                                            borderColor: '#405189',
+                                            padding: 10,
+                                            cursor: 'pointer'
+                                        }}
                                         onClick={handleSubmitFormData}
-                                    />
+                                    >
+                                        Create Signals
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -453,7 +469,7 @@ function AutoSignalFormComponent(props) {
     return (
         <React.Fragment>
             <Responsive minWidth={701}>
-                <div style={{ backgroundColor: '#f0f2f5'}}>
+                <div style={{ backgroundColor: '#222840' }}>
                     <p>Create AutoSignals</p>
                     <Divider />
                     <div>

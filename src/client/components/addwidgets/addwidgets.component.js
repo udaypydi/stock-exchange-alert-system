@@ -42,7 +42,7 @@ function AddWidgetModal(props) {
       <Modal
         trigger={
           <Icon
-            style={{ fontSize: 20, marginTop: 20 }}
+            style={{ fontSize: props.iconSize || 20 }}
             color="orange"
             name="plus"
             onClick={handleClick}
