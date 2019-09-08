@@ -256,17 +256,17 @@ function renderStatsBar(user) {
     <div style={{ width: '20%', backgroundColor: '#131633', height, paddingTop: 100 }}>
         <div css={styles.statsContainer}>
             {/* <p css={styles.statsCount}>{user.followers.length}</p> */}
-            <CountUp end={user.followers.length} css={styles.statsCount} />
+            <CountUp end={user.followers ? user.followers.length : 0} css={styles.statsCount} />
             <p css={styles.statsTitle}>FOLLOWERS</p>
         </div>
         <div css={styles.statsContainer}>
             {/* <p css={styles.statsCount}>{user.following.length}</p> */}
-            <CountUp end={user.following.length} css={styles.statsCount} />
+            <CountUp end={user.following ? user.following.length : 0} css={styles.statsCount} />
             <p css={styles.statsTitle}>FOLLOWING</p>
         </div>
         <div css={styles.statsContainer}>
             {/* <p css={styles.statsCount}>{user.alerts.length}</p> */}
-            <CountUp end={user.alerts.length} css={styles.statsCount} />
+            <CountUp end={user.alerts ? user.alerts.length : 0} css={styles.statsCount} />
             <p css={styles.statsTitle}>ALERTS</p>
         </div>
         <div 

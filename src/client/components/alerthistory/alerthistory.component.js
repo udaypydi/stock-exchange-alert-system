@@ -13,23 +13,66 @@ import AutoAlerts from './autoalerts.component';
 import styles from './alerthistory.styles';
 
 
-
-const panes = [
-    { menuItem: 'Indicator Alerts', render: () => <Tab.Pane attached={false} style={{ backgroundColor: '#131633', color: '#fff' }}><AutoAlerts /> </Tab.Pane>},
-    { menuItem: 'Expert Alerts', render: () => <Tab.Pane attached={false} style={{ backgroundColor: '#131633', color: '#fff' }}><ExpertAlerts /></Tab.Pane>},
-    { menuItem: 'Price Alerts', render: () => <Tab.Pane attached={false} style={{ backgroundColor: '#131633', color: '#fff' }}><PriceAlerts /></Tab.Pane>},
-];
-
-
 function AlerstHistory(props) {
 
     const [pageCount, setPageCount] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(0);
     const { alerts, sidebar } = props;
 
     useEffect(() => {
         const { dispatch } = props;
         dispatch(fetchAlertsHistory());
     }, []);
+
+    const renderAlertsHistoryTabs = () => (
+        <div style={{ display: 'flex' }}>
+            <div 
+                style={{ 
+                    background: activeIndex === 0 ? 'transparent' : '#292f42', 
+                    color: '#b1b1b5', 
+                    padding: 10, 
+                    cursor: 'pointer',
+                    border: activeIndex === 0 ? '1px solid #b1b1b5' : '',
+                    borderBottomWidth: 0,
+                }}
+                onClick={() => {
+                    setActiveIndex(0);
+                }}
+            >
+                <p>Indicator Alerts</p>
+            </div>
+            <div 
+                style={{ 
+                    background: activeIndex === 1 ? 'transparent' : '#292f42',  
+                    color: '#b1b1b5', 
+                    padding: 10, 
+                    cursor: 'pointer',
+                    border: activeIndex === 1 ? '1px solid #b1b1b5' : '',
+                    borderBottomWidth: 0,
+                }}
+                onClick={() => {
+                    setActiveIndex(1);
+                }}
+            >
+                <p>Expert Alerts</p>
+            </div>
+            <div 
+                style={{ 
+                    background: activeIndex === 2 ? 'transparent' : '#292f42', 
+                    color: '#b1b1b5', 
+                    padding: 10, 
+                    cursor: 'pointer',
+                    border: activeIndex === 2 ? '1px solid #b1b1b5' : '',
+                    borderBottomWidth: 0,
+                }}
+                onClick={() => {
+                    setActiveIndex(2);
+                }}
+            >
+                <p>Price Alerts</p>
+            </div>
+        </div>
+    );
 
     return (
         <React.Fragment>
@@ -53,7 +96,13 @@ function AlerstHistory(props) {
                                     </div>
                                 </div>
                                 <Divider />
-                                <Tab menu={{ color: 'blue', secondary: true, pointing: true }} panes={panes} />
+                                {renderAlertsHistoryTabs()}
+                                <div style={{ border: '1px solid #b1b1b5' }}>
+                                    {activeIndex === 0 && <AutoAlerts />}
+                                    {activeIndex === 1 && <ExpertAlerts />}
+                                    {activeIndex === 2 && <PriceAlerts />}
+                                </div>
+                                
                             </div>
                         </Segment>
                     </div>
