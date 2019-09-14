@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Segment, Input, Checkbox, Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router';
 import ReactFlagsSelect from 'react-flags-select';
+import { Helmet } from "react-helmet";
 import 'react-flags-select/css/react-flags-select.css';
   /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
@@ -14,9 +15,20 @@ function SignUp(props) {
 
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
-    const [countryCode, setCountryCode] = useState('IN');
+    const [countryCode, setCountryCode] = useState('');
     const [password, setPassword] = useState('');
     const [showErrors, setShowErrors] = useState(false);
+    const countryFlags = React.createRef();
+
+    useEffect(() => {
+        fetch('http://ip-api.com/json')
+            .then(res => res.json())
+            .then(json => {
+                if (countryFlags.current) {
+                    countryFlags.current.updateSelected(json.countryCode);
+                }
+            });
+    });
 
     function signupUser() {
         const { dispatch, history } = props; 
@@ -47,9 +59,30 @@ function SignUp(props) {
             setShowErrors(true);
         }
     }
-    
+
+    function renderErrorFields() {
+        if (showErrors && (!password || !email || !userName)) {
+            return (
+                <p style={{ color: 'red' }}>Please fill all the fields</p>
+            )
+        }
+
+        if (showErrors && (password && email && userName)) {
+            return (
+                <p style={{ color: 'red' }}>Email already exist</p>
+            )
+        }
+
+        return null;
+    } 
+
     return (
         <div css={styles.container}>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Signalant - Sign Up</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
             <Segment style={{ width: '60%', height: 500, borderRadius: 10, backgroundColor: '#ffffff' }} raised>
                 <Grid>
                     <Grid.Row style={{ padding: 0 }}>
@@ -106,6 +139,7 @@ function SignUp(props) {
                                 <div css={styles.formElement}>
                                 <ReactFlagsSelect
                                         defaultCountry={countryCode} 
+                                        ref={countryFlags}
                                         searchPlaceholder="Search for a country"
                                         onSelect={(countryCode) => { setCountryCode(countryCode) }}
                                         style={{ width: '80%' }}
@@ -121,13 +155,9 @@ function SignUp(props) {
                                         onChange={(event) => { setPassword(event.target.value) }}
                                     />
                                 </div>
-                                {
-                                    showErrors && password && email && (
-                                        <p style={{ color: 'red' }}>Email already exist</p>
-                                    )
-                                }
+                                {renderErrorFields()}
                                 <div css={styles.formElement}>
-                                    <Checkbox label="by signing up, I accept Term & Condition" />
+                                    <Checkbox label={<label>By signing up, I accept the <a href="/#/terms-and-conditions">Terms & Conditions.</a></label>}/>
                                 </div>             
                                 <div css={styles.formElement}>
                                     <Button onClick={signupUser}primary>Sign Up</Button>

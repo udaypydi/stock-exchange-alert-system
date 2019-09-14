@@ -8,7 +8,7 @@
 .loader-container {
   width: 100%;
   height: 100%;
-  background: #222840;
+  background: #ffffff;
   position: absolute;
   display: flex;
   flex: 1; }
@@ -18,7 +18,7 @@
   bottom: 0;
   width: 10px;
   height: 50%;
-  background: rgb(86, 94, 132);
+  background: #038fde;
   transform-origin: center bottom;
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2); }
 
@@ -53,7 +53,7 @@
   left: 0;
   width: 10px;
   height: 10px;
-  background: rgb(86, 94, 132);
+  background: #038fde;
   border-radius: 50%;
   animation: ball 4s infinite; }
 

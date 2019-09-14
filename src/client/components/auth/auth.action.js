@@ -22,8 +22,10 @@ export const signInUser = (userData) => (dispatch) => {
     userLogIn(userData)
         .then(json => {
             dispatch(updateUserLogInData(json));
-            dispatch(getUserState());
-            history.push('/home');
+            if (json.isLoggedin) {
+                dispatch(getUserState());
+                history.push('/home');
+            }
         })
         .catch((err) => {
             console.log(err);

@@ -97,7 +97,7 @@ passport.use('local.signup', new LocalStrategy({
         }
   
         if (!authentication.decryptPassword(password, user.password)) {
-          return done(null ,false, { message: 'Wrong Password.' });
+          return done(null ,false, { message: 'Invalid Credentials.' });
         }
   
         req.session.user = user;

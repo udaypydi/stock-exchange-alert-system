@@ -13,6 +13,8 @@ function Auth(props) {
     const [password, setPassword] = useState('');
     const [showErrors, setShowErrors] = useState(false);
 
+    const { user } = props;
+
     function logInUser() {
         const { dispatch } = props;
         const userData = {
@@ -63,7 +65,7 @@ function Auth(props) {
                             >
                                <h1>Sign In</h1>
                                <p style={{ fontSize: 16 }}>By Signing Up, you can avail full features of our services.</p>
-                               <p style={{ fontSize: 16, marginTop: 20 }}>Get an account!!!</p> 
+                               <p style={{ fontSize: 16, marginTop: 20 }}>Get an account today.</p> 
                                <img 
                                     src="https://res.cloudinary.com/dgvup74b7/image/upload/v1565302530/h6auuysxte0jayf1ro9t.png" 
                                     style={{ height: 40, marginTop: 40 }} 
@@ -91,6 +93,7 @@ function Auth(props) {
                                         error={showErrors && !password}
                                     />
                                 </div> 
+                                {user.userLoginError !== 'Logged in succesfully' && (<p style={{ color: 'red' }}>{user.userLoginError}</p>)}
                                 <div css={styles.formElement}>
                                     <Button onClick={logInUser}primary>Sign In</Button>
                                     <label style={{ marginLeft: 10 }}>or</label>
@@ -102,8 +105,12 @@ function Auth(props) {
                 </Grid>
             </Segment>
         </div>
-     
     )
 } 
 
-export default withRouter(connect()(Auth));
+
+const mapStateToProps = state => ({
+    user: state.user,
+});
+
+export default withRouter(connect(mapStateToProps)(Auth));

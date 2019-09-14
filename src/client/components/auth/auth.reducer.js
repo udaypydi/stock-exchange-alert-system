@@ -5,7 +5,13 @@ import { FOLLOW_UNFOLLOW_EXPERT } from 'components/followexperts/followexperts.c
 
 export default function userReducer(state = USER_INIT_STATE, action) {
     switch(action.type) {
-        case SIGN_IN_USER:
+        case SIGN_IN_USER: {
+            if (!action.payload.isLoggedIn) {
+                return {
+                    ...state,
+                    userLoginError: action.payload.message,
+                };
+            }
             return { 
                 ...state, isLoggedIn: action.payload.isLoggedin, 
                 email: action.payload.userId.email,
@@ -15,7 +21,9 @@ export default function userReducer(state = USER_INIT_STATE, action) {
                 profilePic: action.payload.userId.profile_pic,
                 bannerURL: action.payload.userId.banner_url,
                 followers: action.payload.userId.followers,
+                userLoginError: '',
             };
+        }
 
         case UPDATE_USER_DATA:
                 return { 

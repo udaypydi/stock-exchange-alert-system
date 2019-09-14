@@ -14,5 +14,6 @@ export const USER_INIT_STATE = {
     activeGraphs: [],
     phoneNumber: '',
     location: '',
+    userLoginError: '',
 };
 
