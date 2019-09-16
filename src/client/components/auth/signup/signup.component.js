@@ -18,17 +18,31 @@ function SignUp(props) {
     const [countryCode, setCountryCode] = useState('');
     const [password, setPassword] = useState('');
     const [showErrors, setShowErrors] = useState(false);
+    const [showEmailInvalid, setShowEmailInvalid] = useState(false);
     const countryFlags = React.createRef();
 
     useEffect(() => {
-        fetch('http://ip-api.com/json')
+        fetch('https://ipapi.co/json/')
             .then(res => res.json())
             .then(json => {
                 if (countryFlags.current) {
-                    countryFlags.current.updateSelected(json.countryCode);
+                    countryFlags.current.updateSelected(json.country);
+                    setCountryCode(json.country);
                 }
             });
     });
+
+    function validateEmail(emailField){
+        let reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
+        if (reg.test(emailField) == false) 
+        {
+            return false;
+        }
+
+        return true;
+
+    }
 
     function signupUser() {
         const { dispatch, history } = props; 
@@ -38,12 +52,13 @@ function SignUp(props) {
             countryCode,
             password,
         };
-
+        const isEmailValid = validateEmail(email);
         if (
             userName
             && email
             && countryCode
             && password
+            && isEmailValid
         ) {
             userSignUp(data)
             .then(json => {
@@ -56,23 +71,34 @@ function SignUp(props) {
                 }
             });
         } else {
-            setShowErrors(true);
+            if (email && password && userName) {
+                setShowEmailInvalid(true);
+            } else {
+                setShowErrors(true);
+            }
+            
         }
     }
 
     function renderErrorFields() {
-        if (showErrors && (!password || !email || !userName)) {
+        if (!showEmailInvalid) {
+            if (showErrors && (!password || !email || !userName)) {
+                return (
+                    <p style={{ color: 'red' }}>Please fill all the fields</p>
+                )
+            }
+    
+            if (showErrors && (password && email && userName)) {
+                return (
+                    <p style={{ color: 'red' }}>Email already exist</p>
+                )
+            }
+        } else {
             return (
-                <p style={{ color: 'red' }}>Please fill all the fields</p>
+                <p style={{ color: 'red' }}>Please eneter a valid email</p>
             )
         }
-
-        if (showErrors && (password && email && userName)) {
-            return (
-                <p style={{ color: 'red' }}>Email already exist</p>
-            )
-        }
-
+     
         return null;
     } 
 
@@ -81,7 +107,6 @@ function SignUp(props) {
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>Signalant - Sign Up</title>
-                <link rel="canonical" href="http://mysite.com/example" />
             </Helmet>
             <Segment style={{ width: '60%', height: 500, borderRadius: 10, backgroundColor: '#ffffff' }} raised>
                 <Grid>
@@ -107,9 +132,9 @@ function SignUp(props) {
                                     borderBottomLeftRadius: 10
                                 }}
                             >
-                               <h1>Sign In</h1>
+                               <h1>Sign Up</h1>
                                <p style={{ fontSize: 16 }}>By Signing Up, you can avail full features of our services.</p>
-                               <p style={{ fontSize: 16, marginTop: 20 }}>Get an account!!!</p> 
+                               <p style={{ fontSize: 16, marginTop: 20 }}>Already have an account? <a href="#/sign-in" style={{ color: '#fff', textDecoration: 'underline', pointer: 'cursor' }}>Sign In</a></p> 
                                <img 
                                     src="https://res.cloudinary.com/dgvup74b7/image/upload/v1565302530/h6auuysxte0jayf1ro9t.png" 
                                     style={{ height: 40, marginTop: 140 }} 

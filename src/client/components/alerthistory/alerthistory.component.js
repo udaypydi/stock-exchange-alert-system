@@ -3,7 +3,9 @@ import { Segment, Divider, Tab, Responsive } from 'semantic-ui-react';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import AlerstHistoryMobile from './alerthistory.mobile.component';
+
 import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import { fetchAlertsHistory } from './alerthistory.action';
@@ -76,6 +78,11 @@ function AlerstHistory(props) {
 
     return (
         <React.Fragment>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Signalant - Alerts History</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
             <Responsive minWidth={701}>
                 <div>
                     <Header />

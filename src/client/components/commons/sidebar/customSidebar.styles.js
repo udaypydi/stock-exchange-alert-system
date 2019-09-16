@@ -16,7 +16,7 @@ const styles = {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        color: #545454;
+        color: #9c9fa6;
         font-size: 14px;
         height: 50px;
         padding-left: 20px;

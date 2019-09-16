@@ -3,6 +3,7 @@ import { Segment, Button, Divider, Responsive, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { toggleLoadingStatus } from './autosignalform/autosignalform.action';
+import { Helmet } from 'react-helmet';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
@@ -24,6 +25,11 @@ function AutoSignal(props) {
 
     return (
         <div style={{ backgroundColor: '#222840'}}>
+             <Helmet>
+                <meta charSet="utf-8" />
+                <title>Signalant - Indicator Signals</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
             <Header />
             <Responsive minWidth={701}>
                 <CustomSidebar />

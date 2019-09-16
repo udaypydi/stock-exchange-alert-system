@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Segment, Icon, Responsive } from 'semantic-ui-react';
 import CountUp from 'react-countup';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import {
     AreaChart,
     Area,
@@ -220,7 +221,7 @@ function renderLatestAlerts() {
         }, 4000);
     },[latestAlerts.length]);
 
-    return latestAlerts.reverse().map(alert => (
+    return latestAlerts.map(alert => (
         <div 
             style={{ 
                 backgroundColor: '#131633', 
@@ -297,6 +298,11 @@ function DashboardHome(props) {
 
     return (
         <div css={styles.container} style={{ marginRight: sidebar.sidebarOpen ? 0 : 30 }}>
+             <Helmet>
+                <meta charSet="utf-8" />
+                <title>Signalant - Dashboard</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
             <Header />
             <Responsive minWidth={701}>
                 <CustomSidebar />

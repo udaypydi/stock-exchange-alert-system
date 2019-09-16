@@ -11,14 +11,32 @@ function AddWidgetModal(props) {
   const [showWidgetsModal, setShowWidgetsModal] = useState(false);
   const [widgetsColor, setWidgetsColor] = useState('');
   const [selectedCurrencyOptions, setSelectedCurrencyOptions] = useState([]);
+  
+  const { activeGraphs } = props.user;
 
   function handleClick() {
     console.log('icon clicked');
     setShowWidgetsModal(!showWidgetsModal);
   }
 
+  function generateCurrencyOptions(activeGraphs) {
+    const currencyGraphsArray = [];
+
+    Object.keys(CURRENCY_OPTIONS).forEach(currency => {
+      if (activeGraphs.indexOf(currency) === -1) {
+        currencyGraphsArray.push({
+          key: currency,
+          name: currency,
+          text: currency,
+          value: currency,
+        });
+      }
+    });
+
+    return currencyGraphsArray;
+  }
+
   function saveGraphData() {
-      const { activeGraphs } = props.user;
 
       const currencyGraphs = selectedCurrencyOptions.map(currency => {
           return {
@@ -155,7 +173,7 @@ function AddWidgetModal(props) {
               multiple
               selection
               placeholder="Select currency pair"
-              options={CURRENCY_OPTIONS}
+              options={generateCurrencyOptions(activeGraphs)}
               style={{ marginTop: 20, width: 250 }}
               onChange={(event, data) => {
                   setSelectedCurrencyOptions(data.value);

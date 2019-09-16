@@ -57,15 +57,19 @@ function CustomSideBar(props) {
             >
                 <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
                 <div css={styles.profileImageContainer}>
-                    <Image 
-                        src={user.profilePic || 'https://solarman.in/wp-content/themes/micron/images/placeholders/placeholder_large.jpg'} 
-                        size='tiny' 
-                        circular
-                        style={{
-                            height: '50px',
-                            width: '50px'
-                        }}
-                    />
+                    {
+                        user.name && (
+                            <Image 
+                                src={user.profilePic || require(`../../../assets/${user.name.split('')[0].toUpperCase()}-01.png`)}
+                                size='tiny' 
+                                circular
+                                style={{
+                                    height: '50px',
+                                    width: '50px'
+                                }}
+                            />
+                        )
+                    }
                     <p css={styles.profileType}>{user.name}</p>
                 </div>
                 {
@@ -103,15 +107,20 @@ function CustomSideBar(props) {
             >
                 <p css={styles.sidebarHeader}>{SIDEBAR_HEADER}</p>
                 <div css={styles.profileImageContainer}>
-                    <Image 
-                        src={user.profilePic || 'https://solarman.in/wp-content/themes/micron/images/placeholders/placeholder_large.jpg'} 
-                        size='tiny' 
-                        circular
-                        style={{
-                            height: '50px',
-                            width: '50px'
-                        }}
-                    />
+                    {
+                        user.name && (
+                            <Image 
+                                src={user.profilePic || require(`../../../assets/${user.name.split('')[0].toUpperCase()}-01.png`)}
+                                size='tiny' 
+                                circular
+                                style={{
+                                    height: '50px',
+                                    width: '50px'
+                                }}
+                            />
+                        )
+                    }
+                    
                 </div>
                 {
                     SIDEBAR_MENU.map((sidebarElement, index) => (

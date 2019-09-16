@@ -28,7 +28,7 @@ function MobileHeader(props) {
     return (
         <div css={styles.headerContainer} style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Icon style={iconStyles} name={sideBar.mobileSidebarOpen ? "outdent" : 'indent'}  onClick={handleSideBarToggle} />
-            <img src={COMPANY_LOGO} height={47} />
+            <img src={'https://res.cloudinary.com/dgvup74b7/image/upload/v1565302530/h6auuysxte0jayf1ro9t.png'} height={40} />
             <Icon 
                 css={styles.sidebarIcon} 
                 name="shutdown" 

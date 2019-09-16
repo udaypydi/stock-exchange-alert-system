@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Grid, Segment, Input, Checkbox, Button, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
+import { Helmet } from "react-helmet";
   /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
@@ -31,6 +32,11 @@ function Auth(props) {
 
     return (
         <div css={styles.container}>
+             <Helmet>
+                <meta charSet="utf-8" />
+                <title>Signalant - Sign In</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
             <Segment 
                 style={{ 
                     width: '60%', 

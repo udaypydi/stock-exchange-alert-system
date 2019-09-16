@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Segment, Button, Divider, Icon, Responsive } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 // import { toggleLoadingStatus } from './autosignalform/autosignalform.action';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 /** @jsx jsx */
@@ -30,6 +31,11 @@ function ExpertSignal(props) {
 
     return (
         <React.Fragment>
+             <Helmet>
+                <meta charSet="utf-8" />
+                <title>Signalant - My Expert Signals</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
             <Responsive minWidth={701}>
                 <div style={{ backgroundColor: '#222840' }}>
                     <Header />

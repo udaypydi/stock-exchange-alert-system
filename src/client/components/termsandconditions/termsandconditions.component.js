@@ -15,6 +15,11 @@ export default function TermsAndConditions(props) {
             <p>When receiving email or text messages on your phone, please note that standard or additional text-messaging/SMS/email-to-sms/mms rates apply. Signalant sends messages to the address you specify and will not be held responsible for any charges you incur from your mobile provider as a result of receiving these messages on your mobile phone. </p>
             <p>Check with your carrier and mobile plan to get details on your incoming sms/text/mms/email-to-sms rates.</p>
             <p>Signalant reserves the right to close/disable any alert or account for any reason including, but not limited to abuse or copyright infringement. </p>
+            
+            <br />
+            <br />
+            <h1>Signalant Privacy Policy</h1>
+            <p>For information regarding how we treat personal information of our users, please see the <a href="/#/privacy-policy">Signalant Privacy Policy</a></p>
         </div>
     )
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Segment, Image, Icon, Responsive } from 'semantic-ui-react';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import Header from 'commons/header/header.component';
@@ -95,6 +96,11 @@ function FollowExperts(props) {
 
     return (
         <React.Fragment>
+             <Helmet>
+                <meta charSet="utf-8" />
+                <title>Signalant - Follow Experts</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
             <Responsive minWidth={701}>
                 <div>
                     <Header />

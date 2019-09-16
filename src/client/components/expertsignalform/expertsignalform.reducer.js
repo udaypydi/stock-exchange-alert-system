@@ -18,10 +18,7 @@ export default function ExpertSignalFormReducer(state = EXPERT_SIGNAL_FORM_INITI
                 ...state,
                 signalName: action.value,
             };
-        
-        case EXPERT_SIGNAL_INDICATOR_CHANGE:
-            return { ...state, indicator: action.value };
-        
+ 
         case EXPERT_SIGNAL_CURRENCY_CHANGE:
             return { ...state, currencyPair: action.value };
 
@@ -33,19 +30,7 @@ export default function ExpertSignalFormReducer(state = EXPERT_SIGNAL_FORM_INITI
                 ...state,
                 alerts: action.value,
             };
-            
-        case EXPERT_SIGNAL_INDICATOR_PARAM_CHANGE: {
-            const { payload } = action;
-            const { key, value } = payload;
 
-            return {
-                ...state,
-                indicatorParameters: {
-                    ...state.indicatorParameters,
-                    [key]: value,
-                },
-            };
-        }
 
         case PROFIT_LOSS_CHANGE: {
             let newState = { ...state };

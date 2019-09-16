@@ -38,13 +38,7 @@ function Header(props) {
                         />
                         {
                             sideBar.sidebarOpen && (
-                                <p style={{ 
-                                    fontWeight: 'bold', 
-                                    fontSize: 40, 
-                                    color: '#b1b1b5',
-                                    marginLeft: 5,
-                                    letterSpacing: 1,
-                                }}>Signalant</p>
+                                <img src={'https://res.cloudinary.com/dgvup74b7/image/upload/v1565302530/h6auuysxte0jayf1ro9t.png'} height={40} />
                             )
                         }    
                     </div>
@@ -52,7 +46,7 @@ function Header(props) {
                         css={styles.sidebarIcon} 
                         name="shutdown" 
                         color="white"
-                        style={{ fontSize: 22, color: '#b1b1b5' }}
+                        style={{ fontSize: 22, color: '#b1b1b5', cursor: 'pointer' }}
                         onClick={handleLogOut}
                     />
                 </div>

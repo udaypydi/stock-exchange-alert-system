@@ -251,25 +251,34 @@ export const TOGGLE_LOADING_STATE = 'TOGGLE_LOADING_STATE';
 export const NOTIFY_SUCCESS_ACTION = 'NOTIFY_SUCCESS_ACTION';
 
 // Reducer form state 
-
 export const EXPERT_SIGNAL_FORM_INITIAL_STATE = {
+    signalName: '',
     currencyPair: '',
-    alerts: '',
-    tradeLots: '',
-    indicator: '',
-    indicatorParameters: {
-        period: '',
-        ohlc: '',
-        fast: '',
-        slow: '',
-        signal: '',
-        level: '',
-        deviation: '', 
+    price: '',
+    alerts: [],
+    timeFrame: '',
+    timeBetweenAlerts: '',
+    timeOutHours: 3,
+    executionLimit: {
+        total: '',
+        daily: '',
     },
     stopLoss: '',
     targetProfit: '',
-    signalName: '',
     addToProfile: true,
-    isLoading: false,
-    isSuccess: false,
 };
+
+export const expiryTimeOptions = () => {
+    let expiryTimeOptions = [];
+    for (let i = 2; i <= 20; i = i + 2) {
+        expiryTimeOptions.push({
+            name: i,
+            text: `${i} days` ,
+            value: i,
+        });
+    }
+
+    return expiryTimeOptions;
+}
+
+export const sampleData = [{"symbol":"XAUUSD","bid":1488,"ask":1489.5,"price":1488.75,"timestamp":1568465823},{"symbol":"XAGUSD","bid":17.433,"ask":17.464,"price":17.4485,"timestamp":1568465823},{"symbol":"EURUSD","bid":1.1074,"ask":1.1076,"price":1.1075,"quota_used":5749,"timestamp":1568465823},{"symbol":"GBPUSD","bid":1.24978,"ask":1.2507,"price":1.25024,"timestamp":1568465823},{"symbol":"AUDUSD","bid":0.68753,"ask":0.68858,"price":0.688055,"timestamp":1568465823},{"symbol":"NZDUSD","bid":0.63739,"ask":0.63827,"price":0.63783,"timestamp":1568465823},{"symbol":"USDCAD","bid":1.3285,"ask":1.32897,"price":1.32873,"timestamp":1568465823},{"symbol":"USDCHF","bid":0.9897,"ask":0.9906,"price":0.99015,"timestamp":1568465823},{"symbol":"USDJPY","bid":108.057,"ask":108.155,"price":108.106,"timestamp":1568465823},{"symbol":"EURGBP","bid":0.88552,"ask":0.88612,"price":0.88582,"timestamp":1568465823},{"symbol":"EURCHF","bid":1.0958,"ask":1.09704,"price":1.09642,"timestamp":1568465823},{"symbol":"EURJPY","bid":119.694,"ask":119.747,"price":119.7205,"timestamp":1568465823}];

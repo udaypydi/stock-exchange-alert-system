@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Segment, Image, Icon, Divider, Button, Responsive } from 'semantic-ui-react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
@@ -14,7 +15,6 @@ import { expertsFollow } from 'components/followexperts/followexperts.action';
 import MyProfileMobile from './myprofile.mobile.component';
 import styles from './myprofile.styles';
 
-
 class MyProfile extends Component {
     state = {
         imageUploadType: '',
@@ -28,7 +28,7 @@ class MyProfile extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
         if (window.screen.availWidth > 700) {
-            dispatch(sideBarToggleStatus());
+            // dispatch(sideBarToggleStatus());
             dispatch(getUserState());
 
             fetchAlertsCount()
@@ -40,10 +40,6 @@ class MyProfile extends Component {
     
             document.getElementById('location').addEventListener('input', (event) => {
                 this.setState({ location: event.target.innerHTML });
-            });
-    
-            document.getElementById('phone-number').addEventListener('input', (event) => {
-                this.setState({ phoneNumber: event.target.innerHTML });
             });
     
             document.getElementById('email').addEventListener('input', (event) => {
@@ -99,8 +95,8 @@ class MyProfile extends Component {
                     textAlign: "center",
                     position: "absolute",
                     left: 50,
-                    top: 220,
-                    marginLeft: sidebar.sidebarOpen ? 220 : 60,
+                    top: 250,
+                    marginLeft: sidebar.sidebarOpen ? 240 : 60,
                     zIndex: 9999,
                     backgroundColor: '#131633',
                     border: '1px solid #34426f',
@@ -108,17 +104,22 @@ class MyProfile extends Component {
                 }}
                 raised
             >
-                 <img
-                    height={150}
-                    width={150}
-                    style={{
-                        borderRadius: "1%",
-                        height: 100,
-                        width: 100,
-                    }}
-                    onClick={() => this.handleProfilePicUpload('profile')}
-                    src={user.profilePic || 'https://www.agora-gallery.com/advice/wp-content/uploads/2015/10/image-placeholder-300x200.png'}
-                />
+                {
+                    user.name && (
+                        <img
+                            height={150}
+                            width={150}
+                            style={{
+                                borderRadius: "50%",
+                                height: 100,
+                                width: 100,
+                            }}
+                            onClick={() => this.handleProfilePicUpload('profile')}
+                            src={user.profilePic || require(`../../assets/${user.name.split('')[0].toUpperCase()}-01.png`)}
+                        />
+                    )
+                }
+                 
                 <div style={{ flexDirection: 'column' }}>
                     {
                         !this.state.formEdit && (
@@ -179,26 +180,6 @@ class MyProfile extends Component {
                             contentEditable={this.state.formEdit}
                         >{user.location}</p>
                     </div>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "flex-start",
-                            fontSize: 17,
-                            margin: 10,
-                            marginLeft: 20,
-                            color: '#9c9fa6',
-                        }}
-                    >
-                        <Icon name="call" />
-                        <p 
-                            contentEditable={this.state.formEdit} 
-                            style={{ 
-                                width: 200, 
-                                border: this.state.formEdit ? '1px solid #ccc' : '' 
-                            }}
-                            id="phone-number"
-                        >{user.phoneNumber || '-'}</p>
-                    </div>
                     {
                         this.state.formEdit && (
                             <Button 
@@ -230,6 +211,11 @@ class MyProfile extends Component {
 
         return (
             <React.Fragment>
+                <Helmet>
+                    <meta charSet="utf-8" />
+                    <title>Signalant - My Profile</title>
+                    <link rel="canonical" href="http://mysite.com/example" />
+                </Helmet>
                 <Responsive minWidth={701}>
                 <div>
                     <Header />
@@ -255,7 +241,7 @@ class MyProfile extends Component {
                 >
                     <div
                         style={{
-                            marginLeft: 30,
+                            marginLeft: sidebar.sidebarOpen ? 300: 30,
                             paddingRight: 20,
                             borderRight: "1px solid #ccc"
                         }}
@@ -317,12 +303,13 @@ class MyProfile extends Component {
                             display: "flex",
                             justifyContent: "center",
                             flex: 1,
-                            marginTop: 40
+                            marginTop: 40,
+                            marginLeft: 35,
                         }}
                     >
                     <Segment
                         style={{
-                            width: 400,
+                            width: 360,
                             height: 400,
                             marginRight: 20,
                             padding: 0,
@@ -384,7 +371,7 @@ class MyProfile extends Component {
                     </Segment>
                     <Segment
                             style={{
-                                width: 400,
+                                width: 360,
                                 height: 400,
                                 marginRight: 20,
                                 padding: 0,
@@ -445,7 +432,7 @@ class MyProfile extends Component {
                         </Segment>
                         <Segment
                             style={{
-                                width: 400,
+                                width: 360,
                                 height: 400,
                                 marginRight: 20,
                                 padding: 0,

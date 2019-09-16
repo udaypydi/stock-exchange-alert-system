@@ -19,7 +19,7 @@ import MyProfile from 'components/myprofile/myprofile.component';
 import { getUser } from 'components/home/home.api';
 import { getUserState } from 'components/home/home.action';
 import TermsAndConditions from 'components/termsandconditions/termsandconditions.component';
-
+import PrivacyPolicy from 'components/privacypolicy/privacypolicy.component';
 // class AppWrapper extends Component {
 //     render() {
 
@@ -55,6 +55,7 @@ class AppRouter extends Component {
                 <Route path="/expert-signal-list" component={ExpertSignalsList} exact />
                 <Route path='/price-alerts-list' component={PriceAlertsList} exact />
                 <Route path='/terms-and-conditions' component={TermsAndConditions} exact />
+                <Route path='/privacy-policy' component={PrivacyPolicy} exact />
             </Router>
         )
     }

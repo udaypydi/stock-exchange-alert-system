@@ -11,9 +11,7 @@ import {
     Responsive,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import DatePicker from 'react-datepicker';
-import TimezonePicker from 'react-timezone';
-import MailConfigurationForm from 'commons/mailconfiguration/mailconfiguration.component';
+import { Helmet } from 'react-helmet';
 import AlertTiming from 'commons/alerttiming/alerttiming.component';
 import Header from 'commons/header/header.component';
 import Loader from 'commons/preLoader/preloader.component';
@@ -231,7 +229,7 @@ function renderAutoSignalForm(props) {
                                     {
                                         activeElement === 'SIGNAL_NAME' && (
                                             <div class="tooltip">
-                                                <Icon name='info circle' />
+                                                <Icon name='info circle'  style={{ color: '#fff' }}/>
                                                 <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_NAME']}</span>
                                             </div>
                                         )
@@ -255,7 +253,7 @@ function renderAutoSignalForm(props) {
                                     {
                                         activeElement === 'CURRENCY_PAIR' && (
                                             <div class="tooltip">
-                                                <Icon name='info circle' />
+                                                <Icon name='info circle'  style={{ color: '#fff' }}/>
                                                 <span class="tooltiptext">{FORM_TOOLIPS['CURRENCY_PAIR']}</span>
                                             </div>
                                         )
@@ -276,7 +274,7 @@ function renderAutoSignalForm(props) {
                                     {
                                         activeElement === 'TIME_FRAME' && (
                                             <div class="tooltip">
-                                                <Icon name='info circle' />
+                                                <Icon name='info circle'  style={{ color: '#fff' }}/>
                                                 <span class="tooltiptext">{FORM_TOOLIPS['TIME_FRAME']}</span>
                                             </div>
                                         )
@@ -293,7 +291,7 @@ function renderAutoSignalForm(props) {
                                     {
                                         activeElement === 'SIGNAL_TYPE' && (
                                             <div class="tooltip">
-                                                <Icon name='info circle' />
+                                                <Icon name='info circle'  style={{ color: '#fff' }}/>
                                                 <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_TYPE']}</span>
                                             </div>
                                         )
@@ -317,7 +315,7 @@ function renderAutoSignalForm(props) {
                                      {
                                         activeElement === 'INDICATOR' && (
                                             <div class="tooltip">
-                                                <Icon name='info circle' />
+                                                <Icon name='info circle'  style={{ color: '#fff' }}/>
                                                 <span class="tooltiptext">{FORM_TOOLIPS['INDICATOR']}</span>
                                             </div>
                                         )
@@ -468,6 +466,11 @@ function renderAutoSignalForm(props) {
 function AutoSignalFormComponent(props) {
     return (
         <React.Fragment>
+             <Helmet>
+                <meta charSet="utf-8" />
+                <title>Signalant - Create Indicator Signals</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
             <Responsive minWidth={701}>
                 <div style={{ backgroundColor: '#222840' }}>
                     <p>Create AutoSignals</p>

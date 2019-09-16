@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Segment, Icon, Button, Responsive, Divider } from 'semantic-ui-react';
+import { Helmet } from 'react-helmet';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import Header from 'commons/header/header.component';
@@ -25,6 +26,11 @@ function PriceAlertsList(props) {
 
     return (
         <div style={{ marginTop: 30 }}>
+             <Helmet>
+                <meta charSet="utf-8" />
+                <title>Signalant - Price Alerts</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
             <Header />
             <Responsive minWidth={701}>
                 <CustomSidebar />

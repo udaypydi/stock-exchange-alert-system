@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
     Divider,
-    Dropdown, 
-    Radio, 
-    Input, 
-    Button, 
+    Dropdown,
+    Radio,
+    Input,
+    Button,
     Segment,
     Message,
     Icon,
     Responsive,
+    Checkbox,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import Loader from 'commons/preLoader/preloader.component';
 import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
@@ -21,16 +23,19 @@ import ExpertSignalFormMobileComponent from './expertsignalform.mobile.component
 import "react-datepicker/dist/react-datepicker.css";
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { 
-    CURRENCY_OPTIONS, 
-    INDICATOR_CONSTANTS, 
+import {
+    CURRENCY_OPTIONS,
+    INDICATOR_CONSTANTS,
     INDICATOR_KEY_VALUE_MAP,
     OHLC,
     MACD_PARAMETERS,
     FORM_TOOLIPS,
+    TIMEFRAME_OPTIONS,
+    expiryTimeOptions,
+    sampleData,
 } from './expertsignalform.constant';
-import { 
-    expertSignalNameChange, 
+import {
+    expertSignalNameChange,
     submitExpertSignalData,
     expertSignalIndicatorChange,
     devitaionConstantGenerator,
@@ -51,7 +56,17 @@ function renderExpertSignal(props) {
     const [showErrors, setShowErrors] = useState(false);
     const [errorMessage, setErrorMessage] = useState('Please fill all the form fields.');
     const [showErrorNotification, setshowErrorNotification] = useState(false);
-    const {    
+    const [currentMarketPrice, setCurrentMarketPrice] = useState({});
+    const [selectedCurrencyPairPrice, setSelectedCurrencyPairPrice] = useState('');
+    const [stopLossPrice, setStopLossPrice] = useState('');
+    const [targetProfitPrice, setTargetProfitPrice] = useState('');
+    const [selectedCurrencyPairPriceCount, setSelectedCurrencyPairPriceCount] = useState(0);
+    const [targetProfitPriceCount, settargetProfitPriceCount] = useState(0);
+    const [stopLossPriceCount, setStopLossPriceCount] = useState(0);
+    const [expiryTime, setExpiryTime] = useState('');
+    const [timeFrame, setTimeFrame] = useState('');
+
+    const {
         currencyPair,
         alerts,
         indicator,
@@ -66,82 +81,51 @@ function renderExpertSignal(props) {
     } = props.expertSignal;
     const { signalMail, signalTiming, sidebar } = props;
 
-    const {
-        period,
-        ohlc,
-        fast,
-        slow,
-        signal,
-        level,
-        deviation, 
-    } = indicatorParameters;
-
 
     useEffect(() => {
         const { dispatch } = props;
         if (isLoading) {
             dispatch(toggleLoadingStatus());
         }
+
+        const currencyPairPrices = {};
+        sampleData.forEach(currency => {
+            currencyPairPrices[currency.symbol] = currency.price;
+        });
+        setCurrentMarketPrice(currencyPairPrices);
+
+        // fetch(`https://forex.1forge.com/1.0.3/quotes?pairs=XAUUSD,XAGUSD,EURUSD,GBPUSD,AUDUSD,NZDUSD,USDCAD,USDCHF,USDJPY,EURGBP,EURCHF,EURJPY&api_key=uD3ghInLCfnn7gsSKAwV3D1nnp1X55x8`)
+        //     .then(res => res.json())
+        //     .then(json => {
+        //         const currencyPairPrices = {};
+        //         json.forEach(currency => {
+        //             currencyPairPrices[currency.symbol] = currency.price;
+        //         })
+        //         setCurrentMarketPrice(currencyPairPrices);
+        //     })
     }, []);
 
     function isFormDataValid() {
         const { signalTiming } = props;
         if (
-            currencyPair 
-            && signalName 
-            && alerts.length 
+            currencyPair
+            && signalName
+            && alerts
             && indicator
             && stopLoss
             && targetProfit
-            && signalTiming.total
-            && signalTiming.daily
-            && signalTiming.total >= signalTiming.daily
+            && expiryTime
         ) {
-            if (indicator === 'rsi') {
-                if (indicatorParameters.level && indicatorParameters.period) {
-                    return true;
-                }
-            } else if (indicator === 'bollinger_bands') {
-                if (indicatorParameters.ohlc && indicatorParameters.period && indicatorParameters.deviation) {
-                    return true;
-                }
-            } else if (indicator === 'simple_moving_average' || indicator === 'exponential_moving_average') {
-                if (indicatorParameters.ohlc && indicatorParameters.period) {
-                    return true;
-                }
-            } else if (indicator === 'macd') {
-                const {
-                    ohlc,
-                    fast,
-                    slow,
-                    signal,
-                } = indicatorParameters;
-                if (ohlc && fast && slow && signal) {
-                    return true;
-                }
-            }
+            return true;
         }
 
-        if (
-            currencyPair 
-            && signalName 
-            && alerts.length 
-            && indicator
-            && stopLoss
-            && targetProfit
-            && signalTiming.total
-            && signalTiming.daily
-            && signalTiming.total < signalTiming.daily
-        ) {
-            setErrorMessage('Total count should be more or equal to daily count');
-        }
         return false;
     }
 
     function handleSignalNameChange(event) {
         const { dispatch } = props;
-        const { value } = event.target; 
-        dispatch(expertSignalNameChange(value))  
+        const { value } = event.target;
+        dispatch(expertSignalNameChange(value))
     }
 
     function handleSubmitFormData() {
@@ -162,6 +146,7 @@ function renderExpertSignal(props) {
     function handleCurrencyPairChange(event, data) {
         const { dispatch } = props;
         dispatch(expertSignalCurrencyChange(data.value));
+        setSelectedCurrencyPairPrice(currentMarketPrice[data.value]);
     }
 
     function handleTimeFrameChange(event, data) {
@@ -175,13 +160,43 @@ function renderExpertSignal(props) {
     }
 
     function handleIndicatorChange(event, data) {
-        const { dispatch }  = props;
+        const { dispatch } = props;
         dispatch(expertSignalIndicatorChange(data.value));
+    }
+
+    function getStopLossTargetProfit(key) {
+        let stopLossProfit = {};
+
+        if (key === 'buy') {
+            stopLossProfit = {
+                stopLoss: currentMarketPrice[currencyPair] * 99 / 100,
+                targetProfit: currentMarketPrice[currencyPair] * 101 / 100
+            }
+        } else {
+            stopLossProfit = {
+                stopLoss: currentMarketPrice[currencyPair] * 101 / 100,
+                targetProfit: currentMarketPrice[currencyPair] * 99 / 100
+            }
+        }
+
+        return stopLossProfit;
+    }
+
+    function setStopLossTargetProfit(key) {
+        if (key === 'buy') {
+            setStopLossPrice(selectedCurrencyPairPrice * 99 / 100);
+            setTargetProfitPrice(selectedCurrencyPairPrice * 101 / 100);
+        } else {
+            setStopLossPrice(selectedCurrencyPairPrice * 101 / 100);
+            setTargetProfitPrice(selectedCurrencyPairPrice * 99 / 100);
+        }
     }
 
     function handleAlertsSelect(key) {
         const { dispatch } = props;
         dispatch(expertSignalAlertsSelect(key));
+        setStopLossTargetProfit(key);
+        setSelectedCurrencyPairPriceCount(0);
     }
 
     function handleSignalTimeFrameChange(value, key) {
@@ -217,359 +232,372 @@ function renderExpertSignal(props) {
             }
             {
                 !isLoading && !isSuccess ? (
-                <div css={styles.container}>
-                    <Segment 
-                        fluid 
-                        basic
-                        style={{ 
-                            width: sidebar.sidebarOpen ? 1000 : 1200, 
-                            backgroundColor: '#131633',
-                            border: '1px solid #313452',
-                        }}
-                    >
-                        <div>
-                            <div css={styles.headerContainer}>
-                                <div>
-                                    <p style={{ color: '#9c9fa6', fontSize: 20, fontWeight: 'bold' }}>Create Expert Signals</p>
+                    <div css={styles.container}>
+                        <Segment
+                            fluid
+                            basic
+                            style={{
+                                width: sidebar.sidebarOpen ? 1000 : 1200,
+                                backgroundColor: '#131633',
+                                border: '1px solid #313452',
+                            }}
+                        >
+                            <div>
+                                <div css={styles.headerContainer}>
+                                    <div>
+                                        <p style={{ color: '#9c9fa6', fontSize: 20, fontWeight: 'bold' }}>Create Expert Signals</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <Divider />
-                            <div style={{ marginLeft: 60, marginRight: 60 }}>
-                                <div css={styles.formContainer}>
-                                    <input 
-                                        fluid 
-                                        style={{ 
-                                            width: '100%', 
-                                            margin: 10, 
-                                            backgroundColor: '#2b2e4c',
-                                            padding: 10,
-                                            border: 0, 
-                                        }}
-                                        placeholder='Signal name (ex: My golden crossover)' 
-                                        value={signalName}
-                                        onChange={handleSignalNameChange}
-                                        error={showErrors && !signalName}
-                                        onFocus={() => setActiveElement('SIGNAL_NAME')}
-                                        onBlur={() => setActiveElement('')}
-                                    /> 
-                                    {
-                                        activeElement === 'SIGNAL_NAME' && (
-                                            <div class="tooltip">
-                                                <Icon name='info circle' />
-                                                <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_NAME']}</span>
-                                            </div>
-                                        )
-                                    }       
-                                </div>
-                                <div css={styles.formContainer}>
-                                    <Dropdown
-                                        placeholder='Add currency pair'
-                                        fluid
-                                        search
-                                        selection
-                                        options={CURRENCY_OPTIONS} 
-                                        css={styles.dropdownContainer}
-                                        text={currencyPair}
-                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
-                                        error={showErrors && !currencyPair}
-                                        onChange={handleCurrencyPairChange}
-                                        onFocus={() => setActiveElement('CURRENCY_PAIR')}
-                                        onBlur={() => setActiveElement('')}
-                                    />
-                                    {
-                                        activeElement === 'CURRENCY_PAIR' && (
-                                            <div class="tooltip">
-                                                <Icon name='info circle' />
-                                                <span class="tooltiptext">{FORM_TOOLIPS['CURRENCY_PAIR']}</span>
-                                            </div>
-                                        )
-                                    }    
-
-                                    <Segment 
-                                        style={{ 
-                                            width: '50%', 
-                                            justifyContent: 'space-evenly', 
-                                            display: 'flex', 
-                                            margin: 10, 
-                                            color: '#9c9fa6' 
-                                        }}
-                                        onFocus={() => setActiveElement('SIGNAL_TYPE')}
-                                        onBlur={() => setActiveElement('')}
-                                        error={showErrors && !alerts.length}
-                                        basic
-                                    >
-                                        <Radio 
-                                            name='radioGroup' 
-                                            onChange={() => handleAlertsSelect('buy')} 
-                                            checked={alerts === 'buy'}
-                                            style={{ 
-                                                color: '#9c9fa6',
+                                <Divider />
+                                <div style={{ marginLeft: 60, marginRight: 60 }}>
+                                    <div css={styles.formContainer}>
+                                        <input
+                                            fluid
+                                            style={{
+                                                width: '100%',
+                                                margin: 10,
+                                                backgroundColor: '#2b2e4c',
+                                                padding: 10,
+                                                border: 0,
                                             }}
+                                            placeholder='Signal name (ex: My golden crossover)'
+                                            value={signalName}
+                                            onChange={handleSignalNameChange}
+                                            error={showErrors && !signalName}
+                                            onFocus={() => setActiveElement('SIGNAL_NAME')}
+                                            onBlur={() => setActiveElement('')}
                                         />
-                                        <label 
-                                            style={{ 
-                                                color: '#9c9fa6',
-                                            }}
-                                        >Buy Alerts</label>
-                                        <Radio 
-                                            name='radioGroup' 
-                                            onChange={() => handleAlertsSelect('sell')} 
-                                            checked={alerts === 'sell'} 
-                                            style={{ 
-                                                color: '#9c9fa6',
-                                            }}
-                                        />
-                                        <label
-                                            style={{ 
-                                                color: '#9c9fa6',
-                                            }}
-                                        >Sell Alerts</label>
-                                    </Segment>
-                                    {
-                                        activeElement === 'SIGNAL_TYPE' && (
-                                            <div class="tooltip">
-                                                <Icon name='info circle' />
-                                                <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_TYPE']}</span>
-                                            </div>
-                                        )
-                                    } 
-                                </div>
-                                <div css={styles.formContainer}>
-                                    <input 
-                                        fluid 
-                                        style={{ 
-                                            width: '50%', 
-                                            margin: 10, 
-                                            backgroundColor: '#2b2e4c',
-                                            padding: 10,
-                                            border: 0, 
-                                        }}
-                                        placeholder='Trade Lots' 
-                                        value={tradeLots}
-                                        onChange={handleTradeLotsChange}
-                                        error={showErrors && !tradeLots}
-                                        onFocus={() => setActiveElement('TRADE_LOTS')}
-                                        onBlur={() => setActiveElement('')}
-                                    />
-                                    {
-                                        activeElement === 'TRADE_LOTS' && (
-                                            <div class="tooltip">
-                                                <Icon name='info circle' />
-                                                <span class="tooltiptext">{FORM_TOOLIPS['TRADE_LOTS']}</span>
-                                            </div>
-                                        )
-                                    } 
-                                    <Dropdown
-                                        placeholder='Add indicator'
-                                        fluid
-                                        search
-                                        selection
-                                        options={INDICATOR_CONSTANTS} 
-                                        css={styles.dropdownContainer}
-                                        text={INDICATOR_KEY_VALUE_MAP[indicator]}
-                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
-                                        onChange={handleIndicatorChange}
-                                        error={showErrors && !indicator}
-                                        onFocus={() => setActiveElement('INDICATOR')}
-                                        onBlur={() => setActiveElement('')}
-                                    />
-                                    {
-                                        activeElement === 'INDICATOR' && (
-                                            <div class="tooltip">
-                                                <Icon name='info circle' />
-                                                <span class="tooltiptext">{FORM_TOOLIPS['INDICATOR']}</span>
-                                            </div>
-                                        )
-                                    }  
-                                </div>
-                                <div css={styles.formContainer}>
-                                    <React.Fragment>
                                         {
-                                            indicator !== 'macd' && (
-                                                <input 
-                                                    fluid 
-                                                    style={{ 
-                                                        width: '50%', 
-                                                        margin: 10, 
-                                                        backgroundColor: '#2b2e4c',
-                                                        padding: 10,
-                                                        border: 0, 
-                                                    }}
-                                                    placeholder='Period' 
-                                                    value={period}
-                                                    error={showErrors && !period}
-                                                    onChange={(event) => handleIndicatorParamsChange(event, undefined, 'period')}
-                                                />
+                                            activeElement === 'SIGNAL_NAME' && (
+                                                <div class="tooltip">
+                                                    <Icon name='info circle' style={{ color: '#ffffff' }}  />
+                                                    <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_NAME']}</span>
+                                                </div>
                                             )
                                         }
-                                        {indicator !== 'rsi' ? (
-                                            <Dropdown
-                                                placeholder='OHLC'
-                                                fluid
-                                                search
-                                                selection
-                                                options={OHLC} 
-                                                style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
-                                                css={styles.dropdownContainer}
-                                                text={ohlc}
-                                                error={showErrors && !ohlc}
-                                                onChange={(event, data) => handleIndicatorParamsChange(event, data, 'ohlc')}
-                                            />
-                                        ) : (
-                                            <input 
-                                                fluid 
-                                                style={{ 
-                                                    width: '50%', 
-                                                    margin: 10, 
-                                                    backgroundColor: '#2b2e4c',
-                                                    padding: 10,
-                                                    border: 0, 
-                                                }}
-                                                placeholder='Level' 
-                                                text={level}
-                                                error={showErrors && !level}
-                                                onChange={(event) => handleIndicatorParamsChange(event, undefined, 'level')}
-                                            />
-                                        )}
-                                        {indicator === 'bollinger_bands' && (
-                                            <Dropdown
-                                                placeholder='DEVIATION'
-                                                fluid
-                                                search
-                                                selection
-                                                options={devitaionConstantGenerator()} 
-                                                style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
-                                                css={styles.dropdownContainer}
-                                                text={deviation}
-                                                error={showErrors && !deviation}
-                                                onChange={(event, data) => handleIndicatorParamsChange(event, data, 'deviation')}
-                                            />
+                                    </div>
+                                    <div css={styles.formContainer}>
+                                        <Dropdown
+                                            placeholder='Add currency pair'
+                                            fluid
+                                            search
+                                            selection
+                                            options={CURRENCY_OPTIONS}
+                                            css={styles.dropdownContainer}
+                                            text={currencyPair}
+                                            style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }}
+                                            error={showErrors && !currencyPair}
+                                            onChange={handleCurrencyPairChange}
+                                            onFocus={() => setActiveElement('CURRENCY_PAIR')}
+                                            onBlur={() => setActiveElement('')}
+                                        />
+                                        {
+                                            activeElement === 'CURRENCY_PAIR' && (
+                                                <div class="tooltip">
+                                                    <Icon name='info circle'  style={{ color: '#fff' }}/>
+                                                    <span class="tooltiptext">{FORM_TOOLIPS['CURRENCY_PAIR']}</span>
+                                                </div>
+                                            )
+                                        }
+                                        <input
+                                            fluid
+                                            style={{
+                                                width: '45%',
+                                                margin: 10,
+                                                backgroundColor: '#2b2e4c',
+                                                padding: 10,
+                                                border: 0,
+                                                color: '#ffffff' ,
+                                            }}
+                                            value={selectedCurrencyPairPrice}
+                                            disabled
+                                            placeholder='Price'
+                                            onFocus={() => setActiveElement('PRICE')}
+                                            onBlur={() => setActiveElement('')}
+                                            error={showErrors && !price}
+                                        />
+                                        {selectedCurrencyPairPrice && (
+                                            <div>
+                                                {
+                                                     selectedCurrencyPairPriceCount <= 10 && (
+                                                        <button 
+                                                        style={{ 
+                                                            backgroundColor:  '#2b2e4c', 
+                                                            color: '#ffffff', 
+                                                            width: 25, 
+                                                            borderRadius: 5 
+                                                        }}
+                                                        onClick={() => {
+                                                            if (selectedCurrencyPairPriceCount <= 10) {
+                                                                const countIncrease = selectedCurrencyPairPriceCount + 1;
+                                                                const initialPrice = currentMarketPrice[currencyPair];
+                                                                setSelectedCurrencyPairPrice(initialPrice * (100 + countIncrease) / 100);
+                                                                setSelectedCurrencyPairPriceCount(countIncrease);
+                                                                setStopLossTargetProfit(alerts);
+                                                            }
+                                                        }}
+                                                        >+</button>
+                                                     )
+                                                }
+                                               {
+                                                   selectedCurrencyPairPrice >= 1 && (
+                                                    <button 
+                                                        style={{ 
+                                                            backgroundColor:  '#2b2e4c', 
+                                                            color: '#ffffff', 
+                                                            width: 25, 
+                                                            marginTop: 2, 
+                                                            borderRadius: 5 
+                                                        }}
+                                                        onClick={() => {
+                                                            if (selectedCurrencyPairPriceCount >= 1) {
+                                                                const countIncrease = selectedCurrencyPairPriceCount - 1;
+                                                                const initialPrice = currentMarketPrice[currencyPair];
+                                                                setSelectedCurrencyPairPrice(initialPrice * (100 + countIncrease) / 100);
+                                                                setSelectedCurrencyPairPriceCount(countIncrease);
+                                                                setStopLossTargetProfit(alerts);
+                                                            }
+                                                        }}
+                                                        >-</button>
+                                                   )
+                                               }
+                                               
+                                            </div>
                                         )
                                         }
-                                           {indicator === 'macd' && (
-                                                <div css={styles.formContainer}>
-                                                    <Dropdown
-                                                        placeholder='Fast'
-                                                        fluid
-                                                        search
-                                                        selection
-                                                        options={MACD_PARAMETERS.fast} 
-                                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
-                                                        css={styles.dropdownContainer}
-                                                        text={fast}
-                                                        error={showErrors && !fast}
-                                                        onChange={(event, data) => handleIndicatorParamsChange(event, data, 'fast')}
-                                                    />
-                                                    <Dropdown
-                                                        placeholder='Slow'
-                                                        fluid
-                                                        search
-                                                        selection
-                                                        options={MACD_PARAMETERS.slow} 
-                                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
-                                                        css={styles.dropdownContainer}
-                                                        text={slow}
-                                                        error={showErrors && !slow}
-                                                        onChange={(event, data) => handleIndicatorParamsChange(event, data, 'slow')}
-                                                    />
-                                                    <Dropdown
-                                                        placeholder='Signal'
-                                                        fluid
-                                                        search
-                                                        selection
-                                                        options={MACD_PARAMETERS.signal} 
-                                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
-                                                        css={styles.dropdownContainer}
-                                                        text={signal}
-                                                        error={showErrors && !signal}
-                                                        onChange={(event, data) => handleIndicatorParamsChange(event, data, 'signal')}
-                                                    />
+                                        
+                                    </div>
+                                    <div css={styles.formContainer}>
+                                        <input
+                                            fluid
+                                            style={{
+                                                width: '50%',
+                                                margin: 10,
+                                                backgroundColor: '#2b2e4c',
+                                                padding: 10,
+                                                border: 0,
+                                            }}
+                                            placeholder='Trade Lots'
+                                            value={tradeLots}
+                                            onChange={handleTradeLotsChange}
+                                            error={showErrors && !tradeLots}
+                                            onFocus={() => setActiveElement('TRADE_LOTS')}
+                                            onBlur={() => setActiveElement('')}
+                                        />
+                                        {
+                                            activeElement === 'TRADE_LOTS' && (
+                                                <div class="tooltip">
+                                                    <Icon name='info circle'  style={{ color: '#fff' }}/>
+                                                    <span class="tooltiptext">{FORM_TOOLIPS['TRADE_LOTS']}</span>
                                                 </div>
-                                )}
-                                    </React.Fragment>    
-                                </div>
-                                <div css={styles.formContainer}>
-                                    <input 
-                                        fluid 
-                                        style={{ 
-                                            width: '50%', 
-                                            margin: 10, 
-                                            backgroundColor: '#2b2e4c',
-                                            padding: 10,
-                                            border: 0, 
-                                        }} 
-                                        placeholder='Stop Loss (No of pips)' 
-                                        text={stopLoss}
-                                        value={stopLoss}
-                                        type="number"
-                                        error={showErrors && !stopLoss}
-                                        onChange={(event) => handleProfitLossChange('loss', event.target.value)}
-                                        onFocus={() => setActiveElement('STOP_LOSS')}
-                                        onBlur={() => setActiveElement('')}
-                                    />
-                                       {
-                                        activeElement === 'STOP_LOSS' && (
-                                            <div class="tooltip">
-                                                <Icon name='info circle' />
-                                                <span class="tooltiptext">{FORM_TOOLIPS['STOP_LOSS']}</span>
-                                            </div>
-                                        )
-                                        }  
-                                    <input 
-                                        fluid 
-                                        style={{ 
-                                            width: '50%', 
-                                            margin: 10, 
-                                            backgroundColor: '#2b2e4c',
-                                            padding: 10,
-                                            border: 0, 
-                                        }}
-                                        placeholder='Target Profit (No of pips)' 
-                                        text={targetProfit}
-                                        value={targetProfit}
-                                        type="number"
-                                        error={showErrors && !targetProfit}
-                                        onChange={(event) => handleProfitLossChange('profit', event.target.value)}
-                                        onFocus={() => setActiveElement('TARGET_PROFIT')}
-                                        onBlur={() => setActiveElement('')}
-                                    />
-                                     {
-                                        activeElement === 'TARGET_PROFIT' && (
-                                            <div class="tooltip">
-                                                <Icon name='info circle' />
-                                                <span class="tooltiptext">{FORM_TOOLIPS['TARGET_PROFIT']}</span>
-                                            </div>
-                                        )
-                                    }  
-                                </div>
-                                <div style={{ marginTop: 20, marginLeft: '-50px' }}>
-                                    <AlertTiming showErrors={showErrors} />
-                                </div>
-                                {/* <div style={{ marginLeft: '-50px' }}>
+                                            )
+                                        }
+                                        <div
+                                            style={{
+                                                width: '50%',
+                                                justifyContent: 'space-between',
+                                                display: 'flex',
+                                                margin: 10,
+                                                alignItems: 'center',
+                                                color: '#ffffff'
+                                            }}
+                                            onFocus={() => setActiveElement('SIGNAL_TYPE')}
+                                            onBlur={() => setActiveElement('')}
+                                        >
+                                            <Segment 
+                                                style={{ width: '100%', justifyContent: 'space-evenly', display: 'flex', margin: 10 }}
+                                                onFocus={() => setActiveElement('SIGNAL_TYPE')}
+                                                onBlur={() => setActiveElement('')}
+                                                error={showErrors && !alerts.length}
+                                                basic
+                                            >
+                                                <Radio name='radioGroup' label={<label style={{ color: '#ffffff' }}>Buy Alerts</label>} onChange={() => handleAlertsSelect('buy')} checked={alerts === 'buy'} />
+                                                <Radio name='radioGroup' label={<label style={{ color: '#ffffff' }}>Sell Alerts</label>} onChange={() => handleAlertsSelect('sell')} checked={alerts === 'sell'} />
+                                            </Segment>
+                                        </div>
+                                        {
+                                            activeElement === 'SIGNAL_TYPE' && (
+                                                <div class="tooltip">
+                                                    <Icon name='info circle'  style={{ color: '#fff' }}/>
+                                                    <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_TYPE']}</span>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                    <div css={styles.formContainer}>
+                                        <input
+                                            fluid
+                                            style={{
+                                                width: '50%',
+                                                margin: 10,
+                                                backgroundColor: '#2b2e4c',
+                                                padding: 10,
+                                                border: 0,
+                                                color: '#ffffff'
+                                            }}
+                                            placeholder='Stop Loss (No of pips)'
+                                            text={stopLoss}
+                                            value={stopLossPrice}
+                                            type="number"
+                                            disabled
+                                            error={showErrors && !stopLoss}
+                                            onChange={(event) => handleProfitLossChange('loss', event.target.value)}
+                                            onFocus={() => setActiveElement('STOP_LOSS')}
+                                            onBlur={() => setActiveElement('')}
+                                        />
+                                        {
+                                            selectedCurrencyPairPrice && (
+                                                <div>
+                                                    <button 
+                                                        style={{ 
+                                                            backgroundColor:  '#2b2e4c', 
+                                                            color: '#ffffff', 
+                                                            width: 25, 
+                                                            borderRadius: 5 
+                                                        }}
+                                                        onClick={() => {
+                                                            if (stopLossPriceCount <= 10) {
+                                                                if (alerts === 'buy' && stopLossPrice <= selectedCurrencyPairPrice ||
+                                                                    slerts === 'sell' && stopLossPrice >= selectedCurrencyPairPrice
+                                                                ) {
+                                                                    const countIncrease = stopLossPriceCount + 1;
+                                                                    const initialPrice = getStopLossTargetProfit(alerts);
+                                                                    setStopLossPrice(initialPrice * (100 + countIncrease) / 100);
+                                                                    setStopLossPriceCount(countIncrease);
+                                                                }
+                                                            }
+                                                        }}
+                                                    >+</button>
+                                                    <button 
+                                                        style={{ 
+                                                            backgroundColor:  '#2b2e4c', 
+                                                            color: '#ffffff', 
+                                                            width: 25, 
+                                                            marginTop: 2, 
+                                                            borderRadius: 5 
+                                                        }}
+                                                    >-</button>
+                                                </div>
+                                            )
+                                        }
+                                        {
+                                            activeElement === 'STOP_LOSS' && (
+                                                <div class="tooltip">
+                                                    <Icon name='info circle'  style={{ color: '#fff' }}/>
+                                                    <span class="tooltiptext">{FORM_TOOLIPS['STOP_LOSS']}</span>
+                                                </div>
+                                            )
+                                        }
+                                        <input
+                                            fluid
+                                            style={{
+                                                width: '50%',
+                                                margin: 10,
+                                                backgroundColor: '#2b2e4c',
+                                                padding: 10,
+                                                border: 0,
+                                                color: '#ffffff',
+                                            }}
+                                            placeholder='Target Profit (No of pips)'
+                                            text={targetProfit}
+                                            value={targetProfitPrice}
+                                            type="number"
+                                            disabled
+                                            error={showErrors && !targetProfit}
+                                            onChange={(event) => handleProfitLossChange('profit', event.target.value)}
+                                            onFocus={() => setActiveElement('TARGET_PROFIT')}
+                                            onBlur={() => setActiveElement('')}
+                                        />
+                                         {
+                                            selectedCurrencyPairPrice && (
+                                                <div>
+                                                    <button style={{ backgroundColor:  '#2b2e4c', color: '#ffffff', width: 25, borderRadius: 5 }}>+</button>
+                                                    <button style={{ backgroundColor:  '#2b2e4c', color: '#ffffff', width: 25, marginTop: 2, borderRadius: 5 }}>-</button>
+                                                </div>
+                                            )
+                                        }
+                                        {
+                                            activeElement === 'TARGET_PROFIT' && (
+                                                <div class="tooltip">
+                                                    <Icon name='info circle'  style={{ color: '#fff' }}/>
+                                                    <span class="tooltiptext">{FORM_TOOLIPS['TARGET_PROFIT']}</span>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                    <div css={styles.formContainer}>
+                                        <Dropdown
+                                            placeholder='Select timeframe ex:1 hour'
+                                            fluid
+                                            selection
+                                            options={TIMEFRAME_OPTIONS}
+                                            css={styles.dropdownContainer}
+                                            text={timeFrame}
+                                            onChange={(event, data) => {
+                                                setTimeFrame(data.value);
+                                            }}
+                                            style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }}
+                                            onFocus={() => setActiveElement('TIME_FRAME')}
+                                            onBlur={() => setActiveElement('')}
+                                            error={showErrors && !timeFrame}
+                                        />
+                                        {
+                                            activeElement === 'TIME_FRAME' && (
+                                                <div class="tooltip">
+                                                    <Icon name='info circle'  style={{ color: '#fff' }}/>
+                                                    <span class="tooltiptext">{FORM_TOOLIPS['TIME_FRAME']}</span>
+                                                </div>
+                                            )
+                                        }
+                                        <Dropdown
+                                            placeholder='Select expiry time'
+                                            fluid
+                                            selection
+                                            options={expiryTimeOptions()}
+                                            css={styles.dropdownContainer}
+                                            text={timeFrame}
+                                            onChange={(event, data) => {
+                                                setExpiryTime(data.value);
+                                            }}
+                                            style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }}
+                                            onFocus={() => setActiveElement('EXPIRY_TIME')}
+                                            onBlur={() => setActiveElement('')}
+                                            error={showErrors && !timeFrame}
+                                        />
+                                        {
+                                            activeElement === 'EXPIRY_TIME' && (
+                                                <div class="tooltip">
+                                                    <Icon name='info circle' style={{ color: '#ffffff' }} />
+                                                    <span class="tooltiptext">{FORM_TOOLIPS['TIME_FRAME']}</span>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                    {/* <div style={{ marginLeft: '-50px' }}>
                                     <MailConfigurationForm />
                                 </div> */}
-                                
-                                <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
-                                    <button 
-                                        style={{
-                                            color: '#fff',
-                                            backgroundColor: '#405189',
-                                            borderColor: '#405189',
-                                            padding: 10,
-                                            cursor: 'pointer'
-                                        }}
-                                        onClick={handleSubmitFormData}
-                                    >
-                                        Create Signals
+
+                                    <div style={{ display: 'flex', flex: 1, justifyContent: 'center', marginTop: 20 }}>
+                                        <button
+                                            style={{
+                                                color: '#fff',
+                                                backgroundColor: '#405189',
+                                                borderColor: '#405189',
+                                                padding: 10,
+                                                cursor: 'pointer'
+                                            }}
+                                            onClick={handleSubmitFormData}
+                                        >
+                                            Create Signals
                                     </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Segment>
-                </div>
+                        </Segment>
+                    </div>
                 ) : (
-                    <Loader />
-                )
+                        <Loader />
+                    )
             }
             {
                 isSuccess && (
@@ -585,16 +613,20 @@ function renderExpertSignal(props) {
                     />
                 )
             }
-            
-       </div> 
-       
+
+        </div>
+
     );
 }
 
 function ExpertSignalFormComponent(props) {
     return (
         <React.Fragment>
-
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Signalant - Create Expert Signals</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
             <Responsive minWidth={701}>
                 <div>
                     <p>Create Expert Signal</p>

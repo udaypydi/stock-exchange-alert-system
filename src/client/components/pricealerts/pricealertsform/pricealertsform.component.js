@@ -13,6 +13,7 @@ import {
 } from 'semantic-ui-react';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
@@ -126,6 +127,11 @@ function PriceAlertsForm(props) {
     }
     return (
         <div>
+             <Helmet>
+                <meta charSet="utf-8" />
+                <title>Signalant - Create Price Alerts</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
          <Responsive minWidth={701}>
                 <Header />
                 <CustomSidebar />
@@ -170,7 +176,7 @@ function PriceAlertsForm(props) {
                         {
                             activeElement === 'SIGNAL_NAME' && (
                                 <div class="tooltip">
-                                    <Icon name='info circle' />
+                                  <Icon name='info circle'  style={{ color: '#fff' }}/>
                                     <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_NAME']}</span>
                                 </div>
                             )
@@ -194,7 +200,7 @@ function PriceAlertsForm(props) {
                         {
                             activeElement === 'CURRENCY_PAIR' && (
                                 <div class="tooltip">
-                                    <Icon name='info circle' />
+                                  <Icon name='info circle'  style={{ color: '#fff' }}/>
                                     <span class="tooltiptext">{FORM_TOOLIPS['CURRENCY_PAIR']}</span>
                                 </div>
                             )
@@ -218,7 +224,7 @@ function PriceAlertsForm(props) {
                         {
                             activeElement === 'PRICE' && (
                                 <div class="tooltip">
-                                    <Icon name='info circle' />
+                                  <Icon name='info circle'  style={{ color: '#fff' }}/>
                                     <span class="tooltiptext">{FORM_TOOLIPS['PRICE']}</span>
                                 </div>
                             )
@@ -259,7 +265,7 @@ function PriceAlertsForm(props) {
                         {
                             activeElement === 'SIGNAL_TYPE' && (
                                 <div class="tooltip">
-                                    <Icon name='info circle' />
+                                  <Icon name='info circle'  style={{ color: '#fff' }}/>
                                     <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_TYPE']}</span>
                                 </div>
                             )
@@ -280,7 +286,7 @@ function PriceAlertsForm(props) {
                         {
                             activeElement === 'TIME_FRAME' && (
                                 <div class="tooltip">
-                                    <Icon name='info circle' />
+                                  <Icon name='info circle'  style={{ color: '#fff' }}/>
                                     <span class="tooltiptext">{FORM_TOOLIPS['TIME_FRAME']}</span>
                                 </div>
                             )
@@ -330,7 +336,7 @@ function PriceAlertsForm(props) {
                         {
                             activeElement === 'SIGNAL_NAME' && (
                                 <div class="tooltip">
-                                    <Icon name='info circle' />
+                                  <Icon name='info circle'  style={{ color: '#fff' }}/>
                                     <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_NAME']}</span>
                                 </div>
                             )
@@ -353,7 +359,7 @@ function PriceAlertsForm(props) {
                         {
                             activeElement === 'CURRENCY_PAIR' && (
                                 <div class="tooltip">
-                                    <Icon name='info circle' />
+                                  <Icon name='info circle'  style={{ color: '#fff' }}/>
                                     <span class="tooltiptext">{FORM_TOOLIPS['CURRENCY_PAIR']}</span>
                                 </div>
                             )
@@ -370,7 +376,7 @@ function PriceAlertsForm(props) {
                         {
                             activeElement === 'PRICE' && (
                                 <div class="tooltip">
-                                    <Icon name='info circle' />
+                                  <Icon name='info circle'  style={{ color: '#fff' }}/>
                                     <span class="tooltiptext">{FORM_TOOLIPS['PRICE']}</span>
                                 </div>
                             )
@@ -396,7 +402,7 @@ function PriceAlertsForm(props) {
                         {
                             activeElement === 'SIGNAL_TYPE' && (
                                 <div class="tooltip">
-                                    <Icon name='info circle' />
+                                  <Icon name='info circle'  style={{ color: '#fff' }}/>
                                     <span class="tooltiptext">{FORM_TOOLIPS['SIGNAL_TYPE']}</span>
                                 </div>
                             )
@@ -418,7 +424,7 @@ function PriceAlertsForm(props) {
                         {
                             activeElement === 'TIME_FRAME' && (
                                 <div class="tooltip">
-                                    <Icon name='info circle' />
+                                  <Icon name='info circle'  style={{ color: '#fff' }}/>
                                     <span class="tooltiptext">{FORM_TOOLIPS['TIME_FRAME']}</span>
                                 </div>
                             )
