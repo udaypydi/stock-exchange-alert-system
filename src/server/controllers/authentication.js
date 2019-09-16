@@ -62,6 +62,20 @@ module.exports = {
             callback: (req, res) => {
                 authentication.updateUserData(req, res);
             }
+        },
+
+        {
+            url: '/generate-otp',
+            callback: (req, res) => {
+                authentication.generateOTP(req, res);
+            }
+        },
+
+        {
+            url: '/validate-otp',
+            callback: (req, res) => {
+                authentication.validateOTP(req, res);
+            }
         }
       
     ]

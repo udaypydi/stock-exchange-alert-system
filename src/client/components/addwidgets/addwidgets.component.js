@@ -11,7 +11,7 @@ function AddWidgetModal(props) {
   const [showWidgetsModal, setShowWidgetsModal] = useState(false);
   const [widgetsColor, setWidgetsColor] = useState('');
   const [selectedCurrencyOptions, setSelectedCurrencyOptions] = useState([]);
-  
+   
   const { activeGraphs } = props.user;
 
   function handleClick() {

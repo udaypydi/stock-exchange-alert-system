@@ -8,7 +8,7 @@ import 'react-flags-select/css/react-flags-select.css';
 import { css, jsx } from '@emotion/core';
 import { connect } from 'react-redux';
 import { updateUserState, getUserState } from 'components/home/home.action';
-import { userSignUp } from '../auth.api';
+import { userSignUp, generateOTP, validateOTP } from '../auth.api';
 import styles from './signup.styles';
 
 function SignUp(props) {
@@ -19,6 +19,9 @@ function SignUp(props) {
     const [password, setPassword] = useState('');
     const [showErrors, setShowErrors] = useState(false);
     const [showEmailInvalid, setShowEmailInvalid] = useState(false);
+    const [showOTPVerificationFiled, setShowOTPVerificationFiled] = useState(false);
+    const [otp, setOTP] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const countryFlags = React.createRef();
 
     useEffect(() => {
@@ -60,21 +63,26 @@ function SignUp(props) {
             && password
             && isEmailValid
         ) {
-            userSignUp(data)
-            .then(json => {
-                if (json.isRegistered) {
-                    updateUserState(json);
-                    dispatch(getUserState());
-                    history.push('/home');
-                } else if(!json.isRegistered && json.message === 'Email already in use') {
-                    setShowErrors(true)
-                }
-            });
+
+            generateOTP(data)
+                .then(res => {
+                    if (res.isSuccessfull) {
+                        setShowOTPVerificationFiled(true);
+                        setShowErrors(false);
+                    } 
+                    
+                    if(res.userAlreadyExist) {
+                        setShowErrors(true);
+                        setErrorMessage('User Already Exist.');
+                    }
+                });
         } else {
             if (email && password && userName) {
                 setShowEmailInvalid(true);
+                setErrorMessage('Please enter a valid email.');
             } else {
                 setShowErrors(true);
+                setErrorMessage('Please fill all the fields');
             }
             
         }
@@ -84,23 +92,57 @@ function SignUp(props) {
         if (!showEmailInvalid) {
             if (showErrors && (!password || !email || !userName)) {
                 return (
-                    <p style={{ color: 'red' }}>Please fill all the fields</p>
+                    <p style={{ color: 'red' }}>{errorMessage}</p>
                 )
             }
     
             if (showErrors && (password && email && userName)) {
                 return (
-                    <p style={{ color: 'red' }}>Email already exist</p>
+                    <p style={{ color: 'red' }}>{errorMessage}</p>
                 )
             }
         } else {
             return (
-                <p style={{ color: 'red' }}>Please eneter a valid email</p>
+                <p style={{ color: 'red' }}>{errorMessage}</p>
             )
         }
      
         return null;
     } 
+
+
+    const verifyOTP = () => {
+        if (!otp || otp.length !== 4) {
+            setShowErrors(true);
+            setErrorMessage('Invalid OTP');
+        } else {
+            const { dispatch, history } = props; 
+            const data = {
+                userName,
+                email,
+                countryCode,
+                password,
+            };
+            validateOTP({
+                email,
+                otp: parseInt(otp),
+            }).then((res) => {
+                if (res.isValid) {
+                    userSignUp(data)
+                    .then(json => {
+                        if (json.isRegistered) {
+                            updateUserState(json);
+                            dispatch(getUserState());
+                            history.push('/home');
+                        }
+                    });
+                } else {
+                    setShowErrors(true);
+                    setErrorMessage('Invalid OTP');
+                }
+            })
+        }
+    }
 
     return (
         <div css={styles.container}>
@@ -143,50 +185,73 @@ function SignUp(props) {
                         </Grid.Column>
                         <Grid.Column computer={10} mobile={16}>
                             <div css={styles.authFormContainer}>
-                                <div css={styles.formElement}>
-                                    <Input 
-                                        placeholder="Name" 
-                                        style={{ width: '80%' }}
-                                        value={userName}
-                                        error={showErrors && !userName}
-                                        onChange={(event) => { setUserName(event.target.value) }}
-                                    />
-                                </div>
-                                <div css={styles.formElement}>
-                                    <Input 
-                                        placeholder="Email" 
-                                        style={{ width: '80%' }}
-                                        value={email}
-                                        error={showErrors && !email}
-                                        onChange={(event) => { setEmail(event.target.value) }}
-                                    />
-                                </div>
-                                <div css={styles.formElement}>
-                                <ReactFlagsSelect
-                                        defaultCountry={countryCode} 
-                                        ref={countryFlags}
-                                        searchPlaceholder="Search for a country"
-                                        onSelect={(countryCode) => { setCountryCode(countryCode) }}
-                                        style={{ width: '80%' }}
-                                    />
-                                </div>
-                                <div css={styles.formElement}>
-                                    <Input 
-                                        placeholder="Password" 
-                                        style={{ width: '80%' }}
-                                        type="password"
-                                        value={password}
-                                        error={showErrors && !password}
-                                        onChange={(event) => { setPassword(event.target.value) }}
-                                    />
-                                </div>
-                                {renderErrorFields()}
-                                <div css={styles.formElement}>
-                                    <Checkbox label={<label>By signing up, I accept the <a href="/#/terms-and-conditions">Terms & Conditions.</a></label>}/>
-                                </div>             
-                                <div css={styles.formElement}>
-                                    <Button onClick={signupUser}primary>Sign Up</Button>
-                                </div>
+                                {
+                                    !showOTPVerificationFiled ? (
+                                        <React.Fragment>
+                                            <div css={styles.formElement}>
+                                                <Input 
+                                                    placeholder="Name" 
+                                                    style={{ width: '80%' }}
+                                                    value={userName}
+                                                    error={showErrors && !userName}
+                                                    onChange={(event) => { setUserName(event.target.value) }}
+                                                />
+                                            </div>
+                                            <div css={styles.formElement}>
+                                                <Input 
+                                                    placeholder="Email" 
+                                                    style={{ width: '80%' }}
+                                                    value={email}
+                                                    error={showErrors && !email}
+                                                    onChange={(event) => { setEmail(event.target.value) }}
+                                                />
+                                            </div>
+                                            <div css={styles.formElement}>
+                                            <ReactFlagsSelect
+                                                    defaultCountry={countryCode} 
+                                                    ref={countryFlags}
+                                                    searchPlaceholder="Search for a country"
+                                                    onSelect={(countryCode) => { setCountryCode(countryCode) }}
+                                                    style={{ width: '80%' }}
+                                                />
+                                            </div>
+                                            <div css={styles.formElement}>
+                                                <Input 
+                                                    placeholder="Password" 
+                                                    style={{ width: '80%' }}
+                                                    type="password"
+                                                    value={password}
+                                                    error={showErrors && !password}
+                                                    onChange={(event) => { setPassword(event.target.value) }}
+                                                />
+                                            </div>
+                                            {renderErrorFields()}
+                                            <div css={styles.formElement}>
+                                                <Checkbox label={<label>By signing up, I accept the <a href="/#/terms-and-conditions">Terms & Conditions.</a></label>}/>
+                                            </div>             
+                                            <div css={styles.formElement}>
+                                                <Button onClick={signupUser}primary>Sign Up</Button>
+                                            </div>
+                                        </React.Fragment>
+                                    ) : (
+                                        <React.Fragment style={{ textAlign: 'center' }}>
+                                              <h1>Verification Code</h1>
+                                              <h3>Please type the verification code sent to **********{email.substring(email.length / 2, email.length)}</h3>
+                                              <div css={styles.formElement}>
+                                                    <Input 
+                                                        placeholder="Enter OTP" 
+                                                        style={{ width: '40%', textAlign: 'center', fontWeight: 'bold' }}
+                                                        value={otp}
+                                                        error={showErrors && otp.length !== 4}
+                                                        type="number"
+                                                        onChange={(event) => { setOTP(event.target.value) }}
+                                                    />
+                                                      {renderErrorFields()}
+                                                    <Button onClick={verifyOTP} style={{ marginLeft: 20 }} primary>Verify</Button>
+                                                </div>
+                                        </React.Fragment>
+                                    )
+                                }
                             </div>  
                         </Grid.Column>
                     </Grid.Row>

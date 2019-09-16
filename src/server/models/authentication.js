@@ -1,9 +1,21 @@
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt-nodejs');
+const smtpTransport = require('nodemailer-smtp-transport');
 const cloudinary = require('cloudinary').v2;
 const { mongoconnection } = require('../config/mongoconnection');
 const config = require('../config/config');
+const nodemailer = require('nodemailer');
 
+
+const transporter = nodemailer.createTransport(smtpTransport({
+  host: 'smtp.zoho.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'noreply@signalant.com',
+    pass: 'Welcome@@@123'
+  }
+}));
 let database  ;
 
 MongoClient.connect(config.development.mongourl, (err, db) => {
@@ -86,6 +98,69 @@ module.exports = {
       };
       database.collection('users').updateOne({ email: req.session.user.email }, { $set: userData });
       res.json({ status: 200, statusText: 'OK' });
+    },
+
+    generateOTP: (req, res) => {
+      database.collection('users').find({ email: req.body.email }).toArray((error, result) => {
+        if (!result.length) {
+          const { email, userName, password, countryCode } = req.body;
+          const OTP = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+          transporter.sendMail({
+            from : 'noreply@signalant.com',
+            to: email,
+            subject: 'Signalant - Account Verification',
+            text: `
+              Hi ${userName},
+
+              Please verify your email address by entering the OTP: 
+              
+              ${OTP}
+
+              If you encounter any problem, please contact us at contact@signalant.com
+              
+              Thank you,
+              Signalant Team
+            `
+          }, (error) => {
+            if (error) {
+              throw error
+            } 
+
+            database.collection('unverified_users').find({ email }).toArray((error, result) => {
+              if (error) {
+                throw error;
+              }
+
+              if (result.length) {
+                database.collection('unverified_users').update({ email }, {$set: { otp: OTP, password, countryCode }});
+                res.json({ message: 'OTP SENT', isSuccessfull: true });
+              } else {
+                database.collection('unverified_users').insert({ email, otp: OTP, password, countryCode }, (error, result) => {
+                  if (error) throw error;
+                  res.json({ message: 'OTP SENT', isSuccessfull: true });
+                });
+              }
+            })
+          });
+        } else {
+          res.json({ message: 'User already exist', userAlreadyExist: true  });
+        }
+      });
+    },
+
+    validateOTP: (req, res) => {
+      const { email, otp } = req.body;
+
+      database.collection('unverified_users').find({ email }).toArray((err, result) => {
+        if (err) throw err;
+        
+        const OTP = result[0].otp;
+        if (otp == OTP) {
+          res.json({ isValid: true, message: 'OTP Verified Successfully' });
+        } else {
+          res.json({ isValid: false, message: 'Invalid OTP' });
+        }
+      });
     },
 
     encryptPassword: (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(5), null),

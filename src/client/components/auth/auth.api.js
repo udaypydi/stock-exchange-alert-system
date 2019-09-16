@@ -17,3 +17,24 @@ export const userSignUp = (userData) => fetch('/sign-up', {
     },
     body: JSON.stringify(userData),
 }).then(res => res.json());
+
+
+export const generateOTP = (userData) => fetch('/generate-otp', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userData),
+}).then(res => res.json());
+
+export const validateOTP = (userData) => fetch('/validate-otp', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userData),
+}).then(res => res.json());
