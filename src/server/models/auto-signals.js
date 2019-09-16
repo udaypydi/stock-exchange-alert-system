@@ -33,6 +33,21 @@ const transporter = nodemailer.createTransport(smtpTransport({
     }
 }));
 
+function getAllAlerts(email) {
+    database.collection('price_alerts').find({ email }).toArray((error, pricealerts) => {
+        database.collection('expert_alerts').find({ email }).toArray((error, expertalerts) => {
+            database.collection('alerts').find({ email }).toArray((err, indicatorSignals) => {
+                return {
+                    priceAlerts: pricealerts.length,
+                    expertAlerts: expertalerts.length,
+                    indicatorAlerts: indicatorSignals.length,
+                };
+            });
+        });
+    });
+}
+
+
 function createSimpleMovingAverageSignal(signalData) {
     const { 
         currencyPair, 
@@ -92,6 +107,7 @@ function createSimpleMovingAverageSignal(signalData) {
                                         price: recent_currency_ex,
                                         indicator: 'SMA',  
                                         profitLoss: '-',
+                                        ...getAllAlerts(email),
                                     };
                     
                                     const mail_template = generateSignalantTemplate(mailData)
@@ -131,6 +147,7 @@ function createSimpleMovingAverageSignal(signalData) {
                                         price: recent_currency_ex,
                                         indicator: 'SMA',  
                                         profitLoss: '-',
+                                        ...getAllAlerts(email),
                                     };
                     
                                     const mail_template = generateSignalantTemplate(mailData)
@@ -228,6 +245,7 @@ function createExponentialMovingAverage(signalData) {
                                         price: recent_currency_ex,
                                         indicator: 'EMA',  
                                         profitLoss: '-',
+                                        ...getAllAlerts(email),
                                     };
                     
                                     const mail_template = generateSignalantTemplate(mailData)
@@ -267,6 +285,7 @@ function createExponentialMovingAverage(signalData) {
                                         price: recent_currency_ex,
                                         indicator: 'EMA',  
                                         profitLoss: '-',
+                                        ...getAllAlerts(email),
                                     };
                     
                                     const mail_template = generateSignalantTemplate(mailData)
@@ -364,6 +383,7 @@ function createRSISignal(signalData) {
                             price: rsi,
                             indicator: 'RSI',  
                             profitLoss: '-',
+                            ...getAllAlerts(email),
                         };
         
                         const mail_template = generateSignalantTemplate(mailData)
@@ -427,6 +447,7 @@ function createRSISignal(signalData) {
                             price: rsi,
                             indicator: 'RSI',  
                             profitLoss: '-',
+                            ...getAllAlerts(email),
                         };
         
                         const mail_template = generateSignalantTemplate(mailData)
@@ -523,6 +544,7 @@ function createBollingerBands(signalData) {
                                             price: recent_currency_ex,
                                             indicator: 'BOLLINGER BANDS',  
                                             profitLoss: '-',
+                                            ...getAllAlerts(email),
                                         };
                         
                                         const mail_template = generateSignalantTemplate(mailData)
@@ -563,6 +585,7 @@ function createBollingerBands(signalData) {
                                             price: recent_currency_ex,
                                             indicator: 'BOLLINGER BANDS',  
                                             profitLoss: '-',
+                                            ...getAllAlerts(email),
                                         };
                         
                                         const mail_template = generateSignalantTemplate(mailData)
@@ -659,6 +682,7 @@ function createMACDSignals(signalData) {
                                     price: recent_currency_ex,
                                     indicator: 'MACD',  
                                     profitLoss: '-',
+                                    ...getAllAlerts(email),
                                 };
                 
                                 const mail_template = generateSignalantTemplate(mailData)
@@ -696,6 +720,7 @@ function createMACDSignals(signalData) {
                                     price: recent_currency_ex,
                                     indicator: 'MACD',  
                                     profitLoss: '-',
+                                    ...getAllAlerts(email),
                                 };
                 
                                 const mail_template = generateSignalantTemplate(mailData)

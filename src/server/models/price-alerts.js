@@ -32,6 +32,20 @@ const pricealertsmapping = {
 
 let priceAlerts = [];
 
+function getAllAlerts(email) {
+    database.collection('price_alerts').find({ email }).toArray((error, pricealerts) => {
+        database.collection('expert_alerts').find({ email }).toArray((error, expertalerts) => {
+            database.collection('alerts').find({ email }).toArray((err, indicatorSignals) => {
+                return {
+                    priceAlerts: pricealerts.length,
+                    expertAlerts: expertalerts.length,
+                    indicatorAlerts: indicatorSignals.length,
+                };
+            });
+        });
+    });
+}
+
 module.exports = {
     createPriceAlerts: (req, res) => {
         const { 
@@ -74,6 +88,7 @@ module.exports = {
                                         price: currency_exchange,
                                         indicator: 'Price Alerts',  
                                         profitLoss: '-',
+                                        ...getAllAlerts(email),
                                     };
                 
                                     const alert_data = {
@@ -113,6 +128,7 @@ module.exports = {
                                         price: currency_exchange,
                                         indicator: 'Price Alerts',  
                                         profitLoss: '-',
+                                        ...getAllAlerts(email),
                                     };
                 
                                     const alert_data = {

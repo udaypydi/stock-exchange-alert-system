@@ -108,8 +108,8 @@ const generateSignalantTemplate = (data) => `<!DOCTYPE html>
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
                           <tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
                             <td  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-align: center;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: #ffffff;font-size: 34px;font-weight: 700;">200</span>
-                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: rgba(255,255,255,.9);font-size: 13px;">Custom Alerts</span>
+                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: #ffffff;font-size: 34px;font-weight: 700;">${data.indicatorAlerts}</span>
+                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: rgba(255,255,255,.9);font-size: 13px;">Indicator Alerts</span>
                             </td>
                           </tr>
                         </table>
@@ -118,8 +118,8 @@ const generateSignalantTemplate = (data) => `<!DOCTYPE html>
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
                           <tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
                             <td  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-align: center;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: #ffffff;font-size: 34px;font-weight: 700;">200</span>
-                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: rgba(255,255,255,.9);font-size: 13px;">Manual Alerts</span>
+                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: #ffffff;font-size: 34px;font-weight: 700;">${data.priceAlerts}</span>
+                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: rgba(255,255,255,.9);font-size: 13px;">Price Alerts</span>
                             </td>
                           </tr>
                         </table>
@@ -128,8 +128,8 @@ const generateSignalantTemplate = (data) => `<!DOCTYPE html>
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;border-spacing: 0 !important;border-collapse: collapse !important;table-layout: fixed !important;margin: 0 auto !important;">
                           <tr style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
                             <td  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-align: center;mso-table-lspace: 0pt !important;mso-table-rspace: 0pt !important;">
-                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: #ffffff;font-size: 34px;font-weight: 700;">${data.profitLoss}</span>
-                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: rgba(255,255,255,.9);font-size: 13px;">Profit/ Loss</span>
+                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: #ffffff;font-size: 34px;font-weight: 700;">${data.expertAlerts}</span>
+                            	<span  style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;color: rgba(255,255,255,.9);font-size: 13px;">Expert Alerts</span>
                             </td>
                           </tr>
                         </table>

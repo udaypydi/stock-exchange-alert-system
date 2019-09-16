@@ -28,6 +28,7 @@ module.exports = {
                 console.log(user);
                 database.collection('alerts').find({ email: JSON.parse(user.session).user.email }).toArray((err, result) => {
                   database.collection('users').find({ email: req.session.user.email}).toArray((error, userData) => {
+                    console.log(userData[0].location);
                     res.json({ 
                       email: JSON.parse(user.session).user.email, 
                       isLoggedIn: true, 

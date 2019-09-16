@@ -22,6 +22,22 @@ const transporter = nodemailer.createTransport(smtpTransport({
     }
 }));
 
+
+function getAllAlerts(email) {
+    database.collection('price_alerts').find({ email }).toArray((error, pricealerts) => {
+        database.collection('expert_alerts').find({ email }).toArray((error, expertalerts) => {
+            database.collection('alerts').find({ email }).toArray((err, indicatorSignals) => {
+                return {
+                    priceAlerts: pricealerts.length,
+                    expertAlerts: expertalerts.length,
+                    indicatorAlerts: indicatorSignals.length,
+                };
+            });
+        });
+    });
+}
+
+
 let rsiInterval = [];
 let pipService = [];
 let pipArray = {};
@@ -99,6 +115,7 @@ function startPipCountService(pipData) {
                         price: current_exchange_value,
                         indicator: 'RSI',  
                         profitLoss: loss.toFixed(4),
+                        ...getAllAlerts(email),
                     };
 
                     const mail_template = generateSignalantTemplate(mailData)
@@ -141,6 +158,7 @@ function startPipCountService(pipData) {
                         price: current_exchange_value,
                         indicator: 'RSI',  
                         profitLoss: profit.toFixed(4),
+                        ...getAllAlerts(email),
                     };
 
                     const mail_template = generateSignalantTemplate(mailData)
