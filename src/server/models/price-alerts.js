@@ -60,8 +60,6 @@ module.exports = {
 
         const email = req.session.user.email;
 
-        console.log('price alerts', req.body);
-
         
         database.collection('price_alerts_signals').insert({ email: req.session.user.email, ...req.body }, (err, res) => {
             const alert_id = res.ops[0]._id;
@@ -71,8 +69,14 @@ module.exports = {
                 const total_alerts = total;
                 const daily_alerts = daily;
 
+                console.log('********Total Alerts********', total_alerts);
+                console.log('********Daily Alerts********', daily_alerts);
+
                 database.collection('price_alerts').find({ email, alert_id }).toArray((err, result) => {
-                    if (result.length <= total_alerts) {
+
+                    console.log('********Alerts Created********', result.length);
+
+                    if (result.length < total_alerts) {
                         const todays_alerts = result.filter(alert => alert.created_at === moment().format("MMM Do YY"));
                         if (todays_alerts.length <= daily_alerts) {
                             fetch(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${currencyPair.split('').splice(0, 3).join('')}&to_currency=${currencyPair.split('').splice(3, 5).join('')}&apikey=QZ5AG7BLQD7TLXTZ`)
@@ -97,7 +101,6 @@ module.exports = {
                                         price: currency_exchange,
                                         created_at: moment().format("MMM Do YY"),
                                         alert_id,
-
                                     };
         
                                     const mail_template = generateSignalantTemplate(mailData)
@@ -137,6 +140,7 @@ module.exports = {
                                         price: currency_exchange,
                                         created_at: moment().format("MMM Do YY"),
                                         alert_id,
+                                        status: 'ACTIVE',
                                     };
                                     
                                     database.collection('price_alerts').insert({ email: req.session.user.email, ...alert_data}, (err, result) => {
@@ -164,6 +168,8 @@ module.exports = {
                             });
                         }
                     } else {
+                        console.log('*******Alert Service Expired********', alert_id);
+                        database.collection('price_alerts_signals').updateOne({ email: req.session.user.email, _id: ObjectId(alert_id) }, { $set : { status: 'EXPIRED' } });
                         clearInterval(priceAlerts[alert_id]);
                     }
                 });

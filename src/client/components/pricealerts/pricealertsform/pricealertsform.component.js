@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { 
     Segment, 
@@ -39,8 +39,9 @@ function PriceAlertsForm(props) {
     const [showErrors, setShowErrors] = useState(false);
     const [errorMessage, setErrorMessage] = useState('Please fill all the form fields.');
     const [showErrorNotification, setshowErrorNotification] = useState(false);
+    const [currentMarketPrice, setCurrentMarketPrice] = useState({});
     const { priceAlert, dispatch, sidebar, signalMail, signalTiming } = props;
-
+    
     const {
         name,
         currencyPair,
@@ -82,11 +83,24 @@ function PriceAlertsForm(props) {
         return false;
     }
 
+    // useEffect(() => {
+    //     fetch(`https://forex.1forge.com/1.0.3/quotes?pairs=XAUUSD,XAGUSD,EURUSD,GBPUSD,AUDUSD,NZDUSD,USDCAD,USDCHF,USDJPY,EURGBP,EURCHF,EURJPY&api_key=uD3ghInLCfnn7gsSKAwV3D1nnp1X55x8`)
+    //         .then(res => res.json())
+    //         .then(json => {
+    //             const currencyPairPrices = {};
+    //             json.forEach(currency => {
+    //                 currencyPairPrices[currency.symbol] = currency.price;
+    //             })
+    //             setCurrentMarketPrice(currencyPairPrices);
+    //     });
+    // }, []);
+
     const handlePriceAlertNameChange = (event) => {
         dispatch(priceAlertNameChange(event.target.value));
     };
 
     const handleCurrencyPairChange = (event, data) => {
+
         dispatch(priceAlertCurrencyPair(data.value));
     };
 
@@ -115,7 +129,7 @@ function PriceAlertsForm(props) {
         const { signalTiming, signalMail } = props;
         const isValid = isFormDataValid();
         if (isValid) {
-            createTraderPriceAlerts({ ...priceAlert, ...signalMail, ...signalTiming });
+            createTraderPriceAlerts({ ...priceAlert, ...signalMail, ...signalTiming, status: 'ACTIVE' });
         } else {
             setShowErrors(true);
             setshowErrorNotification(true);
@@ -125,6 +139,7 @@ function PriceAlertsForm(props) {
             console.log('Error');
         }
     }
+
     return (
         <div>
              <Helmet>
@@ -167,6 +182,7 @@ function PriceAlertsForm(props) {
                                 backgroundColor: '#2b2e4c',
                                 padding: 10,
                                 border: 0, 
+                                color: '#ffffff'
                             }}
                             onChange={handlePriceAlertNameChange}
                             onFocus={() => setActiveElement('SIGNAL_NAME')}
@@ -192,7 +208,7 @@ function PriceAlertsForm(props) {
                             css={styles.dropdownContainer}
                             onChange={handleCurrencyPairChange}
                             options={CURRENCY_OPTIONS} 
-                            style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
+                            style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }}
                             onFocus={() => setActiveElement('CURRENCY_PAIR')}
                             onBlur={() => setActiveElement('')}
                             error={showErrors && !currencyPair}
@@ -213,6 +229,7 @@ function PriceAlertsForm(props) {
                                 backgroundColor: '#2b2e4c',
                                 padding: 10,
                                 border: 0, 
+                                color: '#ffffff'
                             }}
                             placeholder='Price' 
                             value={price}
@@ -238,6 +255,7 @@ function PriceAlertsForm(props) {
                                 display: 'flex', 
                                 margin: 10,
                                 alignItems: 'center',
+                                color: '#ffffff',
                             }}
                             onFocus={() => setActiveElement('SIGNAL_TYPE')}
                             onBlur={() => setActiveElement('')}
@@ -278,7 +296,7 @@ function PriceAlertsForm(props) {
                             css={styles.dropdownContainer}
                             text={timeFrame}
                             onChange={handleTimeFrameChange}
-                            style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
+                            style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }}
                             onFocus={() => setActiveElement('TIME_FRAME')}
                             onBlur={() => setActiveElement('')}
                             error={showErrors && !timeFrame}
@@ -302,7 +320,7 @@ function PriceAlertsForm(props) {
                                 backgroundColor: '#405189',
                                 borderColor: '#405189',
                                 padding: 10,
-                                cursor: 'pointer'
+                                cursor: 'pointer',
                             }}
                             onClick={handleAlertSubmit}
                         >

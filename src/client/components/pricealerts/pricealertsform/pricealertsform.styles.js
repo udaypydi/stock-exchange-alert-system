@@ -6,6 +6,7 @@ const styles = {
         flex: 1;
         justify-content: center;
         align-items: center;
+        color: #ffffff;
     `,
 
     container: css`

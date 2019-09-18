@@ -233,15 +233,15 @@ function renderLatestAlerts() {
                 margin: 0,
                 border: '1px solid #565e84', 
             }}>
-            <p style={{ color: '#9c9fa6', marginBottom: 0 }}>{alert.currencyPair}</p>
+            <p style={{ color: '#9c9fa6', marginBottom: 0 }}>{alert.currencyPair || alert.currency_pair}</p>
             <p style={{ color: '#9c9fa6',  marginBottom: 0 }}>{alert.price || alert.buyPrice || alert.sellPrice}</p>
             {
-                alert.buyPrice && (
+                (alert.buyPrice || alert.alert_type === 'Price High') && (
                     <Icon name="arrow up" color="green" />
                 )
             }
             {
-                alert.sellPrice && (
+                (alert.sellPrice || alert.alert_type === 'Price Low') && (
                     <Icon name="arrow down" color="red" />
                 )
             }

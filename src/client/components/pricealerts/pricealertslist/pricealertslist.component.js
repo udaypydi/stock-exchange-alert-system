@@ -99,9 +99,13 @@ function PriceAlertsList(props) {
                                         <p css={styles.autoSignalCell}>{signal.name}</p>
                                         <p css={styles.autoSignalCell}>{signal.timeFrame}</p>
                                         <p css={styles.autoSignalCell}>{signal.price}</p>
-                                        <div css={styles.autoSignalCell}><p css={styles.statusButton}>Pending</p></div>
                                         <div css={styles.autoSignalCell}>
-                                            <Icon name="pencil" style={{ marginRight: 20 }} />
+                                            <p 
+                                                css={styles.statusButton} 
+                                                style={{ backgroundColor: signal.status === 'ACTIVE' ? 'green': 'red' }}
+                                            >{signal.status}</p>
+                                        </div>
+                                        <div css={styles.autoSignalCell}>
                                             <Icon 
                                                 name="trash alternate outline" 
                                                 color="red" 

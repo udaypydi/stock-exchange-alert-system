@@ -8,9 +8,8 @@ const styles = {
     `,
 
     statusButton: css`
-        border: 1px solid #038fde;
-        color: #038fde;
-        border-radius: 5px;
+        color: #ffffff;
+        background: green;
         width: 80px;
         padding: 2px 15px 2px 15px;
         height: 25px;

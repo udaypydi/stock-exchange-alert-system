@@ -169,13 +169,13 @@ function renderExpertSignal(props) {
 
         if (key === 'buy') {
             stopLossProfit = {
-                stopLoss: currentMarketPrice[currencyPair] * 99 / 100,
-                targetProfit: currentMarketPrice[currencyPair] * 101 / 100
+                stopLoss: selectedCurrencyPairPrice * 99 / 100,
+                targetProfit: selectedCurrencyPairPrice * 101 / 100
             }
         } else {
             stopLossProfit = {
-                stopLoss: currentMarketPrice[currencyPair] * 101 / 100,
-                targetProfit: currentMarketPrice[currencyPair] * 99 / 100
+                stopLoss: selectedCurrencyPairPrice * 101 / 100,
+                targetProfit: selectedCurrencyPairPrice * 99 / 100
             }
         }
 
@@ -350,7 +350,7 @@ function renderExpertSignal(props) {
                                                             borderRadius: 5 
                                                         }}
                                                         onClick={() => {
-                                                            if (selectedCurrencyPairPriceCount >= 1) {
+                                                            if (selectedCurrencyPairPriceCount >= -10) {
                                                                 const countIncrease = selectedCurrencyPairPriceCount - 1;
                                                                 const initialPrice = currentMarketPrice[currencyPair];
                                                                 setSelectedCurrencyPairPrice(initialPrice * (100 + countIncrease) / 100);
@@ -448,35 +448,59 @@ function renderExpertSignal(props) {
                                         {
                                             selectedCurrencyPairPrice && (
                                                 <div>
-                                                    <button 
-                                                        style={{ 
-                                                            backgroundColor:  '#2b2e4c', 
-                                                            color: '#ffffff', 
-                                                            width: 25, 
-                                                            borderRadius: 5 
-                                                        }}
-                                                        onClick={() => {
-                                                            if (stopLossPriceCount <= 10) {
-                                                                if (alerts === 'buy' && stopLossPrice <= selectedCurrencyPairPrice ||
-                                                                    slerts === 'sell' && stopLossPrice >= selectedCurrencyPairPrice
-                                                                ) {
-                                                                    const countIncrease = stopLossPriceCount + 1;
-                                                                    const initialPrice = getStopLossTargetProfit(alerts);
-                                                                    setStopLossPrice(initialPrice * (100 + countIncrease) / 100);
-                                                                    setStopLossPriceCount(countIncrease);
+                                                    {
+                                                        stopLossPriceCount < 0 && (
+                                                        <button 
+                                                            style={{ 
+                                                                backgroundColor:  '#2b2e4c', 
+                                                                color: '#ffffff', 
+                                                                width: 25, 
+                                                                borderRadius: 5 
+                                                            }}
+                                                            onClick={() => {
+                                                                if (stopLossPriceCount < 0) {
+                                                                    if (alerts === 'buy' && stopLossPrice <= selectedCurrencyPairPrice ||
+                                                                        alerts === 'sell' && stopLossPrice >= selectedCurrencyPairPrice
+                                                                    ) {
+                                                                        const countIncrease = stopLossPriceCount + 1;
+                                                                        const initialPrice = getStopLossTargetProfit(alerts);
+                                                                        setStopLossPrice(initialPrice * (100 + countIncrease) / 100);
+                                                                        setStopLossPriceCount(countIncrease);
+                                                                    }
                                                                 }
-                                                            }
-                                                        }}
-                                                    >+</button>
-                                                    <button 
-                                                        style={{ 
-                                                            backgroundColor:  '#2b2e4c', 
-                                                            color: '#ffffff', 
-                                                            width: 25, 
-                                                            marginTop: 2, 
-                                                            borderRadius: 5 
-                                                        }}
-                                                    >-</button>
+                                                            }}
+                                                        >+</button>
+                                                        )
+                                                    }
+
+                                                    {
+                                                        stopLossPriceCount > -11 && (
+                                                            <button 
+                                                                style={{ 
+                                                                    backgroundColor:  '#2b2e4c', 
+                                                                    color: '#ffffff', 
+                                                                    width: 25, 
+                                                                    marginTop: 2, 
+                                                                    borderRadius: 5 
+                                                                }}
+
+                                                                onClick={() => {
+                                                                    if (stopLossPriceCount > -11) {
+                                                                        if (alerts === 'buy' && stopLossPrice <= selectedCurrencyPairPrice ||
+                                                                            alerts === 'sell' && stopLossPrice >= selectedCurrencyPairPrice
+                                                                        ) {
+                                                                            const countIncrease = stopLossPriceCount - 1;
+                                                                            const initialPrice = getStopLossTargetProfit(alerts);
+                                                                            setStopLossPrice(initialPrice * (100 + countIncrease) / 100);
+                                                                            setStopLossPriceCount(countIncrease);
+                                                                        }
+                                                                    }
+                                                                }}
+                                                            >-</button>
+                                                        )
+                                                    }
+                                                    
+                                                    
                                                 </div>
                                             )
                                         }
