@@ -23,6 +23,7 @@ const styles = {
 
     dropdownContainer: css`
         margin: 10px;
+        color: #ffffff;
     `,
 
     dateContainer: css`

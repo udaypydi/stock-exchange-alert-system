@@ -127,7 +127,7 @@ function createSimpleMovingAverageSignal(signalData) {
                                         }
                                     });
     
-                                    database.collection('alerts').insert({ ...alert, email }, (err, result) => {
+                                    database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
                                         if (err) console.log(err);
                                         console.log('alert created');
                                     });
@@ -167,7 +167,7 @@ function createSimpleMovingAverageSignal(signalData) {
                                         }
                                     });
     
-                                    database.collection('alerts').insert({ ...alert, email }, (err, result) => {
+                                    database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
                                         if (err) console.log(err);
                                         console.log('alert created');
                                     });
@@ -265,7 +265,7 @@ function createExponentialMovingAverage(signalData) {
                                         }
                                     });
     
-                                    database.collection('alerts').insert({ ...alert, email }, (err, result) => {
+                                    database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
                                         if (err) console.log(err);
                                         console.log('alert created');
                                     });
@@ -305,7 +305,7 @@ function createExponentialMovingAverage(signalData) {
                                         }
                                     });
     
-                                    database.collection('alerts').insert({ ...alert, email }, (err, result) => {
+                                    database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
                                         if (err) console.log(err);
                                         console.log('alert created');
                                     });
@@ -402,7 +402,7 @@ function createRSISignal(signalData) {
                                 console.log('Email sent: ' + info.response);
                             }
                             });
-                        database.collection('alerts').insert({ ...alert, email }, (err, result) => {
+                        database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
                             if (err) console.log(err);
                             console.log('alert created');
                         });
@@ -466,7 +466,7 @@ function createRSISignal(signalData) {
                                 console.log('Email sent: ' + info.response);
                             }
                             });
-                        database.collection('alerts').insert({ ...alert, email }, (err, result) => {
+                        database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
                             if (err) console.log(err);
                             console.log('alert created');
                         })
@@ -565,7 +565,7 @@ function createBollingerBands(signalData) {
                                             }
                                         });
 
-                                        database.collection('alerts').insert({ ...alert, email }, (err, result) => {
+                                        database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
                                             if (err) console.log(err);
                                             console.log('alert created');
                                         });
@@ -605,7 +605,7 @@ function createBollingerBands(signalData) {
                                             }
                                         });
 
-                                        database.collection('alerts').insert({ ...alert, email }, (err, result) => {
+                                        database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
                                             if (err) console.log(err);
                                             console.log('alert created');
                                         });
@@ -702,7 +702,7 @@ function createMACDSignals(signalData) {
                                     }
                                 });
 
-                                database.collection('alerts').insert({ ...alert, email }, (err, result) => {
+                                database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
                                     if (err) console.log(err);
                                     console.log('alert created');
                                 });
@@ -740,7 +740,7 @@ function createMACDSignals(signalData) {
                                     }
                                 });
 
-                                database.collection('alerts').insert({ ...alert, email }, (err, result) => {
+                                database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
                                     if (err) console.log(err);
                                     console.log('alert created');
                                 });

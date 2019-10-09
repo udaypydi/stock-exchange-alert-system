@@ -245,7 +245,7 @@ function renderAutoSignalForm(props) {
                                         css={styles.dropdownContainer}
                                         text={currencyPair}
                                         onChange={handleCurrencyPairChange}
-                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
+                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }}
                                         onFocus={() => setActiveElement('CURRENCY_PAIR')}
                                         onBlur={() => setActiveElement('')}
                                         error={showErrors && !currencyPair}
@@ -266,7 +266,7 @@ function renderAutoSignalForm(props) {
                                         css={styles.dropdownContainer}
                                         text={timeFrame}
                                         onChange={handleTimeFrameChange}
-                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0 }}
+                                        style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }}
                                         onFocus={() => setActiveElement('TIME_FRAME')}
                                         onBlur={() => setActiveElement('')}
                                         error={showErrors && !timeFrame}
@@ -306,7 +306,7 @@ function renderAutoSignalForm(props) {
                                         options={INDICATOR_CONSTANTS} 
                                         css={styles.dropdownContainer}
                                         text={INDICATOR_KEY_VALUE_MAP[indicator]}
-                                        style={{ backgroundColor: '#2b2e4c', borderRadius: 0 }}
+                                        style={{ backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }}
                                         onChange={handleIndicatorChange}
                                         onFocus={() => setActiveElement('INDICATOR')}
                                         onBlur={() => setActiveElement('')}
@@ -329,7 +329,7 @@ function renderAutoSignalForm(props) {
                                                     search
                                                     selection
                                                     options={periodValueDropdownGenerator()}
-                                                    style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
+                                                    style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }} 
                                                     css={styles.dropdownContainer}
                                                     text={period}
                                                     error={showErrors && !period}
@@ -344,7 +344,7 @@ function renderAutoSignalForm(props) {
                                                 search
                                                 selection
                                                 options={OHLC} 
-                                                style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
+                                                style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }} 
                                                 css={styles.dropdownContainer}
                                                 text={ohlc}
                                                 error={showErrors && !ohlc}
@@ -368,7 +368,7 @@ function renderAutoSignalForm(props) {
                                                 search
                                                 selection
                                                 options={devitaionConstantGenerator()} 
-                                                style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
+                                                style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }} 
                                                 css={styles.dropdownContainer}
                                                 text={deviation}
                                                 error={showErrors && !deviation}
@@ -386,7 +386,7 @@ function renderAutoSignalForm(props) {
                                             search
                                             selection
                                             options={MACD_PARAMETERS.fast} 
-                                            style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
+                                            style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }} 
                                             css={styles.dropdownContainer}
                                             text={fast}
                                             error={showErrors && !fast}
@@ -398,7 +398,7 @@ function renderAutoSignalForm(props) {
                                             search
                                             selection
                                             options={MACD_PARAMETERS.slow} 
-                                            style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
+                                            style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }} 
                                             css={styles.dropdownContainer}
                                             text={slow}
                                             error={showErrors && !slow}
@@ -410,7 +410,7 @@ function renderAutoSignalForm(props) {
                                             search
                                             selection
                                             options={MACD_PARAMETERS.signal} 
-                                            style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0 }} 
+                                            style={{ width: '50%', margin: 10, backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }} 
                                             css={styles.dropdownContainer}
                                             text={signal}
                                             error={showErrors && !signal}

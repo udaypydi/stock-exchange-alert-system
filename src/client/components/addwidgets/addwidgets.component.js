@@ -15,15 +15,16 @@ function AddWidgetModal(props) {
   const { activeGraphs } = props.user;
 
   function handleClick() {
-    console.log('icon clicked');
     setShowWidgetsModal(!showWidgetsModal);
   }
 
   function generateCurrencyOptions(activeGraphs) {
     const currencyGraphsArray = [];
 
-    Object.keys(CURRENCY_OPTIONS).forEach(currency => {
-      if (activeGraphs.indexOf(currency) === -1) {
+    const alreadyAddedCurrencyPairs = activeGraphs.map(graph => graph.currency);
+
+    CURRENCY_OPTIONS.forEach(currency => {
+      if (alreadyAddedCurrencyPairs.indexOf(currency) === -1) {
         currencyGraphsArray.push({
           key: currency,
           name: currency,

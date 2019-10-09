@@ -121,7 +121,7 @@ class MyProfile extends Component {
                 }
                  
                 <div style={{ flexDirection: 'column' }}>
-                    {
+                    {/* {
                         !this.state.formEdit && (
                             <Icon 
                                 name="pencil"
@@ -131,7 +131,7 @@ class MyProfile extends Component {
                                 })}
                             />
                         )
-                    }
+                    } */}
                     {
                         this.state.formEdit && (
                             <Icon 
@@ -465,7 +465,7 @@ class MyProfile extends Component {
                         </div>
                     </div>
                     </div>
-                    <input type="file" id="profile-pic-uploader" onChange={this.handleImageUpload} style={ { display: 'none' } } />
+                    <input type="file" id="profile-pic-uploader" accept=".jpg,.png,.jpeg" onChange={this.handleImageUpload} style={ { display: 'none' } } />
                 </div>
                 </Responsive>
               <Responsive maxWidth={700}>

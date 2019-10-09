@@ -100,6 +100,7 @@ module.exports = {
                                         alert_type: 'Price High',
                                         price: currency_exchange,
                                         created_at: moment().format("MMM Do YY"),
+                                        type: 'PRICE_ALERTS',
                                         alert_id,
                                     };
         
@@ -139,6 +140,7 @@ module.exports = {
                                         alert_type: 'Price Low',
                                         price: currency_exchange,
                                         created_at: moment().format("MMM Do YY"),
+                                        type: 'PRICE_ALERTS',
                                         alert_id,
                                         status: 'ACTIVE',
                                     };
@@ -168,7 +170,6 @@ module.exports = {
                             });
                         }
                     } else {
-                        console.log('*******Alert Service Expired********', alert_id);
                         database.collection('price_alerts_signals').updateOne({ email: req.session.user.email, _id: ObjectId(alert_id) }, { $set : { status: 'EXPIRED' } });
                         clearInterval(priceAlerts[alert_id]);
                     }

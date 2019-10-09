@@ -208,6 +208,20 @@ function renderCurrencyGraph(currencyData, props) {
     );
 }
 
+function getAlertType(type) {
+    if (type === 'PRICE_ALERTS') {
+        return 'PA';
+    }  
+    
+    if (type === 'INDICATOR_ALERTS') {
+        return 'IA';
+    }
+
+    if (type === 'EXPERT_ALERTS') {
+        return 'EA';
+    }
+}
+
 function renderLatestAlerts() {
     const [latestAlerts, setLatestAlerts] = useState([]);
 
@@ -233,16 +247,17 @@ function renderLatestAlerts() {
                 margin: 0,
                 border: '1px solid #565e84', 
             }}>
+            <span style={{ color: '#9c9fa6' }}>{getAlertType(alert.type)}</span>
             <p style={{ color: '#9c9fa6', marginBottom: 0 }}>{alert.currencyPair || alert.currency_pair}</p>
             <p style={{ color: '#9c9fa6',  marginBottom: 0 }}>{alert.price || alert.buyPrice || alert.sellPrice}</p>
             {
                 (alert.buyPrice || alert.alert_type === 'Price High') && (
-                    <Icon name="arrow up" color="green" />
+                    <span style={{ color: 'green' }}>High</span>
                 )
             }
             {
                 (alert.sellPrice || alert.alert_type === 'Price Low') && (
-                    <Icon name="arrow down" color="red" />
+                    <span style={{ color: 'red' }}>Low</span>
                 )
             }
         </div>

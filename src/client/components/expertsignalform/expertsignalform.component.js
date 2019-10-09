@@ -105,13 +105,28 @@ function renderExpertSignal(props) {
         //     })
     }, []);
 
+
+    function checkProfitLossValid() {
+        if (alerts === 'sell') {
+            if (stopLossPrice >= selectedCurrencyPairPrice && targetProfitPrice <= selectedCurrencyPairPrice) {
+                return true
+            } 
+            return false;
+        }
+
+        if (alerts === 'buy') {
+            if (stopLossPrice <= selectedCurrencyPairPrice && targetProfitPrice >= selectedCurrencyPairPrice) {
+                return false;
+            } 
+            return true;
+        }
+    }
+
     function isFormDataValid() {
-        const { signalTiming } = props;
         if (
             currencyPair
             && signalName
             && alerts
-            && indicator
             && stopLoss
             && targetProfit
             && expiryTime
@@ -132,20 +147,21 @@ function renderExpertSignal(props) {
         const { dispatch, signalTiming, signalMail } = props;
         const isValid = isFormDataValid();
         if (isValid) {
-            dispatch(submitExpertSignalData({ ...props.expertSignal, ...signalTiming, ...signalMail }));
+            dispatch(submitExpertSignalData({ ...props.expertSignal, ...signalTiming, expiryTime, timeFrame }));
         } else {
             setShowErrors(true);
             setshowErrorNotification(true);
             setTimeout(() => {
                 setshowErrorNotification(false);
             }, 3000);
-            console.log('Error');
         }
     }
 
     function handleCurrencyPairChange(event, data) {
         const { dispatch } = props;
         dispatch(expertSignalCurrencyChange(data.value));
+        dispatch(profitLossTargetChange('profit', currentMarketPrice[data.value]));
+        dispatch(profitLossTargetChange('loss', currentMarketPrice[data.value]));
         setSelectedCurrencyPairPrice(currentMarketPrice[data.value]);
     }
 
@@ -259,6 +275,7 @@ function renderExpertSignal(props) {
                                                 backgroundColor: '#2b2e4c',
                                                 padding: 10,
                                                 border: 0,
+                                                color: '#ffffff',
                                             }}
                                             placeholder='Signal name (ex: My golden crossover)'
                                             value={signalName}
@@ -314,7 +331,7 @@ function renderExpertSignal(props) {
                                             placeholder='Price'
                                             onFocus={() => setActiveElement('PRICE')}
                                             onBlur={() => setActiveElement('')}
-                                            error={showErrors && !price}
+                                            error={showErrors && !selectedCurrencyPairPrice}
                                         />
                                         {selectedCurrencyPairPrice && (
                                             <div>
@@ -376,6 +393,7 @@ function renderExpertSignal(props) {
                                                 backgroundColor: '#2b2e4c',
                                                 padding: 10,
                                                 border: 0,
+                                                color: '#ffffff',
                                             }}
                                             placeholder='Trade Lots'
                                             value={tradeLots}
@@ -437,73 +455,13 @@ function renderExpertSignal(props) {
                                             }}
                                             placeholder='Stop Loss (No of pips)'
                                             text={stopLoss}
-                                            value={stopLossPrice}
+                                            value={stopLoss}
                                             type="number"
-                                            disabled
                                             error={showErrors && !stopLoss}
                                             onChange={(event) => handleProfitLossChange('loss', event.target.value)}
                                             onFocus={() => setActiveElement('STOP_LOSS')}
                                             onBlur={() => setActiveElement('')}
                                         />
-                                        {
-                                            selectedCurrencyPairPrice && (
-                                                <div>
-                                                    {
-                                                        stopLossPriceCount < 0 && (
-                                                        <button 
-                                                            style={{ 
-                                                                backgroundColor:  '#2b2e4c', 
-                                                                color: '#ffffff', 
-                                                                width: 25, 
-                                                                borderRadius: 5 
-                                                            }}
-                                                            onClick={() => {
-                                                                if (stopLossPriceCount < 0) {
-                                                                    if (alerts === 'buy' && stopLossPrice <= selectedCurrencyPairPrice ||
-                                                                        alerts === 'sell' && stopLossPrice >= selectedCurrencyPairPrice
-                                                                    ) {
-                                                                        const countIncrease = stopLossPriceCount + 1;
-                                                                        const initialPrice = getStopLossTargetProfit(alerts);
-                                                                        setStopLossPrice(initialPrice * (100 + countIncrease) / 100);
-                                                                        setStopLossPriceCount(countIncrease);
-                                                                    }
-                                                                }
-                                                            }}
-                                                        >+</button>
-                                                        )
-                                                    }
-
-                                                    {
-                                                        stopLossPriceCount > -11 && (
-                                                            <button 
-                                                                style={{ 
-                                                                    backgroundColor:  '#2b2e4c', 
-                                                                    color: '#ffffff', 
-                                                                    width: 25, 
-                                                                    marginTop: 2, 
-                                                                    borderRadius: 5 
-                                                                }}
-
-                                                                onClick={() => {
-                                                                    if (stopLossPriceCount > -11) {
-                                                                        if (alerts === 'buy' && stopLossPrice <= selectedCurrencyPairPrice ||
-                                                                            alerts === 'sell' && stopLossPrice >= selectedCurrencyPairPrice
-                                                                        ) {
-                                                                            const countIncrease = stopLossPriceCount - 1;
-                                                                            const initialPrice = getStopLossTargetProfit(alerts);
-                                                                            setStopLossPrice(initialPrice * (100 + countIncrease) / 100);
-                                                                            setStopLossPriceCount(countIncrease);
-                                                                        }
-                                                                    }
-                                                                }}
-                                                            >-</button>
-                                                        )
-                                                    }
-                                                    
-                                                    
-                                                </div>
-                                            )
-                                        }
                                         {
                                             activeElement === 'STOP_LOSS' && (
                                                 <div class="tooltip">
@@ -524,22 +482,13 @@ function renderExpertSignal(props) {
                                             }}
                                             placeholder='Target Profit (No of pips)'
                                             text={targetProfit}
-                                            value={targetProfitPrice}
+                                            value={targetProfit}
                                             type="number"
-                                            disabled
                                             error={showErrors && !targetProfit}
                                             onChange={(event) => handleProfitLossChange('profit', event.target.value)}
                                             onFocus={() => setActiveElement('TARGET_PROFIT')}
                                             onBlur={() => setActiveElement('')}
                                         />
-                                         {
-                                            selectedCurrencyPairPrice && (
-                                                <div>
-                                                    <button style={{ backgroundColor:  '#2b2e4c', color: '#ffffff', width: 25, borderRadius: 5 }}>+</button>
-                                                    <button style={{ backgroundColor:  '#2b2e4c', color: '#ffffff', width: 25, marginTop: 2, borderRadius: 5 }}>-</button>
-                                                </div>
-                                            )
-                                        }
                                         {
                                             activeElement === 'TARGET_PROFIT' && (
                                                 <div class="tooltip">
@@ -579,14 +528,14 @@ function renderExpertSignal(props) {
                                             selection
                                             options={expiryTimeOptions()}
                                             css={styles.dropdownContainer}
-                                            text={timeFrame}
+                                            text={expiryTime}
                                             onChange={(event, data) => {
                                                 setExpiryTime(data.value);
                                             }}
                                             style={{ width: '50%', backgroundColor: '#2b2e4c', borderRadius: 0, color: '#ffffff' }}
                                             onFocus={() => setActiveElement('EXPIRY_TIME')}
                                             onBlur={() => setActiveElement('')}
-                                            error={showErrors && !timeFrame}
+                                            error={showErrors && !expiryTime}
                                         />
                                         {
                                             activeElement === 'EXPIRY_TIME' && (
