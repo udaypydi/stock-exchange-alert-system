@@ -38,3 +38,24 @@ export const validateOTP = (userData) => fetch('/validate-otp', {
     },
     body: JSON.stringify(userData),
 }).then(res => res.json());
+
+
+export const forgotPassword = (email) => fetch('/reset-password', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email }),
+}).then(res => res.json());
+
+export const resetPassword = (data) => fetch('/reset-user-data', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
+}).then(res => res.json());

@@ -40,7 +40,6 @@ module.exports = {
                 console.log(user);
                 database.collection('alerts').find({ email: JSON.parse(user.session).user.email }).toArray((err, result) => {
                   database.collection('users').find({ email: req.session.user.email}).toArray((error, userData) => {
-                    console.log(userData[0].location);
                     res.json({ 
                       email: JSON.parse(user.session).user.email, 
                       isLoggedIn: true, 
@@ -146,6 +145,54 @@ module.exports = {
           res.json({ message: 'User already exist', userAlreadyExist: true  });
         }
       });
+    },
+
+    resetPassword: (req, res) => {
+      database.collection('users').find({ email: req.body.email }).toArray((err, result) => {
+        if (!result.length) {
+          res.json({ status: 404, message: 'User not found' });
+        } else {
+          const { email } = req.body;
+          const OTP = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+          transporter.sendMail({
+            from : 'noreply@signalant.com',
+            to: email,
+            subject: 'Signalant - Account Verification',
+            text: `
+              Hi ,
+
+              Please verify your email address by entering the OTP: 
+              
+              ${OTP}
+
+              If you encounter any problem, please contact us at contact@signalant.com
+              
+              Thank you,
+              Signalant Team
+            `
+          }, (error) => {
+            if (error) {
+              throw error
+            } 
+
+            database.collection('unverified_users').find({ email }).toArray((error, result) => {
+              if (error) {
+                throw error;
+              }
+
+              if (result.length) {
+                database.collection('unverified_users').update({ email }, {$set: { otp: OTP }});
+                res.json({ message: 'OTP SENT', isSuccessfull: true, status: 200 });
+              } else {
+                database.collection('unverified_users').insert({ email, otp: OTP }, (error, result) => {
+                  if (error) throw error;
+                  res.json({ message: 'OTP SENT', isSuccessfull: true, status: 200 });
+                });
+              }
+            })
+          });
+        }
+      })
     },
 
     validateOTP: (req, res) => {

@@ -72,11 +72,30 @@ module.exports = {
         },
 
         {
+            url: '/reset-password',
+            callback: (req, res) => {
+                authentication.resetPassword(req, res);
+            }
+        },
+
+        {
             url: '/validate-otp',
             callback: (req, res) => {
                 authentication.validateOTP(req, res);
             }
-        }
+        },
+        {
+            url: '/reset-user-data',
+            callback: (req, res, next) => passport.authenticate('local.forgotPassword', (err, user, info) => {
+              if (user) {
+                res.json({ passwordReset: true, isLoggedin: true, message: 'Registered succesfully', userId: req.session.user });
+                // res.redirect('/');
+              }
+              if (info) {
+                res.json({passwordReset: false, message: info.message});
+              }
+            })(req, res, next)
+        },
       
     ]
 }

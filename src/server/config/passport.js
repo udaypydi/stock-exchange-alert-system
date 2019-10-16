@@ -105,3 +105,31 @@ passport.use('local.signup', new LocalStrategy({
         return done(null ,user);
       })
   }));
+
+
+  passport.use('local.forgotPassword', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true,
+  }, (req, phoneNumber, password, done) => {
+    database.collection('users').findOne({ 'email': req.body.email }, (err, user) => {
+      if (err) {
+        return done(err);
+      }
+      if (user) {
+        var newUser = {};
+        newUser.email = req.body.email;
+        newUser.password = authentication.encryptPassword(req.body.password);
+        database.collection('users').find({ email: req.body.email }).toArray((err, result) => {
+          database.collection('users').update({email: req.body.email}, { ...result[0], ...newUser }, { upsert: true }, (err, result) => {
+            if (err) {
+              return done(err);
+            }
+            req.session.user = { ...newUser };
+            newUser.sessionID = req.sessionID;
+            return done(null, newUser);
+          });
+        })
+      }
+    })
+  }));
