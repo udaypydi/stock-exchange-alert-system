@@ -8,6 +8,7 @@ import CustomSidebar from 'commons/sidebar/customSidebar.component';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import ExpertSignalsMobileList from './expertsignallist.mobile.component';
+import { populateExpertSignalForm } from '../../expertsignalform/expertsignalform.action';
 import Header from 'commons/header/header.component';
 import styles from './expertsignalslist.styles';
 
@@ -28,6 +29,11 @@ function ExpertSignal(props) {
                 console.log(err);
             });
     }, []);
+
+    const handleEditSignal = (signal) => {
+        props.dispatch(populateExpertSignalForm(signal));
+        props.history.push('/create-expert-signal');
+    }
 
     return (
         <React.Fragment>
@@ -80,6 +86,12 @@ function ExpertSignal(props) {
                                                 <p css={styles.autoSignalCell}>1 Hours</p>
                                                 <div css={styles.autoSignalCell}><p css={styles.statusButton}>ACTIVE</p></div>
                                                 <div css={styles.autoSignalCell}>
+                                                    <Icon 
+                                                        name="edit" 
+                                                        color="#656792" 
+                                                        style={{ marginRight: 20 }} 
+                                                        onClick={() => handleEditSignal(signal)}
+                                                    />
                                                     <Icon 
                                                         name="trash alternate outline" 
                                                         color="red" 

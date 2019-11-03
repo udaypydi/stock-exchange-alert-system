@@ -198,9 +198,15 @@ module.exports = {
         });
     },
 
+    fetchAlertById: (req, res) => {
+        const { id } = req.query;
+        database.collection('price_alerts_signals').find({ _id: ObjectId(id) }).toArray((err, result) => {
+            res.json(result[0]);
+        });
+    },
+
     deletePriceAlertSignals: (req, res) => {
         const { id } = req.query;
-        console.log(id);
         mongoconnection.dbInstance((db) => {
             const database = db.db('signalant');
             database.collection('price_alerts_signals').remove({ _id: ObjectId(id) }, true);

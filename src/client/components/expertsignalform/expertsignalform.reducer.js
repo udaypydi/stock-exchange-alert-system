@@ -9,6 +9,8 @@ import {
     NOTIFY_SUCCESS_ACTION,
     EXPERT_SIGNAL_FORM_INITIAL_STATE,
     PROFIT_LOSS_CHANGE,
+    RESET_EXPERT_ALERTS_FORM,
+    POPULATE_EXPERT_SIGNAL_DATA,
 } from './expertsignalform.constant';
 
 export default function ExpertSignalFormReducer(state = EXPERT_SIGNAL_FORM_INITIAL_STATE, action) {
@@ -49,6 +51,12 @@ export default function ExpertSignalFormReducer(state = EXPERT_SIGNAL_FORM_INITI
         case NOTIFY_SUCCESS_ACTION:
             return { ...state, isSuccess: action.flag };
 
+        case RESET_EXPERT_ALERTS_FORM:
+            return { ...EXPERT_SIGNAL_FORM_INITIAL_STATE };
+
+        case POPULATE_EXPERT_SIGNAL_DATA:
+            return { ...action.signalData };
+            
         default: 
             return { ...state };
     }

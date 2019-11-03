@@ -47,6 +47,7 @@ import {
     expertSignalIntervalUpdate,
     toggleLoadingStatus,
     profitLossTargetChange,
+    resetExpertAlertForm,
 } from './expertsignalform.action';
 import styles from './expertsignalform.styles';
 import './expertsignalform.css';
@@ -593,6 +594,7 @@ function renderExpertSignal(props) {
 }
 
 function ExpertSignalFormComponent(props) {
+
     return (
         <React.Fragment>
             <Helmet>

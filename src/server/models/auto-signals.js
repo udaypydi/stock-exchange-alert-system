@@ -806,5 +806,15 @@ module.exports = {
                 res.json({ status: 200, 'alerts_signals': result });
             });
         })
+    },
+
+    fetchSignalById: (req, res) => {
+        const { id } = req.query;
+        mongoconnection.dbInstance((db) => {
+            const database = db.db('signalant');
+            database.collection('signals').find({ _id: ObjectId(id) }).toArray((err, result) => {
+                res.json(result[0]);
+            })
+        })
     }
 };

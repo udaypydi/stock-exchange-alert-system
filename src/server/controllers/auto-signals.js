@@ -13,6 +13,12 @@ module.exports = {
             callback: (req, res) => {
                 autoSignals.deleteAutoSignal(req, res);
             }
+        },
+        {
+            url: '/auto-signal-byid',
+            callback: (req, res) => {
+                autoSignals.fetchSignalById(req, res);
+            }
         }
     ],
     post: [

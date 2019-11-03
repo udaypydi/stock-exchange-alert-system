@@ -8,6 +8,8 @@ import {
     TOGGLE_LOADING_STATE,
     NOTIFY_SUCCESS_ACTION,
     PROFIT_LOSS_CHANGE,
+    RESET_EXPERT_ALERTS_FORM,
+    POPULATE_EXPERT_SIGNAL_DATA,
  } from './expertsignalform.constant';
 import { createAutoSignal } from './expertsignalform.api';
 import history from '../../history';
@@ -104,4 +106,17 @@ export function devitaionConstantGenerator() {
         });
     }
     return deviationConstant;
+}
+
+export function resetExpertAlertForm() {
+    return {
+        type: RESET_EXPERT_ALERTS_FORM,
+    };
+}
+
+export function populateExpertSignalForm(signalData) {
+    return {
+        type: POPULATE_EXPERT_SIGNAL_DATA,
+        signalData,
+    };
 }

@@ -7,6 +7,7 @@ import Header from 'commons/header/header.component';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { populatePriceAlerts } from "../pricealertsform/pricealertsform.action";
 import { fetchAllAutoSignals, deleteSignalList } from './pricealertslist.action';
 import PriceListMobile from './pricealertslist.mobile.component';
 import styles from './pricealertslist.styles';
@@ -22,6 +23,11 @@ function PriceAlertsList(props) {
     function handleDeleteSignals(index) {
         const { signalsList } = priceAlertsList;
         dispatch(deleteSignalList(signalsList[index]._id));
+    }
+
+    function handleEditSignal(signal) {
+        dispatch(populatePriceAlerts(signal));
+        props.history.push(`/create-price-alerts?type=edit&id=${signal._id}`);
     }
 
     return (
@@ -106,6 +112,12 @@ function PriceAlertsList(props) {
                                             >{signal.status}</p>
                                         </div>
                                         <div css={styles.autoSignalCell}>
+                                            <Icon 
+                                                name="edit" 
+                                                color="#656792" 
+                                                style={{ marginRight: 20 }} 
+                                                onClick={() => handleEditSignal(signal)}
+                                            />
                                             <Icon 
                                                 name="trash alternate outline" 
                                                 color="red" 

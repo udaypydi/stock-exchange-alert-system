@@ -57,27 +57,29 @@ const styles = {
     `,
 
     statsContainer: css`
-        justify-content: center;
+        justify-content: flex-start;
         display: flex;
         align-items: center;
-        flex-direction: column;
+        flex-direction: row;
         border-bottom: 1px solid #565e84;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        padding-top: 20px;
+        padding-bottom: 20px;
     `,
 
     statsCount: css`
         margin-bottom: 0;
-        font-size: 30px;
+        font-size: 60px;
         color: #9c9fa6 ;
         margin-bottom: 10px;
         margin-top: 10px;
+        margin-left: 30px;
     `,
 
     statsTitle: css`
         color: #9c9fa6 ;
         font-size: 20px;
         font-weight: bold;
+        margin-left: 30px;
     `
 };
 

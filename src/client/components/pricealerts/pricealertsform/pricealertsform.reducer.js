@@ -7,6 +7,7 @@ import {
     PRICE_ALERT_TIME_INTERVAL_CHANGE,
     PRICE_ALERT_TIME_OUT_CHANGE,
     PRICE_ALERT_TYPE_SELECT,
+    POPULATE_PRICE_ALERTS,
 } from './pricealertsform.constant';
 
 export default function priceAlertsReducer(state = PRICE_ALERT_SIGNAL_INIT_STATE, action) {
@@ -53,6 +54,9 @@ export default function priceAlertsReducer(state = PRICE_ALERT_SIGNAL_INIT_STATE
                 alerts: newAlerts,
             }
         }
+
+        case POPULATE_PRICE_ALERTS:
+            return { ...action.payload };
                 
         default:
             return { ...state };

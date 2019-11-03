@@ -10,6 +10,7 @@ import {
     AUTO_SIGNAL_INTERVAL_CHANGE,
     TOGGLE_LOADING_STATE,
     NOTIFY_SUCCESS_ACTION,
+    POPULATE_INDICATOR_SIGNAL,
  } from './autosignalform.constants';
 import { createAutoSignal } from './autosignalform.api';
 import history from '../../../history';
@@ -119,3 +120,10 @@ export function devitaionConstantGenerator() {
     return deviationConstant;
 }
 
+
+export function populateIndicatorSignal(payload) {
+    return {
+        type: POPULATE_INDICATOR_SIGNAL,
+        payload
+    };
+}

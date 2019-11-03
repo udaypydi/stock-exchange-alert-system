@@ -294,6 +294,8 @@ function renderStatsBar(user) {
                 justifyContent: 'flex-start',
                 overflow: 'auto',
                 padding: 10,
+                alignItems: 'flex-start',
+                flexDirection: 'column'
             }}>
                  <p css={styles.statsTitle}>RECENT ALERTS</p>
                 {renderLatestAlerts()}

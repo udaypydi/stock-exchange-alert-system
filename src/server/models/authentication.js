@@ -51,7 +51,7 @@ module.exports = {
                       banner_url: userData[0].banner_url,
                       active_graphs: userData[0].activeGraphs,
                       phoneNumber: userData[0].phoneNumber,
-                      location: userData[0].location,
+                      location: userData[0].country_code,
                     });
                   });
                 })

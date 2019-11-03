@@ -10,6 +10,7 @@ import {
     AUTO_SIGNAL_INTERVAL_CHANGE,
     TOGGLE_LOADING_STATE,
     NOTIFY_SUCCESS_ACTION,
+    POPULATE_INDICATOR_SIGNAL,
 } from './autosignalform.constants';
 
 export default function AutoSignalFormReducer(state = AUTO_SIGNAL_FORM_INITIAL_STATE, action) {
@@ -85,6 +86,9 @@ export default function AutoSignalFormReducer(state = AUTO_SIGNAL_FORM_INITIAL_S
         case NOTIFY_SUCCESS_ACTION:
             return { ...state, isSuccess: action.flag };
 
+        case POPULATE_INDICATOR_SIGNAL:
+            return { ...action.payload };
+            
         default: 
         return { ...state };
     }

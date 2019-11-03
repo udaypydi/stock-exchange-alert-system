@@ -41,6 +41,13 @@ const styles = {
         width: 120px;
         text-align: center;
         color: #9c9fa6;
+    `,
+    nodatafound: css`
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        height: 240px;
     `
 }
 

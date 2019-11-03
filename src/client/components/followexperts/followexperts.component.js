@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet';
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import Header from 'commons/header/header.component';
+import { resetExpertAlertForm } from '../expertsignalform/expertsignalform.action';
 import { fetchExperts } from './followexperts.api';
 import CustomSidebar from 'commons/sidebar/customSidebar.component';
 import FollowExpertsMobile from './followexperts.mobile.component';
@@ -25,7 +26,8 @@ function FollowExperts(props) {
     }, [props.user.following]);
 
     function navigateToFollowExperts() {
-        const { history } = props;
+        const { history, dispatch } = props;
+        dispatch(resetExpertAlertForm());
         history.push('/create-expert-signal');
     }
 
@@ -48,12 +50,12 @@ function FollowExperts(props) {
                     marginLeft: 10,
                 }}>
                 <img 
-                    src={expert.banner_url} 
+                    src={expert.banner_url || 'https://hookagency.com/wp-content/uploads/2015/11/green-to-blue-ui-gradient-background.jpg'} 
                     css={styles.cardImage}
                 />
                 <div>
                     <Image 
-                        src={expert.profile_pic} 
+                        src={expert.profile_pic || require(`../../assets/${expert.name.split('')[0].toUpperCase()}-01.png`)}
                         style={{
                             borderRadius: 10,
                             height: 60,
@@ -63,16 +65,21 @@ function FollowExperts(props) {
                         }}
                     />
                     <div css={styles.nameContainer}>
-                        <p style={{ width: 100, marginLeft: 10 }}>{expert.email}</p>
-                        <div css={styles.followProfileContainer}>
-                            <Button 
-                                inverted 
-                                color='blue' 
-                                content={user.following.indexOf(expert.email) !== -1 ? 'Unfollow' : 'Follow'}
-                                disabled={expert.email === user.email}
-                                onClick={() => handleFollowExpert(expert.email)}
-                            />
-                        </div>
+                        <p style={{ width: 100, marginLeft: 10, fontSize: 15 }}>{expert.name}</p>
+                        {
+                            expert.email !== user.email && (
+                                <div css={styles.followProfileContainer}>
+                                    <Button 
+                                        inverted 
+                                        color='blue' 
+                                        content={user.following.indexOf(expert.email) !== -1 ? 'Unfollow' : 'Follow'}
+                                        disabled={expert.email === user.email}
+                                        onClick={() => handleFollowExpert(expert.email)}
+                                    />
+                                </div>
+                            )
+                        }
+                       
                     </div>
                     <div css={styles.dataContainer}>
                         <div css={styles.stats}>

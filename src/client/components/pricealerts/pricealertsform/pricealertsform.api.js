@@ -7,3 +7,6 @@ export const createPriceAlerts = (payload) => fetch('/create-price-alerts', {
     },
     body: JSON.stringify(payload),
 }).then(res => res.json());
+
+
+export const fetchAlertById = (id) => fetch(`/price-alert-byid?id=${id}`).then(res => res.json());

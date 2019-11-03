@@ -6,6 +6,7 @@ import {
     PRICE_ALERT_TIME_INTERVAL_CHANGE,
     PRICE_ALERT_TIME_OUT_CHANGE,
     PRICE_ALERT_TYPE_SELECT,
+    POPULATE_PRICE_ALERTS,
 } from './pricealertsform.constant';
 import { createPriceAlerts } from './pricealertsform.api';
 import history from '../../../history';
@@ -66,4 +67,11 @@ export function createTraderPriceAlerts(payload) {
             console.log(json);
             history.push('/price-alerts-list')
         })
+}
+
+export function populatePriceAlerts(payload) {
+    return {
+        type: POPULATE_PRICE_ALERTS,
+        payload,
+    };
 }

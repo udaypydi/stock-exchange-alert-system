@@ -21,6 +21,10 @@ function AutoSignalsList(props) {
         dispatch(deleteSignalList(signalsList[index]._id));
     }
 
+    function handleEditSignal(signal) {
+        props.history.push(`/auto-signals-create?type=edit&id=${signal._id}`);
+    }
+
     return (
         <div style={{ marginTop: 30 }}>
             <Segment 
@@ -49,6 +53,12 @@ function AutoSignalsList(props) {
                         <p css={styles.autoSignalCell}>{signal.signalTimeFrame.timeOutHours} Hours</p>
                         <div css={styles.autoSignalCell}><p css={styles.statusButton}>ACTIVE</p></div>
                         <div css={styles.autoSignalCell}>
+                            <Icon 
+                                name="edit" 
+                                color="#656792" 
+                                style={{ marginRight: 20, cursor: 'pointer' }} 
+                                onClick={() => handleEditSignal(signal)}
+                            />
                             <Icon 
                                 name="trash alternate outline" 
                                 color="red" 

@@ -30,7 +30,10 @@ import {
     priceAlertTimeOutHoursChange,
     createTraderPriceAlerts,
     priceAlertTypeSelect,
+    populatePriceAlerts,
 } from './pricealertsform.action';
+import { fetchAlertById } from './pricealertsform.api';
+
 import styles from './pricealertsform.styles';
 import './pricealertsform.css';
 
@@ -83,24 +86,34 @@ function PriceAlertsForm(props) {
         return false;
     }
 
-    // useEffect(() => {
-    //     fetch(`https://forex.1forge.com/1.0.3/quotes?pairs=XAUUSD,XAGUSD,EURUSD,GBPUSD,AUDUSD,NZDUSD,USDCAD,USDCHF,USDJPY,EURGBP,EURCHF,EURJPY&api_key=uD3ghInLCfnn7gsSKAwV3D1nnp1X55x8`)
-    //         .then(res => res.json())
-    //         .then(json => {
-    //             const currencyPairPrices = {};
-    //             json.forEach(currency => {
-    //                 currencyPairPrices[currency.symbol] = currency.price;
-    //             })
-    //             setCurrentMarketPrice(currencyPairPrices);
-    //     });
-    // }, []);
+    useEffect(() => {
+        fetch(`https://forex.1forge.com/1.0.3/quotes?pairs=XAUUSD,XAGUSD,EURUSD,GBPUSD,AUDUSD,NZDUSD,USDCAD,USDCHF,USDJPY,EURGBP,EURCHF,EURJPY&api_key=uD3ghInLCfnn7gsSKAwV3D1nnp1X55x8`)
+            .then(res => res.json())
+            .then(json => {
+                const currencyPairPrices = {};
+                json.forEach(currency => {
+                    currencyPairPrices[currency.symbol] = currency.price;
+                })
+                setCurrentMarketPrice(currencyPairPrices);
+        });
+    }, []);
+
+    useEffect(() => {
+        if (window.location.hash.split('?')[1] !== undefined) {
+            const id = window.location.hash.split('?')[1].split('&')[1].split('=')[1];
+            fetchAlertById(id)
+                .then(res => {
+                    props.dispatch(populatePriceAlerts(res));
+                })
+        } 
+    }, []);
 
     const handlePriceAlertNameChange = (event) => {
         dispatch(priceAlertNameChange(event.target.value));
     };
 
     const handleCurrencyPairChange = (event, data) => {
-
+        dispatch(priceAlertPriceChange(currentMarketPrice[data.value]));
         dispatch(priceAlertCurrencyPair(data.value));
     };
 
@@ -231,6 +244,7 @@ function PriceAlertsForm(props) {
                                 border: 0, 
                                 color: '#ffffff'
                             }}
+                            type="number"
                             placeholder='Price' 
                             value={price}
                             onChange={handlePriceAlertPriceChange}

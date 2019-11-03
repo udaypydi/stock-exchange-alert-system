@@ -43,6 +43,7 @@ passport.use('local.signup', new LocalStrategy({
         return done(null ,false, { message: 'Email already in use' });
       }
       var newUser = {};
+      console.log(req.body);
       newUser.name = req.body.userName;
       newUser.email = req.body.email;
       newUser.password = authentication.encryptPassword(req.body.password);
@@ -53,6 +54,7 @@ passport.use('local.signup', new LocalStrategy({
       newUser.success_ratio = 0;
       newUser.user_role = 'trader';
       newUser.profile_pic = '';
+      newUser.country_code = req.body.countryCode;
       newUser.activeGraphs = [
         {
           currency: 'EURUSD',

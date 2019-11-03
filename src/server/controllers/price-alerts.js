@@ -19,6 +19,12 @@ module.exports = {
             callback: (req, res) => {
                 priceAlerts.deletePriceAlertSignals(req, res);
             }
+        },
+        {
+            url: '/price-alert-byid',
+            callback: (req, res) => {
+                priceAlerts.fetchAlertById(req, res);
+            }
         }
     ],
     post: [

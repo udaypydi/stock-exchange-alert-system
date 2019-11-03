@@ -43,8 +43,10 @@ import {
     autoSignalAlertsSelect,
     autoSignalIntervalUpdate,
     toggleLoadingStatus,
+    populateIndicatorSignal,
 } from './autosignalform.action';
 // import AutoSignalFormReducer from './autosignalform.reducer';
+import { fetchAutoSignalById } from "./autosignalform.api";
 import styles from './autosignalform.styles';
 import './autosignalform.css';
 
@@ -86,6 +88,16 @@ function renderAutoSignalForm(props) {
         if (isLoading) {
             dispatch(toggleLoadingStatus());
         }
+    }, []);
+
+    useEffect(() => {
+        if (window.location.hash.split('?')[1] !== undefined) {
+            const id = window.location.hash.split('?')[1].split('&')[1].split('=')[1];
+            fetchAutoSignalById(id)
+                .then(res => {
+                    props.dispatch(populateIndicatorSignal(res));
+                })
+        } 
     }, []);
 
     function isFormDataValid() {
