@@ -79,11 +79,10 @@ module.exports = {
                     if (result.length < total_alerts) {
                         const todays_alerts = result.filter(alert => alert.created_at === moment().format("MMM Do YY"));
                         if (todays_alerts.length <= daily_alerts) {
-                            fetch(`https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${currencyPair.split('').splice(0, 3).join('')}&to_currency=${currencyPair.split('').splice(3, 5).join('')}&apikey=QZ5AG7BLQD7TLXTZ`)
+                            fetch(`https://api.1forge.com/convert?from=${currencyPair.split('').splice(0, 3).join('')}&to=${currencyPair.split('').splice(3, 5).join('')}&quantity=1&api_key=uD3ghInLCfnn7gsSKAwV3D1nnp1X55x8`)
                             .then(res => res.json())
-                            .then(json => {
-                                const currencyData = json['Realtime Currency Exchange Rate'];
-                                const currency_exchange = parseFloat(currencyData['5. Exchange Rate']);
+                            .then(json => { 
+                                const currency_exchange = json.value;
         
                                 if (compare_price < currency_exchange && alerts.indexOf('high') !== -1) {
                                     const mailData = {  
