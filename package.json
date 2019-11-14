@@ -36,6 +36,7 @@
     "express-http-proxy": "^1.5.1",
     "express-session": "^1.16.2",
     "history": "^4.9.0",
+    "http": "0.0.0",
     "moment": "^2.24.0",
     "mongodb": "^3.3.0-beta2",
     "node-cron": "^2.0.3",
@@ -64,7 +65,10 @@
     "redux-thunk": "^2.3.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.87.3",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
     "technicalindicators": "^2.0.9",
+    "toastr": "^2.1.4",
     "uuid": "^3.3.2",
     "webpack": "^4.29.5"
   },

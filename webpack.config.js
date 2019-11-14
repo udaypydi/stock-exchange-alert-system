@@ -8,12 +8,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
     devtool: 'eval-source-map',
     mode: 'development',
-    entry: {
-      index: [
-          "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
-          "./src/client/index.js"
-      ]
-    },
+    entry: './src/client/index.js',
     output: {
         path: path.resolve(__dirname, './public'),
         filename: '[name].bundle.js',
@@ -22,13 +17,6 @@ module.exports = {
         hotUpdateMainFilename: '.hot/[hash].hot-update.json'
     },
 
-    devServer: {
-      port: 3000,
-      open: true,
-      proxy: {
-        '/': 'http://localhost:8080'
-      }
-    },
     // loaders for loading different file extension
 
     module: {
@@ -84,7 +72,6 @@ module.exports = {
         title: 'Signalant',
       }),
       new HtmlWebpackRootPlugin(),
-      new webpack.HotModuleReplacementPlugin(),
       new UglifyJsPlugin()
     ],
 }

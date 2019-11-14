@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 // import { Router } from 'react-router';
 import { Route, Router } from 'react-router';
+import io from 'socket.io-client';
+import toastr from 'toastr';
+
+const socket = io('http://localhost:3000', {transports: ['websocket'], upgrade: false});
+
 // import { HashRouter, Route } from 'react-router-dom';
 import history from './history';
 import AutoSignal from 'components/autosignal/autosignal.component';
@@ -30,6 +35,9 @@ import PrivacyPolicy from 'components/privacypolicy/privacypolicy.component';
 //     }
 // }
 
+  
+let socketConnected = false;
+
 class AppRouter extends Component {
     componentWillMount() {
         const { dispatch } = this.props;
@@ -38,6 +46,35 @@ class AppRouter extends Component {
 
     render() {
         const { isLoggedIn } = this.props.user;
+        if (isLoggedIn) {
+            socket.emit('join', {email: this.props.user.email });
+            socket.on("new_msg", function(data) {
+
+                toastr.options = {
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": true,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+                if (data.type === 'success') {
+                    toastr.success(data.content, data.title, {timeOut: 3000});
+                } else { 
+                    toastr.error(data.content, data.title, {timeOut: 3000});                   
+                }
+                console.log(data);
+            });
+        }
 
         return (
             <Router history={history}>

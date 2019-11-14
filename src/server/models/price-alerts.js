@@ -116,6 +116,8 @@ module.exports = {
                                         if (err) throw err;
                                         console.log('alert inserted');
                                     });
+
+                                    req.app.locals.io.sockets.in(req.session.user.email).emit('new_msg', {title: 'Price Alerts', content: `Price Raised to ${currency_exchange}`, type: 'success' });
         
                                     transporter.sendMail(mailConfig, function(error, info){
                                         if (error) {
@@ -158,6 +160,7 @@ module.exports = {
                                         html: mail_template,
                                     };
         
+                                    req.app.locals.io.sockets.in(req.session.user.email).emit('new_msg', {title: 'Price Alerts', content: `Price dropped to ${currency_exchange}`, type: 'failure' });
                                     transporter.sendMail(mailConfig, function(error, info){
                                         if (error) {
                                           console.log(error);
