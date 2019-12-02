@@ -5,18 +5,28 @@ const cron = require('node-cron');
 const mailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 const nodemailer = require('nodemailer');
+var RSI = require('technicalindicators').RSI;
 const { mongoconnection } = require('../config/mongoconnection');
 const { generateSignalantTemplate } = require('../common/mailTemplate');
+const { sendSMAAlert, calculateSMA } = require('./sma');
+const { sendEMAAlert, calculateEMA } = require('./ema');
 
 let database;
+let sma = {};
+let ema = {};
+let rsi = {};
+let indicatorCalculationInterval = {};
 
-mongoconnection.dbInstance((db) => {
+mongoconnection.dbInstance((db  ) => {
     database = db.db('signalant');
 });
 
-let alertSignalInterval = [];
+let alertSignalInterval = {};
+let prevAlertType = {};
+
 
 const INDICATOR_ALERTS_MAPPING = {
+    '1min': 1 * 60,
     '5min': 5 * 60,
     '30min': 30 * 60,
     '1hour': 60 * 60,
@@ -57,8 +67,18 @@ function createSimpleMovingAverageSignal(signalData) {
         email,
         total,
         daily,
+        priceValues,
     } = signalData;
     const { period, ohlc } = indicatorParameters;
+
+    (() => {
+        sma[alert_id] = calculateSMA(priceValues[currencyPair], period);
+    })();
+
+    indicatorCalculationInterval[alert_id] = setInterval(() => {
+        sma[alert_id] = calculateSMA(priceValues[currencyPair], period);
+    }, INDICATOR_ALERTS_MAPPING[timeFrame] * 1000);
+
     alertSignalInterval[alert_id] = setInterval(() => {
         const total_alerts = total;
         const daily_alerts = daily;
@@ -66,123 +86,48 @@ function createSimpleMovingAverageSignal(signalData) {
             if (result.length <= total_alerts) {
                 const todays_alerts = result.filter(alert => alert.created_at === moment().format("MMM Do YY"));
                 if (todays_alerts.length <= daily_alerts) {
-                    fetch(`https://www.alphavantage.co/query?function=SMA&symbol=${currencyPair}&interval=${timeFrame}&time_period=${period}&series_type=${ohlc}&apikey=H91OK5G7SWN2UH50`)
-                        .then(res => res.json())
-                        .then(json => {
+                    if (todays_alerts.length <= daily_alerts) {
+                        if (sma[alert_id] < priceValues[currencyPair].currentPrice && (prevAlertType[alert_id] === undefined || prevAlertType[alert_id] === 'SELL')) {
+                            const alertData = {
+                                currencyPair,
+                                indicator_value: sma[alert_id],
+                                alert_id,
+                                sellPrice: '',
+                                buyPrice: priceValues[currencyPair].currentPrice,
+                                allAlerts: getAllAlerts(email),
+                                price: priceValues[currencyPair].currentPrice,
+                                alertType: 'BUY',
+                                email,
+                            };
 
-                            const sma_analysis_keys = Object.keys(json["Technical Analysis: SMA"]);
-                            const sma_analysis = json["Technical Analysis: SMA"][sma_analysis_keys[0]];
-                            const sma_value = parseFloat(sma_analysis['SMA']);
-                            const currency_key = ohlc.includes('close') ? '4. close' : '1. open';
+                            sendSMAAlert(alertData);
+                            prevAlertType[alert_id] = 'BUY';
+                        } else if (sma[alert_id] > priceValues[currencyPair].currentPrice && (prevAlertType[alert_id] === undefined || prevAlertType[alert_id] === 'BUY')) {
+                            const alertData = {
+                                currencyPair,
+                                indicator_value: sma[alert_id],
+                                alert_id,
+                                buyPrice: '',
+                                sellPrice: priceValues[currencyPair].currentPrice,
+                                allAlerts: getAllAlerts(email),
+                                price: priceValues[currencyPair].currentPrice,
+                                alertType: 'SELL',
+                                email,
+                            };
 
-                            const fromSymbol = currencyPair.split('').splice(0, 3).join('');
-                            const toSymbol = currencyPair.split('').splice(3).join('');
+                            sendSMAAlert(alertData);
+                            prevAlertType[alert_id] = 'SELL';
 
-                            fetch(`https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${fromSymbol}&to_symbol=${toSymbol}&apikey=LZ80Z101ZA1Q3SKY`)
-                            .then(res => res.json())
-                            .then(response => {
-                                
-                                const current_price_keys = Object.keys(response['Time Series FX (Daily)']);
-                                const recent_currency_ex = parseFloat(response['Time Series FX (Daily)'][current_price_keys[0]][currency_key]);
-
-                                let alert = {
-                                    currencyPair,
-                                    indicator: 'SMA',
-                                    created_at: moment().format("MMM Do YY"),
-                                    indicator_value: sma_value,
-                                    alert_id,
-                                };
-
-                                if (sma_value < recent_currency_ex) {
-
-                                    alert = {
-                                        ...alert,
-                                        sellPrice: '',
-                                        buyPrice: recent_currency_ex,
-                                    };
-
-                                    const mailData = {  
-                                        currencyPair,
-                                        alertType: 'BUY',
-                                        price: recent_currency_ex,
-                                        indicator: 'SMA',  
-                                        profitLoss: '-',
-                                        ...getAllAlerts(email),
-                                    };
-                    
-                                    const mail_template = generateSignalantTemplate(mailData)
-                    
-                                    const mailConfig = {
-                                        from: 'noreply@signalant.com',
-                                        to: [email],
-                                        subject: 'Signalant Alerts',
-                                        html: mail_template,
-                                    };            
-    
-                                    transporter.sendMail(mailConfig, function(error, info){
-                                        if (error) {
-                                            console.log(error);
-                                        } else {
-                                            console.log('Email sent: ' + info.response);
-                                        }
-                                    });
-    
-                                    database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
-                                        if (err) console.log(err);
-                                        console.log('alert created');
-                                    });
-
-
-                                } else {
-
-                                    alert = {
-                                        ...alert,
-                                        sellPrice: recent_currency_ex,
-                                        buyPrice: '',
-                                    };
-
-                                    const mailData = {  
-                                        currencyPair,
-                                        alertType: 'SELL',
-                                        price: recent_currency_ex,
-                                        indicator: 'SMA',  
-                                        profitLoss: '-',
-                                        ...getAllAlerts(email),
-                                    };
-                    
-                                    const mail_template = generateSignalantTemplate(mailData)
-                    
-                                    const mailConfig = {
-                                        from: 'noreply@signalant.com',
-                                        to: [email],
-                                        subject: 'Signalant Alerts',
-                                        html: mail_template,
-                                    };            
-    
-                                    transporter.sendMail(mailConfig, function(error, info){
-                                        if (error) {
-                                            console.log(error);
-                                        } else {
-                                            console.log('Email sent: ' + info.response);
-                                        }
-                                    });
-    
-                                    database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
-                                        if (err) console.log(err);
-                                        console.log('alert created');
-                                    });
-
-                                }
-                            });
-                        });
-
+                        }
+                    }
                 }
             } else {
                 clearInterval( alertSignalInterval[alert_id]);
+                clearInterval(indicatorCalculationInterval[alert_id]);
             }
         });
 
-    }, INDICATOR_ALERTS_MAPPING[timeFrame] * 1000);
+    }, 1000);
 
 }
 
@@ -195,8 +140,19 @@ function createExponentialMovingAverage(signalData) {
         email,
         total,
         daily,
+        priceValues,
     } = signalData;
     const { period, ohlc } = indicatorParameters;
+
+
+    (() => {
+        ema[alert_id] = calculateEMA(priceValues[currencyPair], period);
+    })();
+
+    indicatorCalculationInterval[alert_id] = setInterval(() => {
+        ema[alert_id] = calculateEMA(priceValues[currencyPair], period);
+    }, INDICATOR_ALERTS_MAPPING[timeFrame] * 1000);
+
     alertSignalInterval[alert_id] = setInterval(() => {
         const total_alerts = total;
         const daily_alerts = daily;
@@ -204,123 +160,46 @@ function createExponentialMovingAverage(signalData) {
             if (result.length <= total_alerts) {
                 const todays_alerts = result.filter(alert => alert.created_at === moment().format("MMM Do YY"));
                 if (todays_alerts.length <= daily_alerts) {
-                    fetch(`https://www.alphavantage.co/query?function=EMA&symbol=${currencyPair}&interval=${timeFrame}&time_period=${period}&series_type=${ohlc}&apikey=H91OK5G7SWN2UH50`)
-                        .then(res => res.json())
-                        .then(json => {
+                    if (ema[alert_id] < priceValues[currencyPair].currentPrice && (prevAlertType[alert_id] === undefined || prevAlertType[alert_id] === 'SELL')) {
+                        const alertData = {
+                            currencyPair,
+                            indicator_value: ema[alert_id],
+                            alert_id,
+                            sellPrice: '',
+                            buyPrice: priceValues[currencyPair].currentPrice,
+                            allAlerts: getAllAlerts(email),
+                            price: priceValues[currencyPair].currentPrice,
+                            alertType: 'BUY',
+                            email,
+                        };
 
-                            const ema_analysis_keys = Object.keys(json["Technical Analysis: EMA"]);
-                            const ema_analysis = json["Technical Analysis: EMA"][ema_analysis_keys[0]];
-                            const ema_value = parseFloat(ema_analysis['EMA']);
-                            const currency_key = ohlc.includes('close') ? '4. close' : '1. open';
+                        sendEMAAlert(alertData);
+                        prevAlertType[alert_id] = 'BUY';
+                    } else if (ema[alert_id] > priceValues[currencyPair].currentPrice && (prevAlertType[alert_id] === undefined || prevAlertType[alert_id] === 'BUY')) {
+                        const alertData = {
+                            currencyPair,
+                            indicator_value: ema[alert_id],
+                            alert_id,
+                            buyPrice: '',
+                            sellPrice: priceValues[currencyPair].currentPrice,
+                            allAlerts: getAllAlerts(email),
+                            price: priceValues[currencyPair].currentPrice,
+                            alertType: 'SELL',
+                            email,
+                        };
 
-                            const fromSymbol = currencyPair.split('').splice(0, 3).join('');
-                            const toSymbol = currencyPair.split('').splice(3).join('');
+                        sendEMAAlert(alertData);
+                        prevAlertType[alert_id] = 'SELL';
 
-                            fetch(`https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${fromSymbol}&to_symbol=${toSymbol}&apikey=LZ80Z101ZA1Q3SKY`)
-                            .then(res => res.json())
-                            .then(response => {
-                                
-                                const current_price_keys = Object.keys(response['Time Series FX (Daily)']);
-                                const recent_currency_ex = parseFloat(response['Time Series FX (Daily)'][current_price_keys[0]][currency_key]);
-
-                                let alert = {
-                                    currencyPair,
-                                    indicator: 'EMA',
-                                    created_at: moment().format("MMM Do YY"),
-                                    indicator_value: ema_value,
-                                    alert_id,
-                                };
-
-                                if (ema_value < recent_currency_ex) {
-
-                                    alert = {
-                                        ...alert,
-                                        sellPrice: '',
-                                        buyPrice: recent_currency_ex,
-                                    };
-
-                                    const mailData = {  
-                                        currencyPair,
-                                        alertType: 'BUY',
-                                        price: recent_currency_ex,
-                                        indicator: 'EMA',  
-                                        profitLoss: '-',
-                                        ...getAllAlerts(email),
-                                    };
-                    
-                                    const mail_template = generateSignalantTemplate(mailData)
-                    
-                                    const mailConfig = {
-                                        from: 'noreply@signalant.com',
-                                        to: [email],
-                                        subject: 'Signalant Alerts',
-                                        html: mail_template,
-                                    };            
-    
-                                    transporter.sendMail(mailConfig, function(error, info){
-                                        if (error) {
-                                            console.log(error);
-                                        } else {
-                                            console.log('Email sent: ' + info.response);
-                                        }
-                                    });
-    
-                                    database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
-                                        if (err) console.log(err);
-                                        console.log('alert created');
-                                    });
-
-
-                                } else {
-
-                                    alert = {
-                                        ...alert,
-                                        sellPrice: recent_currency_ex,
-                                        buyPrice: '',
-                                    };
-
-                                    const mailData = {  
-                                        currencyPair,
-                                        alertType: 'SELL',
-                                        price: recent_currency_ex,
-                                        indicator: 'EMA',  
-                                        profitLoss: '-',
-                                        ...getAllAlerts(email),
-                                    };
-                    
-                                    const mail_template = generateSignalantTemplate(mailData)
-                    
-                                    const mailConfig = {
-                                        from: 'noreply@signalant.com',
-                                        to: [email],
-                                        subject: 'Signalant Alerts',
-                                        html: mail_template,
-                                    };            
-    
-                                    transporter.sendMail(mailConfig, function(error, info){
-                                        if (error) {
-                                            console.log(error);
-                                        } else {
-                                            console.log('Email sent: ' + info.response);
-                                        }
-                                    });
-    
-                                    database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
-                                        if (err) console.log(err);
-                                        console.log('alert created');
-                                    });
-
-                                }
-                            });
-                        });
-
+                    }
                 }
             } else {
                 clearInterval( alertSignalInterval[alert_id]);
+                clearInterval(indicatorCalculationInterval[alert_id]);
             }
         });
 
-    }, INDICATOR_ALERTS_MAPPING[timeFrame] * 1000);
+    }, 1000);
 }
 
 function createRSISignal(signalData) {
@@ -336,51 +215,62 @@ function createRSISignal(signalData) {
         created_at,
         total,
         daily,
+        priceValues
     } = signalData;
     const { level, period } = indicatorParameters;
     const { timeOut, timeOutHours } = signalTimeFrame;
 
-    console.log('time frame created', timeFrame);
-
+    // (() => {
+    //     const { historicalPrices, currentPrice } = priceValues[currencyPair];
+    //     const lastIndex = (historicalPrices.length - 1);
+    //     const initIndex = lastIndex - parseInt(period);
+    //     const priceArray = [];
+    //     Object.keys(historicalPrices).forEach(key => {
+    //         priceArray.push(historicalPrices[key]);
+    //     });
+    //     if (priceArray.length >= parseInt(period)) {
+    //         const rsiValue = RSI.calculate({period : parseInt(period), values : priceArray });
+    //         rsi[alert_id] = rsiValue[rsiValue.length - 1];
+    //     }
+    // })();
     alertSignalInterval[alert_id] = setInterval(() => {
-        const current_time = (new Date()).getTime();
+
+        const { historicalPrices, currentPrice } = priceValues[currencyPair];
+        const lastIndex = (historicalPrices.length - 1);
+        const initIndex = lastIndex - parseInt(period);
+        const priceArray = [];
+        Object.keys(historicalPrices).forEach(key => {
+            priceArray.push(historicalPrices[key]);
+        });
+        if (priceArray.length >= parseInt(period)) {
+            const rsiValue = RSI.calculate({period : parseInt(period), values : priceArray });
+            rsi[alert_id] = rsiValue[rsiValue.length - 1];
+        }
+
         const total_alerts = total;
         const daily_alerts = daily;
         database.collection('alerts').find({ email, alert_id }).toArray((err, result) => {
-            if (total_alerts === daily_alerts) {
-                if (result.length <= daily_alerts) {
-                    fetch(`https://www.alphavantage.co/query?function=RSI&symbol=${currencyPair}&interval=${timeFrame}&time_period=${parseInt(period)}&series_type=${ohlc}&apikey=JJJLU0RT9LACJCYK`)
-                    .then(res => res.json())
-                    .then(json => {
-                        const rsi_analysis_keys = Object.keys(json["Technical Analysis: RSI"]);
-                        const rsi_analysis = json["Technical Analysis: RSI"];
-                        const rsi = parseFloat(rsi_analysis[rsi_analysis_keys[0]]["RSI"]);
-                        let alert = {
-                            currencyPair,
-                            indicator: indicator.toUpperCase(),
-                            created_at: moment().format("MMM Do YY"),
-                            indicator_value: rsi,
-                            alert_id,
+            if (result.length <= total_alerts) {
+                const todays_alerts = result.filter(alert => alert.created_at === moment().format("MMM Do YY"));
+                if (todays_alerts.length <= daily_alerts) {
+                    let alert = {
+                        currencyPair,
+                        indicator: indicator.toUpperCase(),
+                        created_at: moment().format("MMM Do YY"),
+                        indicator_value: rsi,
+                        alert_id,
+                    };
+    
+                    if (rsi[alert_id] > parseFloat(level) && (prevAlertType[alert_id] === undefined || prevAlertType[alert_id] === 'OVERSOLD')) {
+                        alert = {
+                            ...alert,
+                            sellPrice: priceValues[currencyPair].currentPrice,
+                            buyPrice: '',
                         };
-        
-                        if (rsi > parseFloat(level)) {
-                            alert = {
-                                ...alert,
-                                sellPrice: rsi,
-                                buyPrice: '',
-                            };
-                        } else if (rsi <= 30) {
-                            alert = {
-                                ...alert,
-                                sellPrice: '',
-                                buyPrice: rsi,
-                            };
-                        }
-                        
                         const mailData = {  
                             currencyPair,
-                            alertType: rsi > 30 ? 'SELL' : 'BUY',
-                            price: rsi,
+                            alertType: rsi[alert_id] > 70 ? 'OVERBOUGHT' : 'CROSSES LINE',
+                            price: priceValues[currencyPair].currentPrice,
                             indicator: 'RSI',  
                             profitLoss: '-',
                             ...getAllAlerts(email),
@@ -406,45 +296,19 @@ function createRSISignal(signalData) {
                             if (err) console.log(err);
                             console.log('alert created');
                         });
-                    })
-                } else {
-                    clearInterval(alertSignalInterval[alert_id]);
-                }
-            } else {
-                const todays_alerts = result.filter(alert => alert.created_at === moment().format("MMM Do YY"));
-                if (todays_alerts.length <= daily_alerts) {
-                    fetch(`https://www.alphavantage.co/query?function=RSI&symbol=${currencyPair}&interval=${timeFrame}&time_period=${parseInt(period)}&series_type=${ohlc}&apikey=JJJLU0RT9LACJCYK`)
-                    .then(res => res.json())
-                    .then(json => {
-                        const rsi_analysis_keys = Object.keys(json["Technical Analysis: RSI"]);
-                        const rsi_analysis = json["Technical Analysis: RSI"];
-                        const rsi = parseFloat(rsi_analysis[rsi_analysis_keys[0]]["RSI"]);
-                        let alert = {
-                            currencyPair,
-                            indicator: indicator.toUpperCase(),
-                            created_at: moment().format("MMM Do YY"),
-                            indicator_value: rsi,
-                            alert_id,
+
+                        prevAlertType[alert_id] = 'CROSSESLINE';
+                    } else if ((rsi[alert_id] <= 30 || rsi[alert_id] <= parseFloat(level)) && (prevAlertType[alert_id] === undefined || prevAlertType[alert_id] === 'CROSSESLINE')) {
+                        alert = {
+                            ...alert,
+                            sellPrice: '',
+                            buyPrice: priceValues[currencyPair].currentPrice,
                         };
-        
-                        if (rsi > parseFloat(level)) {
-                            alert = {
-                                ...alert,
-                                sellPrice: rsi,
-                                buyPrice: '',
-                            };
-                        } else if (rsi <= 30) {
-                            alert = {
-                                ...alert,
-                                sellPrice: '',
-                                buyPrice: rsi,
-                            };
-                        }
-                        
+
                         const mailData = {  
                             currencyPair,
-                            alertType: rsi > 30 ? 'SELL' : 'BUY',
-                            price: rsi,
+                            alertType: rsi[alert_id] > 30 ? 'CROSSES LINE' : 'OVERSOLD',
+                            price: priceValues[currencyPair].currentPrice,
                             indicator: 'RSI',  
                             profitLoss: '-',
                             ...getAllAlerts(email),
@@ -469,14 +333,17 @@ function createRSISignal(signalData) {
                         database.collection('alerts').insert({ ...alert, email, type: 'INDICATOR_ALERTS' }, (err, result) => {
                             if (err) console.log(err);
                             console.log('alert created');
-                        })
-                    })
-                } else {
-                    clearInterval(alertSignalInterval[alert_id]);
+                        });
+
+                        prevAlertType[alert_id] = 'OVERSOLD';
+                    } 
                 }
+            } else {
+                clearInterval( alertSignalInterval[alert_id]);
+                clearInterval(indicatorCalculationInterval[alert_id]);
             }
         });
-       
+
     }, INDICATOR_ALERTS_MAPPING[timeFrame] * 1000);
 }
 
@@ -491,6 +358,7 @@ function createBollingerBands(signalData) {
         email,
         total,
         daily,
+        priceValues
     } = signalData;
     const { deviation, period, ohlc } = indicatorParameters;
     const { timeOut } = signalTimeFrame;
@@ -516,6 +384,8 @@ function createBollingerBands(signalData) {
                             fetch(`https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${fromSymbol}&to_symbol=${toSymbol}&apikey=JJJLU0RT9LACJCYK`)
                                 .then(res => res.json())
                                 .then(response => {
+                                    const price = priceValues[currencyPair].currentPrice;
+
                                     const current_price_keys = Object.keys(response['Time Series FX (Daily)']);
                                     const recent_currency_ex = parseFloat(response['Time Series FX (Daily)'][current_price_keys[0]][currency_key]);
                                     const bb_analysis_lower_band = parseFloat(bb_analysis['Real Lower Band']);
@@ -525,23 +395,22 @@ function createBollingerBands(signalData) {
                                         currencyPair,
                                         indicator: 'BOLLINGER BANDS',
                                         created_at: moment().format("MMM Do YY"),
-                                        indicator_value: recent_currency_ex,
+                                        indicator_value: price,
                                         alert_id,
                                     };
 
-                                    if ((bb_analysis_higher_band - recent_currency_ex) < (recent_currency_ex - bb_analysis_lower_band)) {
-                                        console.log('buy signal');
+                                    if ((bb_analysis_higher_band - price) < (price - bb_analysis_lower_band) && (prevAlertType[alert_id] === undefined || prevAlertType[alert_id] === 'SELL')) {
 
                                         alert = {
                                             ...alert,
                                             sellPrice: '',
-                                            buyPrice: recent_currency_ex,
+                                            buyPrice: price,
                                         };
 
                                         const mailData = {  
                                             currencyPair,
                                             alertType: 'BUY',
-                                            price: recent_currency_ex,
+                                            price: price,
                                             indicator: 'BOLLINGER BANDS',  
                                             profitLoss: '-',
                                             ...getAllAlerts(email),
@@ -570,19 +439,20 @@ function createBollingerBands(signalData) {
                                             console.log('alert created');
                                         });
 
-                                    } else {
-                                        console.log('sell signal');
+                                        prevAlertType[alert_id] = 'BUY';
+
+                                    } else if((bb_analysis_higher_band - price) > (price - bb_analysis_lower_band) && (prevAlertType[alert_id] === undefined || prevAlertType[alert_id] === 'BUY')) {
 
                                         alert = {
                                             ...alert,
-                                            sellPrice: recent_currency_ex,
+                                            sellPrice: price,
                                             buyPrice: '',
                                         };
 
                                         const mailData = {  
                                             currencyPair,
                                             alertType: 'SELL',
-                                            price: recent_currency_ex,
+                                            price: price,
                                             indicator: 'BOLLINGER BANDS',  
                                             profitLoss: '-',
                                             ...getAllAlerts(email),
@@ -609,6 +479,8 @@ function createBollingerBands(signalData) {
                                             if (err) console.log(err);
                                             console.log('alert created');
                                         });
+
+                                        prevAlertType[alert_id] = 'SELL';
                                     }
                                 })
                         });
@@ -669,7 +541,7 @@ function createMACDSignals(signalData) {
                                 alert_id,
                             };
     
-                            if (macd > macd_signal) {
+                            if (macd > macd_signal && (prevAlertType[alert_id] === undefined || prevAlertType[alert_id] === "SELL") ) {
                                 alert = {
                                     ...alert,
                                     sellPrice: '',
@@ -706,8 +578,9 @@ function createMACDSignals(signalData) {
                                     if (err) console.log(err);
                                     console.log('alert created');
                                 });
-    
-                            } else {
+                                prevAlertType[alert_id] = 'BUY';
+
+                            } else if (macd < macd_signal && (prevAlertType[alert_id] === undefined || prevAlertType[alert_id] === "BUY")) {
                                 alert = {
                                     ...alert,
                                     sellPrice: recent_currency_ex,
@@ -744,6 +617,8 @@ function createMACDSignals(signalData) {
                                     if (err) console.log(err);
                                     console.log('alert created');
                                 });
+
+                                prevAlertType[alert_id] = 'SELL';
                             }
                         });
                     });
@@ -777,15 +652,15 @@ module.exports = {
                 const alert_id = result.insertedIds['0'];
                 if (indicator === 'rsi') {
                     console.log(req.body);
-                    createRSISignal({ ...req.body, alert_id: alert_id, email: req.session.user.email, created_at: (new Date()).getTime() },);
+                    createRSISignal({ ...req.body, alert_id: alert_id, email: req.session.user.email, created_at: (new Date()).getTime(), priceValues: req.app.locals.priceValues });
                 } else if (indicator === 'bollinger_bands') {
-                    createBollingerBands({ ...req.body, alert_id: alert_id, email: req.session.user.email, created_at: (new Date()).getTime() });
+                    createBollingerBands({ ...req.body, alert_id: alert_id, email: req.session.user.email, created_at: (new Date()).getTime(), priceValues: req.app.locals.priceValues  });
                 } else if (indicator === 'macd') {
                     createMACDSignals({ ...req.body, alert_id: alert_id, email: req.session.user.email, created_at: (new Date()).getTime() });
                 } else if (indicator === 'simple_moving_average') {
-                    createSimpleMovingAverageSignal({ ...req.body, alert_id: alert_id, email: req.session.user.email, created_at: (new Date()).getTime() });
+                    createSimpleMovingAverageSignal({ ...req.body, alert_id: alert_id, email: req.session.user.email, created_at: (new Date()).getTime(), priceValues: req.app.locals.priceValues });
                 } else if (indicator === 'exponential_moving_average') {
-                    createExponentialMovingAverage({ ...req.body, alert_id: alert_id, email: req.session.user.email, created_at: (new Date()).getTime() });
+                    createExponentialMovingAverage({ ...req.body, alert_id: alert_id, email: req.session.user.email, created_at: (new Date()).getTime(), priceValues: req.app.locals.priceValues });
                 }
 
                 res.json({ status: 200 });

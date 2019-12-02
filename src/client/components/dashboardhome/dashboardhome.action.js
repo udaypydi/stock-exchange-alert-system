@@ -28,26 +28,28 @@ export const fetchCurrencyData = () => (dispatch) => {
         .then(res => {
             if (res.status === 200) {
                 currencyExchange = res['currencyExchange'].map((json, index) => {
-                    let min = parseFloat(json.currencyData[0].currencyValue['4. close']);
-                    let max = parseFloat(json.currencyData[0].currencyValue['4. close']);
+                    const historicalDataKeys = Object.keys(json.historicalData);
+                    const { historicalData } = json;
+                    let min = parseFloat(json.historicalData[historicalDataKeys[0]]);
+                    let max = parseFloat(json.historicalData[historicalDataKeys[0]]);
 
                     return {
-                        data: json.currencyData.map(data => {
+                        data: historicalDataKeys.map(key => {
                         
-                        if (parseFloat(data.currencyValue['4. close']) < min) {
-                            min = parseFloat(data.currencyValue['4. close']);
+                        if (parseFloat(historicalData[key]) < min) {
+                            min = parseFloat(historicalData[key]);
                         }
 
-                        if (parseFloat(data.currencyValue['4. close']) > max) {
-                            max = parseFloat(data.currencyValue['4. close']);
+                        if (parseFloat(historicalData[key]) > max) {
+                            max = parseFloat(historicalData[key]);
                         }
 
                         return {
-                            date: data.date,
-                            price: parseFloat(data.currencyValue['4. close'])
+                            date: key,
+                            price: parseFloat(historicalData[key])
                         }
                     }),
-                    currency: json.currencyName,
+                    currency: json.currencyPair,
                     graphStyle: json.graphStyle,
                     domain: [max - min < 0.5 ? min : min - 0.5, max],
                 }}

@@ -22,7 +22,7 @@ function AddWidgetModal(props) {
     const currencyGraphsArray = [];
 
     const alreadyAddedCurrencyPairs = activeGraphs ? activeGraphs.map(graph => graph.currency) : [];
-
+// comment
     CURRENCY_OPTIONS.forEach(currency => {
       if (alreadyAddedCurrencyPairs.indexOf(currency) === -1) {
         currencyGraphsArray.push({

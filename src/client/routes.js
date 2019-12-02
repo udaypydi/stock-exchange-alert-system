@@ -5,7 +5,7 @@ import { Route, Router } from 'react-router';
 import io from 'socket.io-client';
 import toastr from 'toastr';
 
-const socket = io('http://localhost:3000', {transports: ['websocket'], upgrade: false});
+const socket = io({transports: ['websocket'], upgrade: false});
 
 // import { HashRouter, Route } from 'react-router-dom';
 import history from './history';
@@ -25,15 +25,6 @@ import { getUser } from 'components/home/home.api';
 import { getUserState } from 'components/home/home.action';
 import TermsAndConditions from 'components/termsandconditions/termsandconditions.component';
 import PrivacyPolicy from 'components/privacypolicy/privacypolicy.component';
-// class AppWrapper extends Component {
-//     render() {
-
-//         if (!this.props.isLoggedIn) return <Redirect to="/sign-in" />
-//         return (
-//             <Route path='/home' component={DashboardHome} />
-//         )
-//     }
-// }
 
   
 let socketConnected = false;

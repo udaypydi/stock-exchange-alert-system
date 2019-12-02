@@ -38,7 +38,7 @@ module.exports.middleware = (app,express) => {
     });
     
     app.use('/', (req, res, next) => {
-		console.log("fetching browser content for / url", req.sessionID);
+		console.log(new Date(), req.sessionID);
 		next();
     });
 }
