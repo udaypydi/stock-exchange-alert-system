@@ -65,7 +65,7 @@ passport.use('local.signup', new LocalStrategy({
           graphStyle: 'GRAPH_1',
         },
         { 
-          currency: 'USDGYD',
+          currency: 'USDCAD',
           graphStyle: 'GRAPH_2',
         }, 
         {

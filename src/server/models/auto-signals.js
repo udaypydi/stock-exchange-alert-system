@@ -673,7 +673,7 @@ module.exports = {
         mongoconnection.dbInstance((db) => {
             const database = db.db('signalant');
             database.collection('signals').remove({ _id: ObjectId(id) }, true);
-            database.collection('signals').find({}).toArray((err, result) => {
+            database.collection('signals').find({ email: req.session.user.email }).toArray((err, result) => {
                 if (err) throw err;
                 console.log('alert signal delted');
                 clearInterval(alertSignalInterval[id]);

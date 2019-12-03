@@ -13,7 +13,21 @@ module.exports = {
             const database = db.db('signalant');
             database.collection('alerts').find({ email: req.session.user.email }).toArray((err, result) => {
                 if (err) throw err;
-                res.json({ status: 200, alerts: result });
+
+                const alertIDs = [];
+                const alerts = []
+                result.forEach(alert => {
+                    if (alertIDs.indexOf(alert.alert_id) === -1) {
+                        alertIDs.push(alert.alert_id);
+                        alerts.push(alert);
+                    }
+                });
+
+                console.log(alertIDs)
+
+                console.log(result.length, [...new Set(alerts)].length);
+
+                res.json({ status: 200, alerts });
             });
         })
     },
