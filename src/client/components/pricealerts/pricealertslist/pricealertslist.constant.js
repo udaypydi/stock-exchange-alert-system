@@ -1,5 +1,0 @@
-export const FETCH_ALL_PRICE_ALERTS_SIGNALS = 'FETCH_ALL_PRICE_ALERTS_SIGNALS';
-
-export const PRICE_ALERT_SIGNAL_LIST_INITIAL_STATE = {
-    signalsList: [],
-};
